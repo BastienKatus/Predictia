@@ -1,0 +1,22 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    container_name: nginx-reverse-proxy
+    ports:
+      - "8080:8080"
+    #network_mode: host #Obligatoire sur Linux
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf #Sur Ordi perso, décommenter cette ligne
+      #- /tmp/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf #Sur Ordi CPE, décommenter cette ligne
+      
+  activemq:
+    image: rmohr/activemq
+    container_name: activemq
+    ports:
+      - "61616:61616"  # Port pour les connexions JMS
+      - "8161:8161"    # Port pour l'interface web d'administration
+      - "61613:61613"
+    environment:
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
