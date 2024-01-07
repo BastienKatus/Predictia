@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AuthentificationService {
 
-    public String login(AuthDTO authDTO) {
+    public UserDTO login(AuthDTO authDTO) {
         String apiUrl = "http://localhost:8080/users/login";
         RestTemplate restTemplate = new RestTemplate();
 
@@ -18,11 +18,11 @@ public class AuthentificationService {
         HttpEntity<AuthDTO> request = new HttpEntity<>(authDTO, headers);
 
         // Envoi de la requête GET et récupération de la réponse
-        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
+        ResponseEntity<UserDTO> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, UserDTO.class);
         return response.getBody();
     }
 
-    public String register(UserDTO userDTO) {
+    public UserDTO register(UserDTO userDTO) {
         String apiUrl = "http://localhost:8080/users/register";
         RestTemplate restTemplate = new RestTemplate();
 
@@ -32,7 +32,7 @@ public class AuthentificationService {
         // Assuming userLoginDTO is an instance of UserLoginDTO
         HttpEntity<UserDTO> request = new HttpEntity<>(userDTO, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
+        ResponseEntity<UserDTO> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, UserDTO.class);
         return response.getBody();
 
     }

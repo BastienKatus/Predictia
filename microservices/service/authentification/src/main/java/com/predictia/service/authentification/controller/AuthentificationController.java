@@ -15,12 +15,12 @@ public class AuthentificationController {
     AuthentificationService authentificationService;
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthDTO authDTO) {
+    public UserDTO login(@RequestBody AuthDTO authDTO) {
         return authentificationService.login(authDTO);
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UserDTO userDTO) {
+    public UserDTO register(@RequestBody UserDTO userDTO) {
         return authentificationService.register(userDTO);
     }
 }

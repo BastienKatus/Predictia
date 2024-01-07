@@ -19,5 +19,5 @@ public class UserDTO {
     private String mail;
     private Date birthdate;
     private BigDecimal credits;
-    private Integer favoriteClubID;
+    private Integer favoriteClubId;
 }

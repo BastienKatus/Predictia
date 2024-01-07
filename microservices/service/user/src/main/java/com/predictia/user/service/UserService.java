@@ -2,7 +2,7 @@ package com.predictia.user.service;
 
 import com.predictia.dto.UserDTO;
 import com.predictia.user.mapper.UserMapper;
-import com.predictia.user.model.User;
+import com.predictia.user.model.UserModel;
 import com.predictia.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +20,26 @@ public class UserService {
     private UserMapper userMapper;
 
 
-    public Iterable<User> getAllUser()  {
+    public Iterable<UserModel> getAllUser()  {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Integer id)  {
+    public Optional<UserModel> getUserById(Integer id)  {
         return userRepository.findById(id);
     }
 
-    public User getUserByUsernameAndPassword(String u, String p )  {
+    public UserModel getUserByUsernameAndPassword(String u, String p )  {
         return userRepository.findByUsernameAndPassword(u,p);
     }
     @Transactional
-    public void addUser(UserDTO userDTO) {
-        User user = userMapper.dtoToEntity(userDTO);
-        userRepository.save(user);
+    public UserModel createOrUpdate(UserDTO userDTO) {
+        UserModel userModel = userMapper.userDTOToUserEntity(userDTO);
+        userRepository.save(userModel);
+        return userModel;
+    }
+
+    public void deleteById(Integer id) {
+        userRepository.deleteById(id);
     }
 
     public void deleteAll(){
