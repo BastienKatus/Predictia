@@ -1,13 +1,13 @@
-package com.predictia.prediction;
+package com.predictia.game;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PredictionApplication {
+public class gameApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PredictionApplication.class, args);
+        SpringApplication.run(gameApplication.class, args);
     }
 
 }
