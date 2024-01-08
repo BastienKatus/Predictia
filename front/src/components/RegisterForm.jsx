@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 
 const RegistrationForm = () => {
-
-  const navigate = useNavigate();
-
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [mail, setMail] = useState('');
+  const [email, setEmail] = useState('');
 
-  const handleFirstnameChange = (e) => {
-    setFirstname(e.target.value);
+  const handleNameChange = (e) => {
+    setName(e.target.value);
   };
 
-  const handleLastnameChange = (e) => {
-    setLastname(e.target.value);
+  const handleSurnameChange = (e) => {
+    setSurname(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -27,39 +23,21 @@ const RegistrationForm = () => {
     setUsername(e.target.value);
   };
 
-  const handleMailChange = (e) => {
-    setMail(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
-  function handleRouting() {
-    navigate("/login");
-  }
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const response = await fetch('/auth/register', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({"username": username,"password": password, "firstname": firstname, "lastname": lastname, "mail": mail}),
-      });
-      console.log(response)
-    /*fetch('http://localhost:8080/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }, 
-              body: JSON.stringify({"username": username,"password": password, "firstname": firstname, "lastname": lastname, "mail": mail}),
-            })
-        .then(response => response.json())
-        .then(json => console.log(json, '. Votre Utilisateur a été créé, vous pouvez vous connecter'))*/
-    handleRouting()
+    console.log(name, username, surname, password, email);
+    if(name !== '' && surname !== '' && password !== ''){
+        console.log('ok')
+    }
 
-    setFirstname('');
-    setLastname('');
+    setName('');
+    setSurname('');
     setPassword('');
-    setMail('');
+    setEmail('');
     setUsername('');
   };
 
@@ -67,26 +45,26 @@ const RegistrationForm = () => {
     <form className="registration-form" onSubmit={handleSubmit}>
       <div>
         <label>
-          Prénom :
-          <input type="text" value={firstname} onChange={handleFirstnameChange} />
+          Name:
+          <input type="text" value={name} onChange={handleNameChange} />
         </label>
       </div>
       <div>
         <label>
-          Nom :
-          <input type="text" value={lastname} onChange={handleLastnameChange} />
+          Surname:
+          <input type="text" value={surname} onChange={handleSurnameChange} />
         </label>
       </div>
       <div>
         <label>
-          Nom d'Utilisateur :
+          Username:
           <input type="text" value={username} onChange={handleUsernameChange} />
         </label>
       </div>
       <div>
         <label>
           Email:
-          <input type="email" value={mail} onChange={handleMailChange} />
+          <input type="email" value={email} onChange={handleEmailChange} />
         </label>
       </div>
       <div>
