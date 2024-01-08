@@ -26,15 +26,12 @@ public class UserModel {
     @Column(name="lastname", nullable = false)
     private String lastname;
 
-    @Column(name="birthdate", nullable = false)
-    private Date birthdate;
-
     @Column(name="mail", nullable = false)
     private String mail;
 
-    @Column(name="credits", nullable = false)
+    @Column(name="credits")
     private Double credits;
 
-    @Column(name="favoriteclubid", nullable = false)
+    @Column(name="favoriteclubid")
     private Integer favoriteClubId;
 }
