@@ -1,0 +1,4 @@
+package com.predictia.soccermanager.model;
+
+public class ClubModel {
+}
