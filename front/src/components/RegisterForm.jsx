@@ -37,24 +37,20 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/auth/register', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({"username": username,"password": password, "firstname": firstname, "lastname": lastname, "mail": mail}),
-      });
-      console.log(response)
-    /*fetch('http://localhost:8080/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }, 
-              body: JSON.stringify({"username": username,"password": password, "firstname": firstname, "lastname": lastname, "mail": mail}),
-            })
-        .then(response => response.json())
-        .then(json => console.log(json, '. Votre Utilisateur a été créé, vous pouvez vous connecter'))*/
-    handleRouting()
+
+    fetch('/auth/register', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({"username": username,"password": password, "firstname": firstname, "lastname": lastname, "mail": mail}),
+    })
+    .then((response) => {
+      if (response.ok) {
+        handleRouting()
+      }
+    })
+    
 
     setFirstname('');
     setLastname('');
