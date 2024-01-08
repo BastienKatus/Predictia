@@ -11,8 +11,8 @@
     <groupId>com.predictia</groupId>
     <artifactId>game</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>betGame</name>
-    <description>betGame</description>
+    <name>game</name>
+    <description>game</description>
     <properties>
         <java.version>17</java.version>
     </properties>
