@@ -9,10 +9,8 @@
 
 	<modules>
 		<module>authentification</module>
-		<module>betGame</module>
+		<module>game</module>
 		<module>commonLib</module>
-		<module>league</module>
-		<module>prediction</module>
 		<module>soccerManager</module>
 		<module>user</module>
 	</modules>
