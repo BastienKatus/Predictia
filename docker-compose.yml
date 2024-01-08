@@ -18,7 +18,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data  # Volume nommé pour la persistance des données
+      - ./docker-volumes/postgres-data:/var/lib/postgresql/data  # Volume nommé pour la persistance des données
 
   pgadmin:
     image: dpage/pgadmin4
@@ -31,7 +31,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - pgadmin-data:/var/lib/pgadmin  # Volume nommé pour la persistance des données de pgAdmin
+      - ./docker-volumes/pgadmin-data:/var/lib/pgadmin  # Volume nommé pour la persistance des données de pgAdmin
 
 volumes:
   postgres-data:  # Définition du volume nommé pour PostgreSQL
