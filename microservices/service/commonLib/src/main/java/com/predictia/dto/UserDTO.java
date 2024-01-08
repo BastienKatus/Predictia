@@ -17,7 +17,6 @@ public class UserDTO {
     private String firstname;
     private String lastname;
     private String mail;
-    private Date birthdate;
     private BigDecimal credits;
     private Integer favoriteClubId;
 }
