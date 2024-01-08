@@ -16,10 +16,11 @@ public class UserMapper {
         u.setPassword(dto.getPassword());
         u.setFirstname(dto.getFirstname());
         u.setLastname(dto.getLastname());
-        u.setBirthdate(dto.getBirthdate());
         u.setMail(dto.getMail());
         u.setFavoriteClubId(dto.getFavoriteClubId());
-        u.setCredits(Double.valueOf(dto.getCredits().toString()));
+        if(dto.getCredits() != null){
+            u.setCredits(Double.valueOf(dto.getCredits().toString()));
+        }
         return u;
     }
 
@@ -30,10 +31,11 @@ public class UserMapper {
         u.setPassword(userModel.getPassword());
         u.setFirstname(userModel.getFirstname());
         u.setLastname(userModel.getLastname());
-        u.setBirthdate(userModel.getBirthdate());
         u.setMail(userModel.getMail());
         u.setFavoriteClubId(userModel.getFavoriteClubId());
-        u.setCredits(BigDecimal.valueOf(userModel.getCredits()));
+        if(userModel.getCredits()!=null){
+            u.setCredits(BigDecimal.valueOf(userModel.getCredits()));
+        }
         return u;
     }
 }
