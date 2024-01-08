@@ -1,2 +1,5 @@
 front/node_modules
 front/.idea
+data/model_training/source/*
+data/.ipynb_checkpoints
+data/predictia_env/*
