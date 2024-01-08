@@ -13,8 +13,5 @@ CREATE TABLE appearances (
     assists TEXT,
     minutes_played TEXT
 );
-
 COPY appearances
-FROM '/csv_files/appearances.csv'
-DELIMITER ',' 
-CSV HEADER;
+FROM '/csv_files/appearances.csv' DELIMITER ',' CSV HEADER;
