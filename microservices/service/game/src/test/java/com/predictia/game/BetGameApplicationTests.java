@@ -1,4 +1,4 @@
-package com.predictia.betgame;
+package com.predictia.game;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
