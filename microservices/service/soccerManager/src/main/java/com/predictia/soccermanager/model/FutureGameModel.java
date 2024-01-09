@@ -6,25 +6,26 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "soccermanager-predictia")
+@Table(name = "next_games")
 public class FutureGameModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="next_game_id")
     private Integer id;
 
-    @Column(name="homeclubid")
+    @Column(name="home_club_id")
     private Integer homeClubId;
 
-    @Column(name="homeclubshortname")
+    @Column(name="home_club_short_name")
     private String homeClubShortName;
 
-    @Column(name="awayclubid")
+    @Column(name="away_club_id")
     private Integer awayClubId;
 
-    @Column(name="awayclubshortname")
+    @Column(name="away_club_short_name")
     private String awayClubShortName;
 
-    @Column(name="prrediction")
+    @Column(name="prediction")
     private Double prediction;
 }

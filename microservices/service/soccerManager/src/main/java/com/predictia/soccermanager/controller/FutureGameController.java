@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "", allowedHeaders = "")
-@RequestMapping("/fgc")
+@RequestMapping("/nextgames")
 public class FutureGameController {
 
     @Autowired
