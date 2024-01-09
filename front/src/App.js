@@ -17,7 +17,7 @@ function App() {
     const [username, setUsername] = useState('');
     const [money, setMoney] = useState('');
     useEffect(() => {
-        document.title = 'ASI-2SBM';
+        document.title = 'Predictia';
     }, []);
     return (
         <React.StrictMode>

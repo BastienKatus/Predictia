@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+select {
+  appearance: none; /* Supprime les styles par défaut des navigateurs */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Style pour les options de la liste déroulante */
+select option {
+  padding: 10px;
+}
