@@ -357,7 +357,7 @@ button:active {
 
 .team {
   text-align: center;
-  margin: 0 10px; /* Ajustez la marge entre les équipes si nécessaire */
+  margin: 0 10px;
 }
 
 .team img {
@@ -378,7 +378,7 @@ button:active {
   background-color: #eee;
   border-radius: 10px;
   overflow: hidden;
-  margin: 10px 0; /* Ajustez la marge entre les équipes et la barre de pourcentage si nécessaire */
+  margin: 10px 0;
 }
 
 .percentage,
@@ -443,4 +443,26 @@ select option {
   background-color: #a7c5eb !important;
   border-radius: 8px;
   min-height: 150px;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: auto;
+}
+
+.label-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.label-group label {
+  width: 48%; 
+}
+
+.label-group select {
+  width: 180%; 
 }

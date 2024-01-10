@@ -17,6 +17,14 @@ const RegistrationForm = () => {
   const [mail, setMail] = useState('');
   const [favoriteTeam, setFavoriteTeam] = useState('');
   const [teamList, setTeamList] = useState([]);
+  const [selectedLeague, setSelectedLeague] = useState('');
+  const [leagueList, setLeagueList] = useState([
+    { id: 1, name: 'Premier League' },
+    { id: 2, name: 'La Liga' },
+    { id: 3, name: 'Bundesliga' },
+    { id: 4, name: 'Serie A' },
+    { id: 5, name: 'Ligue 1' },
+  ]);
 
   useEffect(() => {
     if(dataReducer.teams.length === 0){
@@ -55,6 +63,10 @@ const RegistrationForm = () => {
 
   const handleFavoriteTeamChange = (e) => {
     setFavoriteTeam(e.target.value);
+  };
+
+  const handleLeagueChange = (e) => {
+    setSelectedLeague(e.target.value);
   };
 
   const validatePassword = (password) => {
@@ -115,18 +127,33 @@ const RegistrationForm = () => {
           <input type="text" value={username} onChange={handleUsernameChange} required className={username ? '' : 'required-input'}/>
         </label>
       </div>
-      <div>
-        <label>
-          Equipe favorite :
-          <select value={favoriteTeam} onChange={handleFavoriteTeamChange}>
-            <option value="">Selectionner une équipe</option>
-            {teamList.map((team) => (
-              <option key={team.clubId} value={team.clubId}>
-                {team.name}
-              </option>
-            ))}
-          </select>
-        </label>
+      <div className="label-group">
+        <div>
+          <label>
+            Equipe favorite :
+            <select value={favoriteTeam} onChange={handleFavoriteTeamChange}>
+              <option value="">Selectionner une équipe</option>
+              {teamList.map((team) => (
+                <option key={team.clubId} value={team.clubId}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div>
+          <label>
+            Ligue :
+            <select value={selectedLeague} onChange={handleLeagueChange}>
+              <option value="">Select a league</option>
+              {leagueList.map((league) => (
+                <option key={league.id} value={league.id}>
+                  {league.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
       <div>
         <label>
