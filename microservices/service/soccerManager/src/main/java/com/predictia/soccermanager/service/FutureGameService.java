@@ -78,10 +78,10 @@ public class FutureGameService {
         // Récupération du tableau des matches
         JSONArray matchesArray = responseJson.getJSONArray("matches");
 
-        List<FutureGameModel> games = new ArrayList<>();
+        List<FutureGameModel> gamesToSave= new ArrayList<>();
         // Boucle pour parcourir tous les matches
         for (int i = 0; i < matchesArray.length(); i++) {
-            FutureGameModel futureGameModel = new FutureGameModel();
+
             JSONObject matchObj = matchesArray.getJSONObject(i);
 
             // Récupération des détails du match
@@ -91,13 +91,21 @@ public class FutureGameService {
             JSONObject awayTeamObj = matchObj.getJSONObject("awayTeam");
             JSONObject scoreObj = matchObj.getJSONObject("score");
 
-            futureGameModel.setHomeClubShortName(homeTeamObj.getString("shortName"));
-            futureGameModel.setAwayClubShortName(awayTeamObj.getString("shortName"));
+            String homeShortName = homeTeamObj.getString("shortName");
+            String awayShortName = homeTeamObj.getString("shortName");
+            FutureGameModel futureGameModel = futureGameRepository.findFutureGameModelByHomeClubShortNameAndAwayClubShortName(homeShortName, awayShortName);
+            if(futureGameModel == null) {
+                futureGameModel = new FutureGameModel();
+            }
+            futureGameModel.setHomeClubId(Integer.parseInt(homeTeamObj.getString("id")));
+            futureGameModel.setHomeClubShortName(homeShortName);
+            futureGameModel.setAwayClubId(Integer.parseInt(awayTeamObj.getString("id")));
+            futureGameModel.setAwayClubShortName(awayShortName);
 
-            games.add(futureGameModel);
+            gamesToSave.add(futureGameModel);
         }
-        futureGameRepository.saveAll(games);
-        return games.stream().map(fgm -> futureGameMapper.futurGameEntityToFuturGameDTO(fgm)).toList();
+        futureGameRepository.saveAll(gamesToSave);
+        return gamesToSave.stream().map(fgm -> futureGameMapper.futurGameEntityToFuturGameDTO(fgm)).toList();
     }
 
     @Transactional
