@@ -6,4 +6,9 @@ export const logIn = (username) => ({
 export const logOut = () => ({
   type: 'LOG_OUT'
 });
+  
+export const getTeams = (teams) => ({
+  type: 'GET_TEAMS',
+  payload: teams
+});
 

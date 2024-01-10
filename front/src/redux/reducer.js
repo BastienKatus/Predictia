@@ -1,7 +1,8 @@
 import { combineReducers } from "redux"
 
 const initialState = {
-    currentUser: null
+    currentUser: null,
+    teams: []
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -10,13 +11,24 @@ export const userReducer = (state = initialState, action) => {
           return {
             ...state,
             currentUser: action.payload
-        };
+          };
         case 'LOG_OUT':
           return {
             ...state,
             currentUser: null
+          };  
+        default:
+        return state;
+    }
+};
+
+export const dataReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case 'GET_TEAMS':
+          return {
+            ...state,
+            teams: action.payload
           };
-  
         default:
         return state;
     }
@@ -24,4 +36,5 @@ export const userReducer = (state = initialState, action) => {
 
 export default combineReducers({
     userReducer,
+    dataReducer
 })

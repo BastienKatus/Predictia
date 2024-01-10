@@ -26,8 +26,6 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('hello')
-
     fetch('/auth/login', {
       method: 'POST',
       headers: {
@@ -37,7 +35,6 @@ const LoginForm = () => {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.username);
       dispatch(logIn(data.username));
       handleRouting()
     })
@@ -47,17 +44,17 @@ const LoginForm = () => {
     <form className="login-form" onSubmit={handleSubmit}>
       <div>
         <label>
-          Username:
-          <input type="text" value={username} onChange={handleUsernameChange} />
+        Nom d'Utilisateur :
+          <input type="text" value={username} onChange={handleUsernameChange} required />
         </label>
       </div>
       <div>
         <label>
-          Password:
-          <input type="password" value={password} onChange={handlePasswordChange} />
+          Mot de passe :
+          <input type="password" value={password} onChange={handlePasswordChange} required />
         </label>
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Se connecter</button>
     </form>
   );
 };

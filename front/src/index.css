@@ -39,6 +39,11 @@ button {
   background-color: white;
   line-height: 1.5;
   margin: 0;
+  transition: background-color 0.3s;
+}
+
+button:active {
+  background-color: #AAA;
 }
 
 #root {
@@ -396,4 +401,22 @@ button {
 
 .percentage3 {
   background-color: red;
+}
+
+select {
+  appearance: none;
+  padding: 10px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  font-size: 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+select option {
+  padding: 10px;
+}
+
+.required-input {
+  border: 1px solid lightcoral;
 }

@@ -6,41 +6,39 @@ const PlayerTable = (props) => {
   const [selectedPlayer, setSelectedPlayer] = useState({
     name: '',
   });
+  const [playerList, setPlayerList] = useState([]);
 
   const dispatch = useDispatch();
 
-  const data = [
-    { name: 'Lionel Pepsi', club: 'dzd', age: 12, value: 277700, pied_fort: 'L', nb_match: 4 },
-    { name: 'Christiano RonaldMcDonald', club: 'ddzdz', age: 43, value: 277700, pied_fort: 'L', nb_match: 4 },
-    { name: 'Zizinédine Zizidane', club: 'dzd', age: 43, value: 277700, pied_fort: 'D', nb_match: 4 },
-  ];
+  fetch('/soccerManager/players/' + props.clubId)
+    .then(response => response.json())
+    .then(data => setPlayerList(data))
+    .catch(error => console.error('Erreur lors de la récupération des clubs', error));
 
   return (
     <div className="card-table-container">
       <table className="card-table">
         <thead>
           <tr>
-            <th>Prénom/Nom</th>
+            <th>Prénom</th>
+            <th>Nom</th>
             <th>Club</th>
-            <th>Age</th>
             <th>Valeur</th>
             <th>Pied fort</th>
-            <th>Nombre de match</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((player, index) => (
+          {playerList.map((player) => (
             <tr
-              key={index}
-              className={selectedPlayer.name === player.name ? 'selected' : ''}
+              key={player.playerId}
+              className={selectedPlayer.lastName === player.lastName ? 'selected' : ''}
               onClick={() => setSelectedPlayer(player)}
             >
-              <td>{player.name}</td>
-              <td>{player.club}</td>
-              <td>{player.age}</td>
-              <td>{player.value}</td>
-              <td>{player.pied_fort}</td>
-              <td>{player.nb_match}</td>
+              <td>{player.firstName}</td>
+              <td>{player.lastName}</td>
+              <td>{player.currentClubId}</td>
+              <td>{player.marketValueInEur}</td>
+              <td>{player.foot}</td>
             </tr>
           ))}
         </tbody>

@@ -38,6 +38,7 @@ const TeamTable = (props) => {
       <h1>Toutes les équipes</h1>
       {allMatches.map((match, index) => (
         <Match
+        key={index}
         team1={match.team1}
         team2={match.team2}
       />

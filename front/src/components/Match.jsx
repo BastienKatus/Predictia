@@ -43,6 +43,10 @@ const Match = ({ team1, team2, logo1, logo2 }) => {
         </div>
     </div>
 
+    <div>
+      <p> Predictia indique {team2} vainqueur. </p>
+    </div>
+
     <button onClick={handleButtonClick}>Simuler le match</button>
     </div>
   );

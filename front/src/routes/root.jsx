@@ -10,7 +10,6 @@ export default function Root(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
   const handleLogOut = () => {
     dispatch(logOut());
     navigate('/');

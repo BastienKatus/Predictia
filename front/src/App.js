@@ -2,6 +2,7 @@ import './App.css';
 import Login from './components/LoginForm';
 import Home from './components/Home';
 import TeamTable from './components/TeamTable';
+import Team from './components/Team';
 import PlayerTable from './components/PlayerTable';
 import Root from './routes/root';
 import Register from './components/RegisterForm'
@@ -17,7 +18,7 @@ function App() {
     const [username, setUsername] = useState('');
     const [money, setMoney] = useState('');
     useEffect(() => {
-        document.title = 'ASI-2SBM';
+        document.title = 'Predictia';
     }, []);
     return (
         <React.StrictMode>
@@ -56,7 +57,11 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <Register />,
-    }
+    },
+    {
+        path: "/team/:id",
+        element: <Team />,
+      }
   ],
   },
 ]);
