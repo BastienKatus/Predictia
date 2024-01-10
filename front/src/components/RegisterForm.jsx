@@ -7,7 +7,7 @@ const RegistrationForm = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const dataReducer = useSelector(state => state.dataReducer)
 
   const [firstname, setFirstname] = useState('');
@@ -62,8 +62,8 @@ const RegistrationForm = () => {
     return passwordRegex.test(password);
   };
 
-  function handleRouting() {
-    navigate("/login");
+  function handleRouting(id) {
+    navigate("/follow_teams/" + id);
   }
 
   const handleSubmit = async (e) => {
@@ -77,10 +77,9 @@ const RegistrationForm = () => {
         },
         body: JSON.stringify({"favoriteClubId" : favoriteTeam, "username": username,"password": password, "firstname": firstname, "lastname": lastname, "mail": mail}),
       })
-      .then((response) => {
-        if (response.ok) {
-          handleRouting()
-        }
+      .then(response => response.json())
+      .then(json => {
+        handleRouting(json.id)
       })
 
       setFirstname('');

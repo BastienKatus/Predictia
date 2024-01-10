@@ -420,3 +420,27 @@ select option {
 .required-input {
   border: 1px solid lightcoral;
 }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.team-grid-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  min-height: 150px;
+}
+
+.team-grid-card-selected {
+  border: 1px solid #ddd;
+  padding: 16px;
+  text-align: center;
+  background-color: #a7c5eb !important;
+  border-radius: 8px;
+  min-height: 150px;
+}
