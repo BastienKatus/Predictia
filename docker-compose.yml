@@ -16,7 +16,7 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: soccer_manager_predictia
+      POSTGRES_DB: predictia_soccer_manager
     ports:
       - "5432:5432"
    
