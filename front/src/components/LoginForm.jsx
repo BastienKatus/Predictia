@@ -26,6 +26,8 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log('hello')
+
     fetch('/auth/login', {
       method: 'POST',
       headers: {
@@ -35,6 +37,7 @@ const LoginForm = () => {
     })
     .then((response) => response.json())
     .then((data) => {
+      console.log(data.username);
       dispatch(logIn(data.username));
       handleRouting()
     })

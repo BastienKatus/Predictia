@@ -1,11 +1,22 @@
-import { Outlet, Link } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { logOut } from '../redux/actions';
 
 
 export default function Root(props) {
   const userReducer = useSelector(state => state.userReducer)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+    navigate('/');
+  };
+
+
   return (
     <>
       <div id="sidebar">
@@ -43,7 +54,14 @@ export default function Root(props) {
                     </>
                 )
             }
-            {userReducer.currentUser !== null && <p><FontAwesomeIcon icon={faUser} />  {userReducer.currentUser}</p>}
+            {userReducer.currentUser !== null && (
+              <>
+              <li>
+                <Link onClick={handleLogOut}>Se Déconnecter</Link>
+              </li>
+              <p><FontAwesomeIcon icon={faUser} /> {userReducer.currentUser}</p>
+              </>
+            )}
           </ul>
         </nav>
       </div>

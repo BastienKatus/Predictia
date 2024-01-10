@@ -50,7 +50,6 @@ const RegistrationForm = () => {
         handleRouting()
       }
     })
-    
 
     setFirstname('');
     setLastname('');

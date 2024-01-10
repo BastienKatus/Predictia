@@ -377,7 +377,8 @@ button {
 }
 
 .percentage,
-.percentage2 {
+.percentage2,
+.percentage3 {
   height: 100%;
   color: #fff;
   display: flex;
@@ -390,5 +391,9 @@ button {
 }
 
 .percentage2 {
+  background-color: orange;
+}
+
+.percentage3 {
   background-color: red;
 }
