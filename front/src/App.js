@@ -3,6 +3,7 @@ import Login from './components/LoginForm';
 import Home from './components/Home';
 import Team from './components/Team';
 import TeamTable from './components/TeamTable';
+import FollowTeams from './components/FollowTeams';
 import CompetitionTable from './components/CompetitionTable';
 import Root from './routes/root';
 import Register from './components/RegisterForm'
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
     {
         path: "/competitions",
         element: <CompetitionTable />,
+    },
+    {
+        path: "/follow_teams/:id",
+        element: <FollowTeams />,
     },
     {
         path: "/login",
