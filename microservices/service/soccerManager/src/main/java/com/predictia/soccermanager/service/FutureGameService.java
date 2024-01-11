@@ -17,10 +17,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -46,21 +47,14 @@ public class FutureGameService {
         System.out.println(response.body());
     }
 
-    public List<FutureGameDTO> getRangeDateFutureGames(Date dateFrom, Date dateTo) throws IOException, InterruptedException, JSONException {
+    public HttpResponse<String> getFromAPINextGamesInRange(LocalDate dateFrom, LocalDate dateTo) throws IOException, InterruptedException, JSONException {
         String filterRequest = "?status=SCHEDULED";
 
-        if(dateFrom == null || dateTo == null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.WEEK_OF_YEAR, 1);
-            dateTo = calendar.getTime();
-            dateFrom = Calendar.getInstance().getTime();
-        }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDateTo = dateFormat.format(dateTo);
-        String formattedDateFrom = dateFormat.format(dateFrom);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDateTo = dateTo.format(formatter);
+        String formattedDateFrom = dateFrom.format(formatter);
 
         filterRequest = "&dateFrom=" + formattedDateFrom + "&dateTo=" + formattedDateTo;
-        System.out.println("filterRequest: " + filterRequest);
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -68,44 +62,78 @@ public class FutureGameService {
                 .header("X-Auth-Token", API_KEY)
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.statusCode());
-        System.out.println(response.body());
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
 
-        // Parsing la réponse API en tant qu'objet JSON
-        JSONObject responseJson = new JSONObject(response.body());
+    @Transactional
+    public List<FutureGameDTO> getAllRangeWeekMatch(LocalDate startDate, LocalDate endDate) throws JSONException, IOException, InterruptedException {
+        List<FutureGameModel> futureGameModelExistWithDate = futureGameRepository.findAllByModifiedDateVerification(LocalDate.now());
+        List<FutureGameModel> filteredGames = new ArrayList<>();
 
-        // Récupération du tableau des matches
-        JSONArray matchesArray = responseJson.getJSONArray("matches");
-
-        List<FutureGameModel> gamesToSave= new ArrayList<>();
-        // Boucle pour parcourir tous les matches
-        for (int i = 0; i < matchesArray.length(); i++) {
-
-            JSONObject matchObj = matchesArray.getJSONObject(i);
-
-            // Récupération des détails du match
-            String utcDate = matchObj.getString("utcDate");
-            String status = matchObj.getString("status");
-            JSONObject homeTeamObj = matchObj.getJSONObject("homeTeam");
-            JSONObject awayTeamObj = matchObj.getJSONObject("awayTeam");
-            JSONObject scoreObj = matchObj.getJSONObject("score");
-
-            String homeShortName = homeTeamObj.getString("shortName");
-            String awayShortName = homeTeamObj.getString("shortName");
-            FutureGameModel futureGameModel = futureGameRepository.findFutureGameModelByHomeClubShortNameAndAwayClubShortName(homeShortName, awayShortName);
-            if(futureGameModel == null) {
-                futureGameModel = new FutureGameModel();
-            }
-            futureGameModel.setHomeClubId(Integer.parseInt(homeTeamObj.getString("id")));
-            futureGameModel.setHomeClubShortName(homeShortName);
-            futureGameModel.setAwayClubId(Integer.parseInt(awayTeamObj.getString("id")));
-            futureGameModel.setAwayClubShortName(awayShortName);
-
-            gamesToSave.add(futureGameModel);
+        if (startDate == null || endDate == null) {
+            startDate = LocalDate.now();
+            endDate = startDate.plusWeeks(1);
         }
-        futureGameRepository.saveAll(gamesToSave);
-        return gamesToSave.stream().map(fgm -> futureGameMapper.futurGameEntityToFuturGameDTO(fgm)).toList();
+
+        if(futureGameModelExistWithDate.isEmpty()) {
+            HttpResponse<String> response = getFromAPINextGamesInRange(startDate, endDate);
+
+            // Parsing la réponse API en tant qu'objet JSON
+            JSONObject responseJson = new JSONObject(response.body());
+
+            // Récupération du tableau des matches
+            JSONArray matchesArray = responseJson.getJSONArray("matches");
+
+            // Boucle pour parcourir tous les matches
+            for (int i = 0; i < matchesArray.length(); i++) {
+
+                JSONObject matchObj = matchesArray.getJSONObject(i);
+
+                // Récupération des détails du match
+                JSONObject homeTeamObj = matchObj.getJSONObject("homeTeam");
+                JSONObject awayTeamObj = matchObj.getJSONObject("awayTeam");
+                JSONObject scoreObj = matchObj.getJSONObject("score");
+
+                String utcDate = matchObj.getString("utcDate");
+                String status = matchObj.getString("status");
+                Integer homeclubId = Integer.parseInt(homeTeamObj.getString("id"));
+                Integer awayClubid = Integer.parseInt(awayTeamObj.getString("id"));
+                String homeShortName = homeTeamObj.getString("shortName");
+                String awayShortName = awayTeamObj.getString("shortName");
+
+                FutureGameModel futureGameModel = futureGameRepository.findFutureGameModelByHomeClubShortNameAndAwayClubShortName(homeShortName, awayShortName);
+                if(futureGameModel == null) {
+                    futureGameModel = new FutureGameModel();
+                }
+
+                futureGameModel.setHomeClubId(homeclubId);
+                futureGameModel.setHomeClubShortName(homeShortName);
+                futureGameModel.setAwayClubId(awayClubid);
+                futureGameModel.setAwayClubShortName(awayShortName);
+                futureGameModel.setStatus(status);
+                futureGameModel.setModifiedDateVerification(LocalDate.now());
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                LocalDateTime dateTime = LocalDateTime.parse(utcDate, formatter);
+                LocalDate localDate = dateTime.toLocalDate();
+                futureGameModel.setGameDate(localDate);
+
+                filteredGames.add(futureGameModel);
+            }
+            futureGameRepository.saveAll(filteredGames);
+        }
+        else {
+            Iterable<FutureGameModel> futureGames = futureGameRepository.findAll();
+            for (FutureGameModel game : futureGames) {
+                LocalDate gameDate = game.getGameDate();
+
+                if ((gameDate.isAfter(startDate) && gameDate.isBefore(endDate)) || gameDate.isEqual(LocalDate.now())) {
+                    filteredGames.add(game);
+                }
+            }
+        }
+
+        return filteredGames.stream().sorted(Comparator.comparing(FutureGameModel::getGameDate)).map(fgm -> futureGameMapper.futurGameEntityToFuturGameDTO(fgm)).toList();
     }
 
     @Transactional

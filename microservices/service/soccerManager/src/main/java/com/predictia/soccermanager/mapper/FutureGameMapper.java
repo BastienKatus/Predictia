@@ -16,7 +16,11 @@ public class FutureGameMapper {
         fgm.setAwayClubShortName(dto.getAwayClubShortName());
         fgm.setHomeClubId(dto.getHomeClubId());
         fgm.setHomeClubShortName(dto.getHomeClubShortName());
-        fgm.setPrediction(dto.getPrediction());
+        fgm.setPredictionDraw(dto.getPredictionDraw());
+        fgm.setPredictionWinHome(dto.getPredictionWinHome());
+        fgm.setPredictionWinAway(dto.getPredictionWinAway());
+        fgm.setStatus(dto.getStatus());
+        fgm.setGameDate(dto.getGameDate());
         fgm.setId(dto.getId());
         return fgm;
     }
@@ -28,8 +32,11 @@ public class FutureGameMapper {
         fgmDTO.setAwayClubShortName(futureGameModel.getAwayClubShortName());
         fgmDTO.setHomeClubId(futureGameModel.getHomeClubId());
         fgmDTO.setHomeClubShortName(futureGameModel.getHomeClubShortName());
-        fgmDTO.setPrediction(futureGameModel.getPrediction());
-        fgmDTO.setId(futureGameModel.getId());
+        fgmDTO.setPredictionDraw(futureGameModel.getPredictionDraw());
+        fgmDTO.setPredictionWinHome(futureGameModel.getPredictionWinHome());
+        fgmDTO.setPredictionWinAway(futureGameModel.getPredictionWinAway());
+        fgmDTO.setStatus(futureGameModel.getStatus());
+        fgmDTO.setGameDate(futureGameModel.getGameDate());
         return fgmDTO;
     }
 }
