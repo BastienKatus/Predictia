@@ -4,11 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "players")
 public class PlayerModel {
@@ -57,6 +57,9 @@ public class PlayerModel {
 
     @Column(name = "url", length = Integer.MAX_VALUE)
     private String url;
+
+    @Column(name = "image_url", length = Integer.MAX_VALUE)
+    private String imageUrl;
 
     @Column(name = "current_club_name", length = Integer.MAX_VALUE)
     private String currentClubName;

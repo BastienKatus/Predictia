@@ -1,10 +1,12 @@
 package com.predictia.soccermanager.controller;
 
+import com.predictia.dto.ClubDTO;
 import com.predictia.soccermanager.model.ClubModel;
 import com.predictia.soccermanager.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -16,12 +18,12 @@ public class ClubController {
     private ClubService clubService;
 
     @GetMapping()
-    public Iterable<ClubModel> getAll(){
+    public List<ClubDTO> getAll(){
         return clubService.getAllClubs();
     }
 
     @GetMapping("/{id}")
-    public Optional<ClubModel> getById(@PathVariable("id") Integer id){
+    public ClubDTO getById(@PathVariable("id") Integer id){
         return clubService.getClubById(id);
     }
 

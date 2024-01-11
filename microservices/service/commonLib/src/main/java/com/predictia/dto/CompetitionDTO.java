@@ -3,6 +3,7 @@ package com.predictia.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
 
 import java.io.Serializable;
 
@@ -10,14 +11,13 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClubDTO{
-    Integer clubId;
+public class CompetitionDTO implements Serializable {
+    String competitionId;
     String name;
-    String domesticCompetitionId;
-    Integer squadSize;
-    String stadiumName;
-    Integer stadiumSeats;
-    String coachName;
-    Integer lastSeason;
+    String subType;
+    String type;
+    String countryName;
+    String domesticLeagueCode;
+    String confederation;
     String url;
 }

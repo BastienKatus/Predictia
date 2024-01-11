@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,5 +15,9 @@ public class FutureGameDTO {
     private String homeClubShortName;
     private Integer awayClubId;
     private String awayClubShortName;
-    private Double prediction;
+    private String status;
+    private LocalDate gameDate;
+    private Float predictionWinHome;
+    private Float predictionWinAway;
+    private Float predictionDraw;
 }

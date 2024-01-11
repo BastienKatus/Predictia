@@ -5,6 +5,8 @@ import com.predictia.user.model.UserModel;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserMapper {
@@ -37,5 +39,13 @@ public class UserMapper {
             u.setCredits(BigDecimal.valueOf(userModel.getCredits()));
         }
         return u;
+    }
+
+    public List<UserDTO> listUserEntityToUserDTO(List<UserModel> list){
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (UserModel UserModel: list){
+            userDTOList.add(userEntityToUserDTO(UserModel));
+        }
+        return userDTOList;
     }
 }
