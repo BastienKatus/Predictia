@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameDTO implements Serializable {
+public class GameDTO{
     Integer gameId;
     String competitionId;
     Integer season;
