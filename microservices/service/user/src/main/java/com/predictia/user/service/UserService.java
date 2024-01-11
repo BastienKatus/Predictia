@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,12 +22,17 @@ public class UserService {
     private UserMapper userMapper;
 
 
-    public Iterable<UserModel> getAllUser()  {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers()  {
+        Iterable<UserModel> userModels =  userRepository.findAll();
+        List<UserModel> userModelList = new ArrayList<>();
+        userModels.forEach(userModelList::add);
+        return new ArrayList<>(userMapper.listUserEntityToUserDTO(userModelList));
+
     }
 
-    public Optional<UserModel> getUserById(Integer id)  {
-        return userRepository.findById(id);
+    public UserDTO getUserById(Integer id)  {
+        Optional<UserModel> userModel = userRepository.findById(id);
+        return userModel.map(model -> userMapper.userEntityToUserDTO(model)).orElse(null);
     }
 
     public UserModel getUserByUsernameAndPassword(String u, String p )  {
