@@ -19,9 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserMapper userMapper;
-
     @GetMapping()
     public List<UserDTO> getAll(){
         return userService.getAllUsers();
@@ -34,14 +31,17 @@ public class UserController {
 
     @PostMapping("/register")
     public UserDTO register(@RequestBody UserDTO userDTO){
-        UserModel user = userService.createOrUpdate(userDTO);
-        return userMapper.userEntityToUserDTO(user);
+        return userService.createOrUpdate(userDTO);
+    }
+
+    @PostMapping("/followedteams/{id}")
+    public UserDTO modifyFollowedTeams(@PathVariable("id") Integer id,@RequestBody List<Integer> idteams){
+       return userService.modifyUserFollowedTeams(id,idteams);
     }
 
     @PostMapping("/login")
     public UserDTO login(@RequestBody AuthDTO authDTO) {
-        UserModel user = userService.getUserByUsernameAndPassword(authDTO.getUsername(), authDTO.getPassword());
-        return userMapper.userEntityToUserDTO(user);
+       return userService.getUserByUsernameAndPassword(authDTO.getUsername(), authDTO.getPassword());
     }
 
     @DeleteMapping("/{id}")

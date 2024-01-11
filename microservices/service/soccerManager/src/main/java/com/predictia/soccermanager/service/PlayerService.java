@@ -42,7 +42,7 @@ public class PlayerService {
         for (PlayerModel ignored : playerModels) {
             tailleIterable++;
         }
-        while(tailleIterable>0){
+        while(tailleIterable==0){
             year = year-1;
             playerModels =  playerRepository.findAllByCurrentClubIdAndLastSeason(id, year);
             for (PlayerModel ignored : playerModels) {

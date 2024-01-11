@@ -1,6 +1,7 @@
 package com.predictia.user.mapper;
 
 import com.predictia.dto.UserDTO;
+import com.predictia.user.model.FollowedTeamsModel;
 import com.predictia.user.model.UserModel;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class UserMapper {
         return u;
     }
 
-    public UserDTO userEntityToUserDTO(UserModel userModel){
+    public UserDTO userEntityToUserDTO(UserModel userModel,List<FollowedTeamsModel> idFT){
         UserDTO u = new UserDTO();
         u.setId(userModel.getId());
         u.setUsername(userModel.getUsername());
@@ -38,13 +39,20 @@ public class UserMapper {
         if(userModel.getCredits()!=null){
             u.setCredits(BigDecimal.valueOf(userModel.getCredits()));
         }
+        List<Integer> idTeams = new ArrayList<>();
+        if(idFT!=null && !idFT.isEmpty()){
+            for(FollowedTeamsModel ft:idFT){
+                idTeams.add(ft.getIdTeam());
+            }
+        }
+        u.setFollowedTeamsId(idTeams);
         return u;
     }
 
     public List<UserDTO> listUserEntityToUserDTO(List<UserModel> list){
         List<UserDTO> userDTOList = new ArrayList<>();
         for (UserModel UserModel: list){
-            userDTOList.add(userEntityToUserDTO(UserModel));
+            userDTOList.add(userEntityToUserDTO(UserModel,null));
         }
         return userDTOList;
     }
