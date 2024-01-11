@@ -128,10 +128,10 @@ CREATE TABLE games (
 COPY games
 FROM '/csv_files/games.csv' DELIMITER ',' CSV HEADER;
 
-create sequence "next_games_seq"
-    increment by 50;
+CREATE SEQUENCE "next_games_seq"
+    increment BY 50;
 
-alter sequence "next_games_seq" owner to admin;
+ALTER SEQUENCE "next_games_seq" OWNER TO ADMIN;
 
 CREATE TABLE next_games (
     next_game_id INTEGER PRIMARY KEY NOT NULL,
@@ -186,3 +186,17 @@ CREATE TABLE players (
 );
 COPY players
 FROM '/csv_files/players.csv' DELIMITER ',' CSV HEADER;
+
+CREATE TABLE game_lineups (
+    game_lineups_id TEXT NULL,
+    game_id INTEGER NULL,
+    club_id INTEGER NULL,
+    type TEXT NULL,
+    number TEXT NULL,
+    player_id INTEGER NULL,
+    player_name TEXT NULL,
+    team_captain TEXT NULL,
+    position TEXT NULL
+);
+COPY game_lineups
+FROM '/csv_files/game_lineups.csv' DELIMITER ',' CSV HEADER;

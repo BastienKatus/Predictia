@@ -13,10 +13,10 @@ app = Flask(__name__)
 
 # Remplacez par vos détails de connexion PostgreSQL
 DB_HOST = 'localhost'
-DB_PORT = '5432'
+DB_PORT = '5433'
 DB_USER = 'admin'
 DB_PASSWORD = 'admin'
-DB_NAME = 'predictia'
+DB_NAME = 'predictia_soccer_manager'
 
 # Initialisation des DataFrames
 df_players = None
