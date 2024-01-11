@@ -478,7 +478,7 @@ select option {
 .registration-form {
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  max-width: 60%;
   margin: auto;
 }
 
@@ -490,9 +490,5 @@ select option {
 }
 
 .label-group label {
-  width: 48%; 
-}
-
-.label-group select {
-  width: 180%; 
+  min-width: 40%; 
 }
