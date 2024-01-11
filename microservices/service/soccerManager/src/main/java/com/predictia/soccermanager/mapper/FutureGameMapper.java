@@ -4,7 +4,6 @@ import com.predictia.dto.FutureGameDTO;
 import com.predictia.soccermanager.model.FutureGameModel;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 
 @Service
 public class FutureGameMapper {

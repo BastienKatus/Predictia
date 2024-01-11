@@ -2,14 +2,11 @@ package com.predictia.user.controller;
 
 import com.predictia.dto.AuthDTO;
 import com.predictia.dto.UserDTO;
-import com.predictia.user.mapper.UserMapper;
-import com.predictia.user.model.UserModel;
 import com.predictia.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "", allowedHeaders = "")
