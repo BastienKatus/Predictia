@@ -478,17 +478,21 @@ select option {
 .registration-form {
   display: flex;
   flex-direction: column;
-  max-width: 60%;
+  max-width: 80%;
   margin: auto;
 }
 
 .label-group {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  position: relative;
   margin-bottom: 16px;
+  width: 100%;
 }
 
 .label-group label {
-  min-width: 40%; 
+  min-width: 40%;
+}
+
+.label-group label select {
+  width: 300px;
 }
