@@ -52,9 +52,15 @@ const FollowTeams = (props) => {
     
       return (
         <>
-        <button onClick={() => toggleSaveSelection()}>Sauvegarder</button>
-        <div className="team-grid">
-          {teamItems}
+        <div className="team-grid-container">
+            <div className="team-grid">
+                {teamItems}
+            </div>
+        </div>
+        <div className="center-button-container">
+            <button className="follow-teams-button" onClick={toggleSaveSelection}>
+            Sauvegarder
+            </button>
         </div>
         </>
       );

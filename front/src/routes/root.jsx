@@ -24,16 +24,16 @@ export default function Root(props) {
             <li>
               <Link to={`/`}>Accueil</Link>
             </li>
+            <li>
+              <Link to={`/competitions`}>Compétitions</Link>
+            </li>
             {userReducer.currentUser !== null && 
             <li>
               <Link to={`/teams_followed`}>Equipes Suivies</Link>
             </li>
             }
             <li>
-              <Link to={`/teams`}>Equipes</Link>
-            </li>
-            <li>
-              <Link to={`/players`}>Joueurs</Link>
+              <Link to={`/teams/all`}>Equipes</Link>
             </li>
 
             {userReducer.currentUser !== null ? (

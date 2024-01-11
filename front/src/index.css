@@ -58,6 +58,10 @@ button:active {
   border-right: solid 1px #e3e3e3;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
 #sidebar > * {
@@ -156,6 +160,7 @@ button:active {
 #detail {
   flex: 1;
   padding: 2rem 4rem;
+  padding-left: 20rem;
   width: 100%;
 }
 
@@ -443,6 +448,31 @@ select option {
   background-color: #a7c5eb !important;
   border-radius: 8px;
   min-height: 150px;
+}
+
+.team-grid-container {
+  max-height: 90%; /* Ajustez la hauteur maximale selon vos besoins */
+  overflow-y: auto;
+  padding: 16px;
+  border: 1px solid darkgray;
+}
+
+.center-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.follow-teams-button {
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
 }
 
 .registration-form {

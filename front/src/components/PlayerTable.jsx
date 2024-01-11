@@ -10,10 +10,10 @@ const PlayerTable = (props) => {
 
   const dispatch = useDispatch();
 
-  /*fetch('/soccerManager/players/' + props.clubId)
+  fetch('/soccerManager/players/club/' + props.clubId)
     .then(response => response.json())
     .then(data => setPlayerList(data))
-    .catch(error => console.error('Erreur lors de la récupération des clubs', error));*/
+    .catch(error => console.error('Erreur lors de la récupération des clubs', error));
 
   return (
     <div className="card-table-container">

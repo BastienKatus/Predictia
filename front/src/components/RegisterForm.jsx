@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getTeams } from '../redux/actions';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,18 +26,7 @@ const RegistrationForm = () => {
   ]);
 
   useEffect(() => {
-    if(dataReducer.teams.length === 0){
-      fetch('/soccerManager/clubs')
-        .then(response => response.json())
-        .then(data => {
-          dispatch(getTeams(data));
-          setTeamList(data)
-        })
-        .catch(error => console.error('Erreur lors de la récupération des clubs', error));
-    }
-    else{
-      setTeamList(dataReducer.teams)
-    }
+    setTeamList(dataReducer.teams)
   }, []);
 
   const handleFirstnameChange = (e) => {

@@ -12,3 +12,8 @@ export const getTeams = (teams) => ({
   payload: teams
 });
 
+export const getCompetitions = (competitions) => ({
+  type: 'GET_COMPETITIONS',
+  payload: competitions
+});
+

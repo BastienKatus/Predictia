@@ -2,7 +2,8 @@ import { combineReducers } from "redux"
 
 const initialState = {
     currentUser: null,
-    teams: []
+    teams: [],
+    competitions: []
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -28,6 +29,11 @@ export const dataReducer = (state = initialState, action) => {
           return {
             ...state,
             teams: action.payload
+          };
+        case 'GET_COMPETITIONS':
+          return {
+            ...state,
+            competitions: action.payload
           };
         default:
         return state;
