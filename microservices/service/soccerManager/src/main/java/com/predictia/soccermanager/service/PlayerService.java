@@ -37,14 +37,14 @@ public class PlayerService {
     public List<PlayerDTO> getAllPlayersFromClub(Integer id)  {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
-        Iterable<PlayerModel> playerModels =  playerRepository.findAllByCurrentClubIdAndLastSeason(String.valueOf(id), String.valueOf(year));
+        Iterable<PlayerModel> playerModels =  playerRepository.findAllByCurrentClubIdAndLastSeason(id, year);
         int tailleIterable = 0;
         for (PlayerModel ignored : playerModels) {
             tailleIterable++;
         }
         while(tailleIterable>0){
             year = year-1;
-            playerModels =  playerRepository.findAllByCurrentClubIdAndLastSeason(String.valueOf(id), String.valueOf(year));
+            playerModels =  playerRepository.findAllByCurrentClubIdAndLastSeason(id, year);
             for (PlayerModel ignored : playerModels) {
                 tailleIterable++;
             }
@@ -52,8 +52,5 @@ public class PlayerService {
         List<PlayerModel> playerModelList = new ArrayList<>();
         playerModels.forEach(playerModelList::add);
         return new ArrayList<>(playerMapper.listPlayerEntityToPlayerDTO(playerModelList));
-
     }
-
-
 }

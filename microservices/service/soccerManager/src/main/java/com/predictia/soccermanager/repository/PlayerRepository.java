@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlayerRepository extends CrudRepository<PlayerModel,Integer> {
 
-    Iterable<PlayerModel> findAllByCurrentClubIdAndLastSeason(String currentCLubId, String lastSeason);
+    Iterable<PlayerModel> findAllByCurrentClubIdAndLastSeason(Integer currentClubId, Integer lastSeason);
 }
