@@ -29,6 +29,21 @@ const RegistrationForm = () => {
     setTeamList(dataReducer.teams)
   }, []);
 
+  useEffect(() => {
+    setLeagueList(dataReducer.competitions);
+  }, [dataReducer.competitions]);
+
+  useEffect(() => {
+    if (selectedLeague) {
+      const filteredTeams = dataReducer.teams.filter(
+        (team) => team.domesticCompetitionId === selectedLeague
+      );
+      setTeamList(filteredTeams);
+    } else {
+      setTeamList([]);
+    }
+  }, [selectedLeague, dataReducer.teams]);
+
   const handleFirstnameChange = (e) => {
     setFirstname(e.target.value);
   };
@@ -58,9 +73,9 @@ const RegistrationForm = () => {
   };
 
   const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{12,}$/;
     return passwordRegex.test(password);
-  };
+  };  
 
   function handleRouting(id) {
     navigate("/follow_teams/" + id);
@@ -116,6 +131,19 @@ const RegistrationForm = () => {
         </label>
       </div>
       <div className="label-group">
+      <div>
+          <label>
+            Ligue :
+            <select value={selectedLeague} onChange={handleLeagueChange}>
+              <option value="">Select a league</option>
+              {leagueList.map((league) => (
+                <option key={league.competitionId} value={league.competitionId}>
+                  {league.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
         <div>
           <label>
             Equipe favorite :
@@ -124,19 +152,6 @@ const RegistrationForm = () => {
               {teamList.map((team) => (
                 <option key={team.clubId} value={team.clubId}>
                   {team.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Ligue :
-            <select value={selectedLeague} onChange={handleLeagueChange}>
-              <option value="">Select a league</option>
-              {leagueList.map((league) => (
-                <option key={league.id} value={league.id}>
-                  {league.name}
                 </option>
               ))}
             </select>
@@ -155,7 +170,7 @@ const RegistrationForm = () => {
           <input type="password" value={password} onChange={handlePasswordChange} required className={password ? '' : 'required-input'}/>
         </label>
         <small>
-          Doit contenir au moins 8 caractères, dont au moins une minuscule, une majuscule et un chiffre.
+          Doit contenir au moins 12 caractères, dont au moins une minuscule, une majuscule, un chiffre et un caractère spécial.
         </small>
       </div>
       <button type="submit">S'inscire</button>
