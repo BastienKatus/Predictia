@@ -16,7 +16,7 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: predictia
+      POSTGRES_DB: predictia_soccer_manager
     ports:
       - "5433:5432"
    
@@ -27,6 +27,6 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "5050:80"
+      - "5051:80"
     depends_on:
       - postgres

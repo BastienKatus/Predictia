@@ -1,11 +1,16 @@
 package com.predictia.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.io.Serializable;
 
-@Value
-public class PlayerDTO implements Serializable {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PlayerDTO{
     Integer playerId;
     String firstName;
     String lastName;
@@ -21,6 +26,7 @@ public class PlayerDTO implements Serializable {
     String foot;
     Integer heightInCm;
     String url;
+    String imageUrl;
     String currentClubName;
     Integer marketValueInEur;
     Integer highestMarketValueInEur;
