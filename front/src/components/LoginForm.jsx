@@ -38,15 +38,24 @@ const LoginForm = () => {
       },
       body: JSON.stringify({"username": username,"password": password}),
     })
-    .then((response) => response.json())
-    .then((data) => {
-      dispatch(logIn(data.username, data.id, data.followedTeamsId));
-      setSuccess("Connexion réussie !");
-      setTimeout(() => {
-        handleRouting();
-      }, 2000);
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Nom d\'utilisateur ou mot de passe incorrect.'); // or you can use response.status to provide a more specific error message
+        }
+        return response.json();
     })
+    .then((data) => {
+        dispatch(logIn(data.username, data.id, data.followedTeamsId));
+        setSuccess("Connexion réussie !");
+        setTimeout(() => {
+            handleRouting();
+        }, 2000);
+    })
+    .catch((error) => {
+        setError('Erreur : ' + error.message); // Handle the error state here
+    });
   };
+
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
