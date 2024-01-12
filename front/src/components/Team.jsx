@@ -13,16 +13,15 @@ const Team = () => {
       team => team.clubId === parseInt(routeParams.id)
     );
     setTeam(filteredTeam);
-  }, [dataReducer.teams, routeParams.id]);
+  }, []);
 
   return (
     <>
       <h1>{team.name}</h1>
-      {team.stadiumName && <p>Nom du stade: {team.stadiumName}</p>}
-      {team.stadiumSeats && <p>Nombre de place dans le stade: {team.stadiumSeats}</p>}
-      {team.lastSeason && <p>Dernière saison: {team.lastSeason}</p>}
-      {team.coachName && <p>Nom du coach: {team.coachName}</p>}
-
+      {team.stadiumName && <p><strong>Nom du stade: </strong>{team.stadiumName}</p>}
+      {team.stadiumSeats && <p><strong>Nombre de place dans le stade: </strong>{team.stadiumSeats}</p>}
+      {team.lastSeason && <p><strong>Dernière saison: </strong>{team.lastSeason}</p>}
+      {team.coachName && <p><strong>Nom du coach: </strong>{team.coachName}</p>}
       <PlayerTable clubId={routeParams.id} />
     </>
   );

@@ -36,7 +36,7 @@ const TeamTable = (props) => {
     setTeamList(filteredTeams);
   };
   
-  const handleButtonClick = (teamId) => {
+  const handleDoubleClick = (teamId) => {
     navigate('/team/' + teamId)
   };
 
@@ -63,17 +63,15 @@ const TeamTable = (props) => {
         <thead>
           <tr>
             <th>Nom</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           {teamList.map((team) => (
             <tr
               key={team.clubId}
+              onDoubleClickCapture={() => { handleDoubleClick(team.clubId) }}
             >
               <td>{team.name}</td>
-              <td><button>
-            <FontAwesomeIcon icon={faEye} onClick={() => { handleButtonClick(team.clubId) }}/></button></td>
             </tr>
           ))}
         </tbody>

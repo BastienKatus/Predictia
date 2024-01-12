@@ -43,18 +43,18 @@ const FollowTeams = (props) => {
     };
 
     const toggleSaveSelection = () => {
-        /*fetch('/user/' + routeParams.id, {
+        fetch('/users/followedteams/' + routeParams.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({"favoriteClubId" : favoriteTeam, "username": username,"password": password, "firstname": firstname, "lastname": lastname, "mail": mail}),
+            body: JSON.stringify(selectedTeams),
           })
-          .then(response => response.json())
+          .then(response => console.log(response))
           .then(json => {
             console.log(json.id)
             handleRouting()
-          })*/
+          })
     };
 
     const teamItems = teamList.map(team => (
