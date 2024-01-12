@@ -15,6 +15,8 @@ public class FutureGameDTO {
     private String homeClubShortName;
     private Integer awayClubId;
     private String awayClubShortName;
+    private String homeClubLogoUrl;
+    private String awayClubLogoUrl;
     private String status;
     private LocalDate gameDate;
     private Float predictionWinHome;

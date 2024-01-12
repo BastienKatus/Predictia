@@ -2,7 +2,9 @@ package com.predictia.soccermanager.service;
 
 import com.predictia.dto.FutureGameDTO;
 import com.predictia.soccermanager.mapper.FutureGameMapper;
+import com.predictia.soccermanager.model.ClubLinkModel;
 import com.predictia.soccermanager.model.FutureGameModel;
+import com.predictia.soccermanager.repository.ClubLinkRepository;
 import com.predictia.soccermanager.repository.FutureGameRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class FutureGameService {
-    private String API_KEY = "7dcfc4cf6b4f4a2eb607ed5ef6f2705d";
-    private String API_URL = "https://api.football-data.org/";
+
+    @Autowired
+    private ClubLinkRepository clubLinkRepository;
 
     @Autowired
     private FutureGameRepository futureGameRepository;
@@ -35,19 +38,14 @@ public class FutureGameService {
     @Autowired
     private FutureGameMapper futureGameMapper;
 
-    public void getAllFutureGames() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.football-data.org/v4/matches/?status=SCHEDULED"))
-                .header("X-Auth-Token", API_KEY)
-                .build();
+    @Autowired
+    private HelperAPIService helperAPIService;
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.statusCode());
-        System.out.println(response.body());
+    public void getAllFutureGames() throws IOException, InterruptedException {
+        helperAPIService.callAPI("EXT", "v4/matches/?status=SCHEDULED");
     }
 
-    public HttpResponse<String> getFromAPINextGamesInRange(LocalDate dateFrom, LocalDate dateTo) throws IOException, InterruptedException, JSONException {
+    public JSONObject getFromAPINextGamesInRange(LocalDate dateFrom, LocalDate dateTo) throws IOException, InterruptedException, JSONException {
         String filterRequest = "?status=SCHEDULED";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -56,13 +54,7 @@ public class FutureGameService {
 
         filterRequest = "&dateFrom=" + formattedDateFrom + "&dateTo=" + formattedDateTo;
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL+"v4/matches?"+filterRequest))
-                .header("X-Auth-Token", API_KEY)
-                .build();
-
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
+        return helperAPIService.callAPI("EXT", "v4/matches?"+filterRequest);
     }
 
     @Transactional
@@ -76,10 +68,9 @@ public class FutureGameService {
         }
 
         if(futureGameModelExistWithDate.isEmpty()) {
-            HttpResponse<String> response = getFromAPINextGamesInRange(startDate, endDate);
 
             // Parsing la réponse API en tant qu'objet JSON
-            JSONObject responseJson = new JSONObject(response.body());
+            JSONObject responseJson = getFromAPINextGamesInRange(startDate, endDate);
 
             // Récupération du tableau des matches
             JSONArray matchesArray = responseJson.getJSONArray("matches");
@@ -118,6 +109,28 @@ public class FutureGameService {
                 LocalDate localDate = dateTime.toLocalDate();
                 futureGameModel.setGameDate(localDate);
 
+                // Transform Ids of club retrieve from external API into data Ids
+                Optional<ClubLinkModel> homeClubLink = clubLinkRepository.findById(homeclubId);
+                Optional<ClubLinkModel> awayClubLink = clubLinkRepository.findById(awayClubid);
+
+                // Compute the prediction
+                if(homeClubLink.isPresent()
+                        && awayClubLink.isPresent()
+                        && homeClubLink.get().getId() != null
+                        && awayClubLink.get().getId() != null){
+                    JSONObject prediction = helperAPIService.callAPI("DATA", "/predict?home_team_id=" + homeClubLink.get().getIdSoccerManager() + "&away_team_id=" + awayClubLink.get().getIdSoccerManager());
+                    if(prediction != null) {
+                        try {
+                            futureGameModel.setPredictionDraw(Float.parseFloat(prediction.getString("probabilite_nul")));
+                            futureGameModel.setPredictionWinHome(Float.parseFloat(prediction.getString("probabilite_victoire")));
+                            futureGameModel.setPredictionWinAway(Float.parseFloat(prediction.getString("probabilite_defaite")));
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    futureGameModel.setHomeClubLogoUrl(homeClubLink.get().getLogo());
+                    futureGameModel.setAwayClubLogoUrl(awayClubLink.get().getLogo());
+                }
                 filteredGames.add(futureGameModel);
             }
             futureGameRepository.saveAll(filteredGames);

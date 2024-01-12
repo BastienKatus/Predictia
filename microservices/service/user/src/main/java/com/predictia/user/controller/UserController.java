@@ -4,8 +4,12 @@ import com.predictia.dto.AuthDTO;
 import com.predictia.dto.UserDTO;
 import com.predictia.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,8 +36,18 @@ public class UserController {
     }
 
     @PostMapping("/followedteams/{id}")
-    public UserDTO modifyFollowedTeams(@PathVariable("id") Integer id,@RequestBody List<Integer> idteams){
-       return userService.modifyUserFollowedTeams(id,idteams);
+    public UserDTO modifyFollowedTeams(@PathVariable("id") Integer id, @RequestBody String jsonString){
+        List<Integer> followedTeamIds = new ArrayList<Integer>();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray("followedTeamIds");
+            for(int i = 0; i < jsonArray.length(); i++){
+                followedTeamIds.add(Integer.parseInt(jsonArray.get(i).toString()));
+            }
+        } catch (JSONException e) {
+            System.out.println("JSONException, the json format is invalid");
+        }
+        return userService.modifyUserFollowedTeams(id,followedTeamIds);
     }
 
     @PostMapping("/login")
