@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
+import './css/signup.css';
 
 const RegistrationForm = () => {
 
@@ -18,6 +19,8 @@ const RegistrationForm = () => {
   const [teamList, setTeamList] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState('');
   const [leagueList, setLeagueList] = useState([]);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setTeamList(dataReducer.teams)
@@ -73,6 +76,9 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccess('');
+    setError('');
+
     if (validatePassword(password)) {
 
       fetch('/auth/register', {
@@ -84,18 +90,15 @@ const RegistrationForm = () => {
       })
       .then(response => response.json())
       .then(json => {
-        handleRouting(json.id)
+        setSuccess("Utilisateur ajouté avec succès !");
+        setTimeout(() => {
+          handleRouting(json.id);
+        }, 2000);
       })
-
-      setFirstname('');
-      setLastname('');
-      setPassword('');
-      setMail('');
-      setUsername('');
-      setFavoriteTeam('');
     }
     else{
       console.log('Le mot de passe est incorrect')
+      setError("Le mot de passe n'est pas valide.")
       setPassword('');
     }
   };
@@ -163,7 +166,9 @@ const RegistrationForm = () => {
           Doit contenir au moins 12 caractères, dont au moins une minuscule, une majuscule, un chiffre et un caractère spécial.
         </small>
       </div>
-      <button type="submit">S'inscire</button>
+      <button type="submit">S'inscrire</button>
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
     </form>
   );
 };
