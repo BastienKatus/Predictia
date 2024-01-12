@@ -20,6 +20,7 @@ const RegistrationForm = () => {
   const [leagueList, setLeagueList] = useState([]);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setTeamList(dataReducer.teams)
@@ -92,16 +93,21 @@ const RegistrationForm = () => {
       .then(response => response.json())
       .then(json => {
         setSuccess("Utilisateur ajouté avec succès !");
+        setIsModalOpen(true)
         setTimeout(() => {
           handleRouting(json.id);
         }, 2000);
       })
     }
     else{
-      console.log('Le mot de passe est incorrect')
       setError("Le mot de passe n'est pas valide.")
+      setIsModalOpen(true)
       setPassword('');
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -168,8 +174,15 @@ const RegistrationForm = () => {
         </small>
       </div>
       <button type="submit">S'inscrire</button>
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
+      {isModalOpen && (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={closeModal}>&times;</span>
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
+        </div>
+      </div>
+      )}
     </form>
   );
 };

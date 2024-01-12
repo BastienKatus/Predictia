@@ -13,6 +13,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -40,22 +41,27 @@ const LoginForm = () => {
     })
     .then((response) => {
         if (!response.ok) {
-            throw new Error('Nom d\'utilisateur ou mot de passe incorrect.'); // or you can use response.status to provide a more specific error message
+            throw new Error('Nom d\'utilisateur ou mot de passe incorrect. Veuillez rééssayer');
         }
         return response.json();
     })
     .then((data) => {
         dispatch(logIn(data.username, data.id, data.followedTeamsId));
-        setSuccess("Connexion réussie !");
+        setSuccess("Connexion réussie ! Veuillez patienter");
+        setIsModalOpen(true);
         setTimeout(() => {
             handleRouting();
         }, 2000);
     })
     .catch((error) => {
-        setError('Erreur : ' + error.message); // Handle the error state here
+        setError(error.message);
+        setIsModalOpen(true);
     });
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
@@ -72,8 +78,15 @@ const LoginForm = () => {
         </label>
       </div>
       <button type="submit">Se connecter</button>
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
+      {isModalOpen && (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={closeModal}>&times;</span>
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
+        </div>
+      </div>
+      )}
     </form>
   );
 };
