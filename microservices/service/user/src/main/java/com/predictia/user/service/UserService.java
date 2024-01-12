@@ -2,7 +2,9 @@ package com.predictia.user.service;
 
 import com.predictia.dto.UserDTO;
 import com.predictia.user.mapper.UserMapper;
+import com.predictia.user.model.FollowedTeamsModel;
 import com.predictia.user.model.UserModel;
+import com.predictia.user.repository.FollowedTeamsRepository;
 import com.predictia.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private FollowedTeamsRepository followedTeamsRepository;
+    @Autowired
     private UserMapper userMapper;
 
 
@@ -32,17 +36,33 @@ public class UserService {
 
     public UserDTO getUserById(Integer id)  {
         Optional<UserModel> userModel = userRepository.findById(id);
-        return userModel.map(model -> userMapper.userEntityToUserDTO(model)).orElse(null);
+        List<FollowedTeamsModel> listFTId =  followedTeamsRepository.findAllByIdUser(id);
+        return userModel.map(model -> userMapper.userEntityToUserDTO(model,listFTId)).orElse(null);
     }
 
-    public UserModel getUserByUsernameAndPassword(String u, String p )  {
-        return userRepository.findByUsernameAndPassword(u,p);
+    public UserDTO getUserByUsernameAndPassword(String u, String p )  {
+        UserModel user = userRepository.findByUsernameAndPassword(u,p);
+        List<FollowedTeamsModel> listFTId =  followedTeamsRepository.findAllByIdUser(user.getId());
+        return userMapper.userEntityToUserDTO(user,listFTId);
     }
+
+    public UserDTO modifyUserFollowedTeams(Integer id, List<Integer> ftid){
+        deleteAllftFromUser(id);
+        for(Integer idTeam: ftid){
+            FollowedTeamsModel model = new FollowedTeamsModel();
+            model.setIdUser(id);
+            model.setIdTeam(idTeam);
+            followedTeamsRepository.save(model);
+        }
+        return getUserById(id);
+    }
+
     @Transactional
-    public UserModel createOrUpdate(UserDTO userDTO) {
+    public UserDTO createOrUpdate(UserDTO userDTO) {
         UserModel userModel = userMapper.userDTOToUserEntity(userDTO);
         userRepository.save(userModel);
-        return userModel;
+        List<FollowedTeamsModel> listFTId =  followedTeamsRepository.findAllByIdUser(userDTO.getId());
+        return userMapper.userEntityToUserDTO(userModel,listFTId);
     }
 
     public void deleteById(Integer id) {
@@ -51,5 +71,9 @@ public class UserService {
 
     public void deleteAll(){
         userRepository.deleteAll();
+    }
+
+    public void deleteAllftFromUser(Integer id){
+        followedTeamsRepository.deleteAllByIdUser(id);
     }
 }

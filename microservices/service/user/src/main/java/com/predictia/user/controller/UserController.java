@@ -2,14 +2,11 @@ package com.predictia.user.controller;
 
 import com.predictia.dto.AuthDTO;
 import com.predictia.dto.UserDTO;
-import com.predictia.user.mapper.UserMapper;
-import com.predictia.user.model.UserModel;
 import com.predictia.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -18,9 +15,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @GetMapping()
     public List<UserDTO> getAll(){
@@ -34,14 +28,17 @@ public class UserController {
 
     @PostMapping("/register")
     public UserDTO register(@RequestBody UserDTO userDTO){
-        UserModel user = userService.createOrUpdate(userDTO);
-        return userMapper.userEntityToUserDTO(user);
+        return userService.createOrUpdate(userDTO);
+    }
+
+    @PostMapping("/followedteams/{id}")
+    public UserDTO modifyFollowedTeams(@PathVariable("id") Integer id,@RequestBody List<Integer> idteams){
+       return userService.modifyUserFollowedTeams(id,idteams);
     }
 
     @PostMapping("/login")
     public UserDTO login(@RequestBody AuthDTO authDTO) {
-        UserModel user = userService.getUserByUsernameAndPassword(authDTO.getUsername(), authDTO.getPassword());
-        return userMapper.userEntityToUserDTO(user);
+       return userService.getUserByUsernameAndPassword(authDTO.getUsername(), authDTO.getPassword());
     }
 
     @DeleteMapping("/{id}")

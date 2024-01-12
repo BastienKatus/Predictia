@@ -1,10 +1,7 @@
 package com.predictia.soccermanager.service;
 
-import com.predictia.dto.ClubDTO;
 import com.predictia.dto.GameDTO;
-import com.predictia.soccermanager.mapper.ClubMapper;
 import com.predictia.soccermanager.mapper.GameMapper;
-import com.predictia.soccermanager.model.ClubModel;
 import com.predictia.soccermanager.model.GameModel;
 import com.predictia.soccermanager.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;

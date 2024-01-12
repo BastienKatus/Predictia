@@ -1,13 +1,12 @@
 package com.predictia.soccermanager.controller;
 
 import com.predictia.dto.GameDTO;
-import com.predictia.soccermanager.model.GameModel;
 import com.predictia.soccermanager.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @CrossOrigin(origins = "", allowedHeaders = "")
