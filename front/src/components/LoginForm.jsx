@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
+import { logIn } from '../redux/actions';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 
 const LoginForm = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,29 +19,42 @@ const LoginForm = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  function handleRouting() {
+    navigate("/");
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Username:', username);
-    console.log('Password:', password);
-    setUsername('');
-    setPassword('');
+
+    fetch('/auth/login', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({"username": username,"password": password}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch(logIn(data.username));
+      handleRouting()
+    })
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
       <div>
         <label>
-          Username:
-          <input type="text" value={username} onChange={handleUsernameChange} />
+        Nom d'Utilisateur :
+          <input type="text" value={username} onChange={handleUsernameChange} required />
         </label>
       </div>
       <div>
         <label>
-          Password:
-          <input type="password" value={password} onChange={handlePasswordChange} />
+          Mot de passe :
+          <input type="password" value={password} onChange={handlePasswordChange} required />
         </label>
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Se connecter</button>
     </form>
   );
 };

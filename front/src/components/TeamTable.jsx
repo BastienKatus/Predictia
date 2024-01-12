@@ -1,49 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardTeam from './CardTeam';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 const TeamTable = (props) => {
-  const [selectedTeam, setSelectedTeam] = useState({
-    name: '',
-  });
+  const [selectedTeam, setSelectedTeam] = useState({name: ''});
+  const [teamList, setTeamList] = useState([]);
+  const [league, setLeague] = useState('');
+  const routeParams = useParams();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dataReducer = useSelector(state => state.dataReducer)
 
-  const data = [
-    { name: 'Real', league: 'Liga', classement: 1, followed: false },
-    { name: 'Barca', league: 'Liga', classement: 4, followed: false },
-    { name: 'OL', league: 'Ligue1', classement: 54, followed: true },
-  ];
+  useEffect(() => {
+    if(routeParams.id !== 'all'){
+      setLeague(routeParams.id)
+      const filteredTeams = dataReducer.teams.filter(
+        (team) => team.domesticCompetitionId === routeParams.id
+      );
+      setTeamList(filteredTeams)
+    }
+    else{
+      setTeamList(dataReducer.teams)
+    }
+  }, []);
 
-  const filteredData = props.followed === 'true' ? data.filter((team) => team.followed === true) : data;
+  const handleLeagueChange = (event) => {
+    setLeague(event.target.value);
+    const filteredTeams = dataReducer.teams.filter(
+      (team) => team.domesticCompetitionId === event.target.value
+    );
+    setTeamList(filteredTeams);
+  };
+  
+  const handleDoubleClick = (teamId) => {
+    navigate('/team/' + teamId)
+  };
 
   return (
+    <>
+    <div>
+      <label htmlFor="league">Sélectionner une ligue :</label>
+      <select
+        id="league"
+        name="league"
+        value={league}
+        onChange={handleLeagueChange}
+      >
+        <option value="">Toutes les ligues</option>
+        {dataReducer.competitions.map((competition) => (
+          <option key={competition.competitionId} value={competition.competitionId}>
+            {competition.name}
+          </option>
+        ))}
+      </select>
+    </div>
     <div className="card-table-container">
       <table className="card-table">
         <thead>
           <tr>
             <th>Nom</th>
-            <th>Ligue</th>
-            <th>Classement</th>
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((team, index) => (
+          {teamList.map((team) => (
             <tr
-              key={index}
-              className={selectedTeam.name === team.name ? 'selected' : ''}
-              onClick={() => setSelectedTeam(team)}
+              key={team.clubId}
+              onDoubleClickCapture={() => { handleDoubleClick(team.clubId) }}
             >
               <td>{team.name}</td>
-              <td>{team.league}</td>
-              <td>{team.classement}</td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {selectedTeam.name !== '' && <CardTeam card={selectedTeam} />}
     </div>
+    </>
   );
 };
 

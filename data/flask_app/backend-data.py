@@ -1,16 +1,39 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import os
 import psycopg2
+import pandas as pd
+import joblib
+import predictia_ml
+from sqlalchemy import create_engine
+import pandas as pd
+
+model = joblib.load(os.path.join("..", "model_training", "model.pkl"))
 
 app = Flask(__name__)
 
-# Replace with your PostgreSQL connection details
+# Remplacez par vos détails de connexion PostgreSQL
 DB_HOST = 'localhost'
-DB_PORT = '5432'
+DB_PORT = '5433'
 DB_USER = 'admin'
 DB_PASSWORD = 'admin'
-DB_NAME = 'predictia'
+DB_NAME = 'predictia_soccer_manager'
 
-def execute_query(query):
+# Initialisation des DataFrames
+df_players = None
+df_clubs = None
+df_game_lineups = None
+df_games = None
+DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+def load_data():
+    global df_players, df_clubs, df_game_lineups, df_games
+    engine = create_engine(DB_URI)
+    df_players = pd.read_sql("SELECT * FROM players", engine)
+    df_clubs = pd.read_sql("SELECT * FROM clubs", engine)
+    df_game_lineups = pd.read_sql("SELECT * FROM game_lineups", engine)
+    df_games = pd.read_sql("SELECT * FROM games", engine)
+
+def execute_query(query, args=None):
     try:
         connection = psycopg2.connect(
             host=DB_HOST,
@@ -19,81 +42,41 @@ def execute_query(query):
             password=DB_PASSWORD,
             database=DB_NAME
         )
-
         cursor = connection.cursor()
-        cursor.execute(query)
+        cursor.execute(query, args or ())
         data = cursor.fetchall()
-
         cursor.close()
         connection.close()
-
         return data
-
     except Exception as e:
         return {'error': str(e)}
 
-# Endpoint to retrieve data from the 'club_games' table
-@app.route('/get_club_games', methods=['GET'])
-def get_club_games():
-    query = "SELECT * FROM club_games;"
-    data = execute_query(query)
-    return jsonify(data)
+@app.route('/predict', methods=['GET'])
+def predict():
+    # Récupérer les paramètres de la requête
+    home_team_id = request.args.get('home_team_id', type=int)
+    away_team_id = request.args.get('away_team_id', type=int)
 
-# Endpoint to retrieve data from the 'clubs' table
-@app.route('/get_clubs', methods=['GET'])
-def get_clubs():
-    query = "SELECT * FROM clubs;"
-    data = execute_query(query)
-    return jsonify(data)
-
-# Endpoint to retrieve data from the 'competitions' table
-@app.route('/get_competitions', methods=['GET'])
-def get_competitions():
-    query = "SELECT * FROM competitions;"
-    data = execute_query(query)
-    return jsonify(data)
-
-# Endpoint to retrieve data from the 'game_events' table
-@app.route('/get_game_events', methods=['GET'])
-def get_game_events():
-    query = "SELECT * FROM game_events;"
-    data = execute_query(query)
-    return jsonify(data)
-
-# Endpoint to retrieve data from the 'game_lineups' table
-@app.route('/get_game_lineups', methods=['GET'])
-def get_game_lineups():
-    query = "SELECT * FROM game_lineups;"
-    data = execute_query(query)
-    return jsonify(data)
-
-# Endpoint to retrieve data from the 'games' table
-@app.route('/get_games', methods=['GET'])
-def get_games():
-    query = "SELECT * FROM games;"
-    data = execute_query(query)
-    return jsonify(data)
-
-# Endpoint to retrieve data from the 'player_valuations' table
-@app.route('/get_player_valuations', methods=['GET'])
-def get_player_valuations():
-    query = "SELECT * FROM player_valuations;"
-    data = execute_query(query)
-    return jsonify(data)
-
-# Endpoint to retrieve data from the 'players' table
-@app.route('/get_players', methods=['GET'])
-def get_players():
-    query = "SELECT * FROM players;"
-    data = execute_query(query)
-    return jsonify(data)
-
-# Endpoint to retrieve data from the 'appearances' table
-@app.route('/get_appearances', methods=['GET'])
-def get_appearances():
-    query = "SELECT * FROM appearances;"
-    data = execute_query(query)
-    return jsonify(data)
+    # Assurez-vous que les ID d'équipe sont fournis
+    if home_team_id is None or away_team_id is None:
+        return jsonify({'error': 'Missing home_team_id or away_team_id'}), 400
+    # Préparer les caractéristiques pour un match donné
+    match_features = predictia_ml.preparer_caracteristiques_match(df_games, df_players, df_game_lineups, home_team_id, away_team_id)
+    # Faire la prédiction des probabilités
+    probas = predictia_ml.predire_probabilites(model, match_features)
+    # Traiter les probabilités comme nécessaire
+    # Par exemple, les ajouter au DataFrame des caractéristiques et filtrer les colonnes
+    # Convertir l'array NumPy en liste Python
+    probas_list = probas.tolist()
+    print(probas_list)
+    # Créer un dictionnaire pour la réponse JSON
+    response = {
+        'probabilite_defaite': probas_list[0][0],
+        'probabilite_nul': probas_list[0][1],
+        'probabilite_victoire': probas_list[0][2]
+    }
+    return jsonify(response)
 
 if __name__ == '__main__':
+    load_data()
     app.run(debug=True, port=5000)

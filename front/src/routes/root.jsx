@@ -1,38 +1,66 @@
-import { Outlet, Link } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { logOut } from '../redux/actions';
 
 
 export default function Root(props) {
-  const buyReducer = useSelector(state => state.buyReducer)
+  const userReducer = useSelector(state => state.userReducer)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+    navigate('/');
+  };
+
+
   return (
     <>
       <div id="sidebar">
         <nav>
           <ul>
             <li>
-                <Link to={`/`}>Accueil</Link>
+              <Link to={`/`}>Accueil</Link>
             </li>
             <li>
-                <Link to={`/teams_followed`}>Equipes Suivies</Link>
+              <Link to={`/competitions`}>Compétitions</Link>
             </li>
+            {userReducer.currentUser !== null && 
             <li>
-                <Link to={`/teams`}>Equipes</Link>
+              <Link to={`/teams_followed`}>Equipes Suivies</Link>
             </li>
+            }
             <li>
-                <Link to={`/players`}>Joueurs</Link>
+              <Link to={`/teams/all`}>Equipes</Link>
             </li>
-            <li>
-                <Link to={`/simulation`}>Simulation</Link>
-            </li>
-            <li>
-                <Link to={`/login`}>Se connecter</Link>
-            </li>
-            <li>
-                <Link to={`/register`}>S'inscrire</Link>
-            </li>
-            <p>[USER] : {buyReducer.price}<FontAwesomeIcon icon={faCoins} /></p>
+
+            {userReducer.currentUser !== null ? (
+                    <>
+                    <li>
+                      <Link to={`/simulation`}>Simulation</Link>
+                    </li>
+                    </>
+                ) : (
+                    <>
+                    <li>
+                      <Link to={`/login`}>Se connecter</Link>
+                    </li>
+                    <li>
+                      <Link to={`/register`}>S'inscrire</Link>
+                    </li>
+                    </>
+                )
+            }
+            {userReducer.currentUser !== null && (
+              <>
+              <li>
+                <Link onClick={handleLogOut}>Se Déconnecter</Link>
+              </li>
+              <p><FontAwesomeIcon icon={faUser} /> {userReducer.currentUser}</p>
+              </>
+            )}
           </ul>
         </nav>
       </div>

@@ -39,6 +39,11 @@ button {
   background-color: white;
   line-height: 1.5;
   margin: 0;
+  transition: background-color 0.3s;
+}
+
+button:active {
+  background-color: #AAA;
 }
 
 #root {
@@ -53,6 +58,10 @@ button {
   border-right: solid 1px #e3e3e3;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
 #sidebar > * {
@@ -151,6 +160,7 @@ button {
 #detail {
   flex: 1;
   padding: 2rem 4rem;
+  padding-left: 20rem;
   width: 100%;
 }
 
@@ -263,74 +273,28 @@ button {
   cursor: pointer;
 }
 
-.card-details {
-  background-color: #fff;
-  border: 1px solid #e1e1e1;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-top: 20px;
-  width: 300px;
+
+.card {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Centrer horizontalement */
+  width: 500px;
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card-details-top {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
+.card-image {
+  width: 25%;
+  height: auto;
+  border-radius: 8px;
   margin-bottom: 10px;
 }
 
-.card-details-energy,
-.card-details-hp {
-  display: flex;
-  align-items: center;
-}
-
-.card-details-energy {
-  color: #f9a825;
-}
-
-.card-details-hp {
-  color: #e53935;
-}
-
-.card-details-image {
-  width: 100%;
+.card-details {
   text-align: center;
-  margin-bottom: 20px;
-}
-
-.card-details-image img {
-  max-width: 100%;
-  border-radius: 5px;
-}
-
-.card-details-bottom {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.card-details-description,
-.card-details-family,
-.card-details-price {
-  width: 45%;
-}
-
-.card-details-description p,
-.card-details-family p,
-.card-details-price p {
-  margin: 5px 0;
-}
-
-.card-details-price {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  color: #43a047;
 }
 
 .match-football {
@@ -352,7 +316,7 @@ button {
 
 .team {
   text-align: center;
-  margin: 0 10px; /* Ajustez la marge entre les équipes si nécessaire */
+  margin: 0 10px;
 }
 
 .team img {
@@ -373,11 +337,12 @@ button {
   background-color: #eee;
   border-radius: 10px;
   overflow: hidden;
-  margin: 10px 0; /* Ajustez la marge entre les équipes et la barre de pourcentage si nécessaire */
+  margin: 10px 0;
 }
 
 .percentage,
-.percentage2 {
+.percentage2,
+.percentage3 {
   height: 100%;
   color: #fff;
   display: flex;
@@ -390,5 +355,132 @@ button {
 }
 
 .percentage2 {
+  background-color: orange;
+}
+
+.percentage3 {
   background-color: red;
+}
+
+select {
+  appearance: none;
+  padding: 10px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  font-size: 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+select option {
+  padding: 10px;
+}
+
+.required-input {
+  border: 1px solid lightcoral;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.team-grid-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  min-height: 150px;
+}
+
+.team-grid-card-selected {
+  border: 1px solid #ddd;
+  padding: 16px;
+  text-align: center;
+  background-color: #a7c5eb !important;
+  border-radius: 8px;
+  min-height: 150px;
+}
+
+.team-grid-container {
+  max-height: 90%; /* Ajustez la hauteur maximale selon vos besoins */
+  overflow-y: auto;
+  padding: 16px;
+  border: 1px solid darkgray;
+}
+
+.center-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.follow-teams-button {
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  margin: auto;
+}
+
+.label-group {
+  display: flex;
+  position: relative;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.label-group label {
+  min-width: 40%;
+}
+
+.label-group label select {
+  width: 300px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #555;
+}
+
+.close:hover {
+  color: #333;
 }
