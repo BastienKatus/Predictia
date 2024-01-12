@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import './css/signup.css';
 
 const RegistrationForm = () => {
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const dataReducer = useSelector(state => state.dataReducer)
@@ -24,15 +23,18 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     setTeamList(dataReducer.teams)
-  }, []);
+  }, [dataReducer.teams]);
 
   useEffect(() => {
-    setLeagueList(dataReducer.competitions);
+    const filteredCompetitions = dataReducer.competitions.filter(
+      (league) => league.competitionId === 'ES1' || league.competitionId === 'FR1' || league.competitionId === 'NL1' || league.competitionId === 'PO1' || league.competitionId === 'IT1' || league.competitionId === 'L1' || league.competitionId === 'GB1'
+    );
+    setLeagueList(filteredCompetitions);
   }, [dataReducer.competitions]);
 
   useEffect(() => {
     const filteredTeams = dataReducer.teams.filter(
-      (team) => selectedLeague === '' || team.domesticCompetitionId === selectedLeague
+      (team) => selectedLeague !== '' && team.domesticCompetitionId === selectedLeague
     );
     setTeamList(filteredTeams);
   }, [selectedLeague, dataReducer.teams]);
@@ -80,7 +82,6 @@ const RegistrationForm = () => {
     setError('');
 
     if (validatePassword(password)) {
-
       fetch('/auth/register', {
         method: 'POST',
         headers: {
