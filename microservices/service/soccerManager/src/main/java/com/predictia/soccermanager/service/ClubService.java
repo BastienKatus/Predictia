@@ -1,8 +1,10 @@
 package com.predictia.soccermanager.service;
 
 import com.predictia.dto.ClubDTO;
+import com.predictia.dto.GameDTO;
 import com.predictia.soccermanager.mapper.ClubMapper;
 import com.predictia.soccermanager.model.ClubModel;
+import com.predictia.soccermanager.repository.ClubLinkRepository;
 import com.predictia.soccermanager.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,12 @@ public class ClubService {
     @Autowired
     private ClubMapper clubMapper;
 
+    @Autowired
+    private  GameService gameService;
+
+    @Autowired
+    private ClubLinkRepository clubLinkRepository;
+
     public List<ClubDTO> getAllClubs()  {
         Iterable<ClubModel> clubModels =  clubRepository.findAll();
         List<ClubModel> clubModelList = new ArrayList<>();
@@ -30,6 +38,12 @@ public class ClubService {
 
     public ClubDTO getClubById(Integer id)  {
         Optional<ClubModel> clubModel = clubRepository.findById(id);
-        return clubModel.map(model -> clubMapper.clubEntityToClubDTO(model)).orElse(null);
+        if(clubModel.isPresent()) {
+            List<GameDTO> gameDTOS = gameService.getFiveLastGamesByClubId(clubModel.get().getClubId());
+            String logo = clubLinkRepository.findLogoById(clubModel.get().getClubId());
+            return clubMapper.clubEntityToClubDTO(clubModel.get(),gameDTOS,logo);
+        }else{
+            return null;
+        }
     }
 }

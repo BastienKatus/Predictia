@@ -32,4 +32,11 @@ public class GameService {
         Optional<GameModel> gameModel = gameRepository.findById(id);
         return gameModel.map(model -> gameMapper.gameEntityToGameDTO(model)).orElse(null);
     }
+
+    public List<GameDTO> getFiveLastGamesByClubId(Integer clubId){
+        Iterable<GameModel> gameModels =  gameRepository.findTop5ByClubIdOrderByGameDateDesc(clubId);
+        List<GameModel> gameModelList = new ArrayList<>();
+        gameModels.forEach(gameModelList::add);
+        return new ArrayList<>(gameMapper.listGameEntityToGameDTO(gameModelList));
+    }
 }
