@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { logIn } from '../redux/actions';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
+import './css/signup.css';
 
 const LoginForm = () => {
 
@@ -10,6 +11,8 @@ const LoginForm = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -25,6 +28,8 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccess('');
+    setError('');
 
     fetch('/auth/login', {
       method: 'POST',
@@ -36,7 +41,10 @@ const LoginForm = () => {
     .then((response) => response.json())
     .then((data) => {
       dispatch(logIn(data.username, data.id, data.followedTeamsId));
-      handleRouting()
+      setSuccess("Connexion réussie !");
+      setTimeout(() => {
+        handleRouting();
+      }, 2000);
     })
   };
 
@@ -55,6 +63,8 @@ const LoginForm = () => {
         </label>
       </div>
       <button type="submit">Se connecter</button>
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
     </form>
   );
 };
