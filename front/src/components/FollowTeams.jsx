@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
+import { saveFollowedTeams } from '../redux/actions';
 
 const FollowTeams = (props) => {
     const [selectedTeams, setSelectedTeams] = useState([]);
@@ -8,11 +9,21 @@ const FollowTeams = (props) => {
     const [league, setLeague] = useState('');
 
     const dataReducer = useSelector(state => state.dataReducer);
+    const userReducer = useSelector(state => state.userReducer);
     const routeParams = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
       setTeamList(dataReducer.teams)
+      if (userReducer.userId !== -1) {
+        fetch('/users/' + routeParams.id)
+          .then(response => response.json())
+          .then(data => {
+            setSelectedTeams(data.followedTeamsId)
+          })
+          .catch(error => console.error('Erreur lors de la récupération des clubs', error));
+      }
     }, []);
 
     const handleLeagueChange = (event) => {
@@ -43,17 +54,17 @@ const FollowTeams = (props) => {
     };
 
     const toggleSaveSelection = () => {
+      dispatch(saveFollowedTeams(selectedTeams));
         fetch('/users/followedteams/' + routeParams.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(selectedTeams),
+            body: JSON.stringify({"followedTeamIds" : selectedTeams}),
           })
-          .then(response => console.log(response))
+          .then(response => response.json())
           .then(json => {
-            console.log(json.id)
-            handleRouting()
+            handleRouting(json.id)
           })
     };
 

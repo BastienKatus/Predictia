@@ -1,6 +1,8 @@
-export const logIn = (username) => ({
+export const logIn = (username, id, followedTeams) => ({
     type: 'LOG_IN',
-    payload: username
+    payload: username,
+    userId: id,
+    followteams: followedTeams
 });
   
 export const logOut = () => ({
@@ -15,5 +17,10 @@ export const getTeams = (teams) => ({
 export const getCompetitions = (competitions) => ({
   type: 'GET_COMPETITIONS',
   payload: competitions
+});
+
+export const saveFollowedTeams = (followedTeams) => ({
+  type: 'SAVE_FOLLOWED_TEAMS',
+  payload: followedTeams
 });
 

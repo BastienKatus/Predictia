@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import CardTeam from './CardTeam';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 
-const TeamTable = (props) => {
+const TeamTable = () => {
   const [selectedTeam, setSelectedTeam] = useState({name: ''});
   const [teamList, setTeamList] = useState([]);
   const [league, setLeague] = useState('');
@@ -13,10 +13,18 @@ const TeamTable = (props) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const dataReducer = useSelector(state => state.dataReducer)
+  const userReducer = useSelector(state => state.userReducer)
 
   useEffect(() => {
-    if(routeParams.id !== 'all'){
+    if(routeParams.id === 'followed'){
+      const followedTeams = dataReducer.teams.filter(
+        (team) => userReducer.followedTeams.includes(team.clubId)
+      );
+      setTeamList(followedTeams)
+    }
+    else if(routeParams.id !== 'all'){
       setLeague(routeParams.id)
       const filteredTeams = dataReducer.teams.filter(
         (team) => team.domesticCompetitionId === routeParams.id
@@ -26,7 +34,7 @@ const TeamTable = (props) => {
     else{
       setTeamList(dataReducer.teams)
     }
-  }, []);
+  }, [location]);
 
   const handleLeagueChange = (event) => {
     setLeague(event.target.value);
@@ -35,6 +43,10 @@ const TeamTable = (props) => {
     );
     setTeamList(filteredTeams);
   };
+
+  const handleClick = (userId) => {
+    navigate('/follow_teams/' + userId)
+  }
   
   const handleDoubleClick = (teamId) => {
     navigate('/team/' + teamId)
@@ -42,6 +54,7 @@ const TeamTable = (props) => {
 
   return (
     <>
+    { routeParams.id !== 'followed' ? (
     <div>
       <label htmlFor="league">Sélectionner une ligue :</label>
       <select
@@ -58,6 +71,14 @@ const TeamTable = (props) => {
         ))}
       </select>
     </div>
+    )
+    :
+    (
+      <div>
+        <button onClick={() => handleClick(userReducer.userId)}>Modifier les équipes suivies</button>
+    </div>
+    )
+    }
     <div className="card-table-container">
       <table className="card-table">
         <thead>

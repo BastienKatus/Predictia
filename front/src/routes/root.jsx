@@ -29,7 +29,7 @@ export default function Root(props) {
             </li>
             {userReducer.currentUser !== null && 
             <li>
-              <Link to={`/teams_followed`}>Equipes Suivies</Link>
+              <Link to={`/teams/followed`}>Equipes Suivies</Link>
             </li>
             }
             <li>
@@ -58,7 +58,7 @@ export default function Root(props) {
               <li>
                 <Link onClick={handleLogOut}>Se Déconnecter</Link>
               </li>
-              <p><FontAwesomeIcon icon={faUser} /> {userReducer.currentUser}</p>
+              <p><FontAwesomeIcon icon={faUser} /> {userReducer.currentUser} {userReducer.userId}</p>
               </>
             )}
           </ul>

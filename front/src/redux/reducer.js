@@ -2,6 +2,8 @@ import { combineReducers } from "redux"
 
 const initialState = {
     currentUser: null,
+    userId: -1,
+    followedTeams: [],
     teams: [],
     competitions: []
 };
@@ -11,7 +13,14 @@ export const userReducer = (state = initialState, action) => {
         case 'LOG_IN':
           return {
             ...state,
-            currentUser: action.payload
+            currentUser: action.payload,
+            userId: action.userId,
+            followedTeams: action.followteams
+          };
+        case 'SAVE_FOLLOWED_TEAMS':
+          return {
+            ...state,
+            followedTeams: action.payload
           };
         case 'LOG_OUT':
           return {

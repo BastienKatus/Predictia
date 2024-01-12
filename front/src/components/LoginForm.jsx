@@ -35,7 +35,7 @@ const LoginForm = () => {
     })
     .then((response) => response.json())
     .then((data) => {
-      dispatch(logIn(data.username));
+      dispatch(logIn(data.username, data.id, data.followedTeamsId));
       handleRouting()
     })
   };

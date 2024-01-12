@@ -38,12 +38,8 @@ const router = createBrowserRouter([
         element: <Home />,
     },
     {
-        path: "/teams_followed",
-        element: <TeamTable followed='true' />,
-    },
-    {
         path: "/teams/:id",
-        element: <TeamTable followed='false' />,
+        element: <TeamTable />,
     },
     {
         path: "/team/:id",

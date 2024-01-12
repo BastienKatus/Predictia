@@ -30,17 +30,7 @@ const Home = () => {
 
   return (
     <>
-    {
-      userReducer.currentUser !== null ? (
-        <>
-        <MatchTable followed={'OL'}/>
-        </>
-      ) : (
-        <>
-        <MatchTable/>
-        </>
-      )
-    } 
+    <MatchTable/>
     </>
   );
 };
