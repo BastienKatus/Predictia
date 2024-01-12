@@ -8,7 +8,4 @@ import java.util.List;
 public interface FollowedTeamsRepository extends CrudRepository<FollowedTeamsModel, Integer> {
 
     List<FollowedTeamsModel> findAllByIdUser(Integer userId);
-
-    void deleteAllByIdUser(Integer userId);
-
 }

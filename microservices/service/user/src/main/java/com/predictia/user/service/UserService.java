@@ -46,8 +46,9 @@ public class UserService {
         return userMapper.userEntityToUserDTO(user,listFTId);
     }
 
+    @Transactional
     public UserDTO modifyUserFollowedTeams(Integer id, List<Integer> ftid){
-        deleteAllftFromUser(id);
+        deleteFollowedTeamsByUserId(id);
         for(Integer idTeam: ftid){
             FollowedTeamsModel model = new FollowedTeamsModel();
             model.setIdUser(id);
@@ -69,11 +70,13 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void deleteAll(){
-        userRepository.deleteAll();
+
+    public void deleteFollowedTeamsByUserId(Integer userId) {
+        List<FollowedTeamsModel> allFollowedTeamsOfUser = followedTeamsRepository.findAllByIdUser(userId);
+        allFollowedTeamsOfUser.forEach(followedTeamsModel -> followedTeamsRepository.deleteById(followedTeamsModel.getId()));
     }
 
-    public void deleteAllftFromUser(Integer id){
-        followedTeamsRepository.deleteAllByIdUser(id);
+    public void deleteAll(){
+        userRepository.deleteAll();
     }
 }
