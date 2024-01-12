@@ -37,7 +37,7 @@ FROM '/csv_files/club_games.csv' DELIMITER ',' CSV HEADER;
 CREATE TABLE clubs_link_api (
     id INTEGER,
     name VARCHAR(255),
-    shortName VARCHAR(255),
+    short_name VARCHAR(255),
     tla VARCHAR(255),
     league_code VARCHAR(255),
     league_name VARCHAR(255),
@@ -139,6 +139,8 @@ CREATE TABLE next_games (
     home_club_short_name TEXT,
     away_club_id INTEGER,
     away_club_short_name TEXT,
+    home_club_logo_url TEXT,
+    away_club_logo_url TEXT,
     status TEXT,
     game_date DATE,
     modified_date_verification DATE,

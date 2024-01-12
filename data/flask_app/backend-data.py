@@ -72,8 +72,8 @@ def predict():
     # Créer un dictionnaire pour la réponse JSON
     response = {
         'probabilite_defaite': probas_list[0][0],
-        'probabilité_nul': probas_list[0][1],
-        'probabilité_victoire': probas_list[0][2]
+        'probabilite_nul': probas_list[0][1],
+        'probabilite_victoire': probas_list[0][2]
     }
     return jsonify(response)
 

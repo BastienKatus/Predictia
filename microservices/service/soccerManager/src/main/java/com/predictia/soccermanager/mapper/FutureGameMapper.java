@@ -20,6 +20,8 @@ public class FutureGameMapper {
         fgm.setPredictionWinAway(dto.getPredictionWinAway());
         fgm.setStatus(dto.getStatus());
         fgm.setGameDate(dto.getGameDate());
+        fgm.setAwayClubLogoUrl(dto.getAwayClubLogoUrl());
+        fgm.setHomeClubLogoUrl(dto.getHomeClubLogoUrl());
         fgm.setId(dto.getId());
         return fgm;
     }
@@ -35,6 +37,8 @@ public class FutureGameMapper {
         fgmDTO.setPredictionWinHome(futureGameModel.getPredictionWinHome());
         fgmDTO.setPredictionWinAway(futureGameModel.getPredictionWinAway());
         fgmDTO.setStatus(futureGameModel.getStatus());
+        fgmDTO.setAwayClubLogoUrl(futureGameModel.getAwayClubLogoUrl());
+        fgmDTO.setHomeClubLogoUrl(futureGameModel.getAwayClubLogoUrl());
         fgmDTO.setGameDate(futureGameModel.getGameDate());
         return fgmDTO;
     }
