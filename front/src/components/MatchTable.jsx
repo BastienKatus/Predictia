@@ -21,8 +21,6 @@ const TeamTable = (props) => {
       allMatches = data
     }
     else{
-      console.log(userReducer.followedTeams);
-      console.log(data);
       setFollowedMatches(data.filter((match) =>
         userReducer.followedTeams.includes(match.id1) || userReducer.followedTeams.includes(match.id2)
       ));
@@ -34,7 +32,7 @@ const TeamTable = (props) => {
 
   return (
     <div>
-      {followedMatches !== [] && <h1>Equipe suivies</h1>}
+      {followedMatches.length !== 0 && <h1>Equipe suivies</h1>}
       {followedMatches.map((match, index) => (
           <Match
           team1={match.team1}

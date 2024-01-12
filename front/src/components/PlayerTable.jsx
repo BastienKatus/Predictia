@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import CardPlayer from './CardPlayer';
-import { useDispatch } from 'react-redux'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 const PlayerTable = (props) => {
   const [selectedPlayer, setSelectedPlayer] = useState({
@@ -12,14 +9,12 @@ const PlayerTable = (props) => {
   const [filteredPlayerList, setFilteredPlayerList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState('');
-  const [positionList, setPositionList] = useState([
+  const [positionList] = useState([
     {id : 1, name : "Goalkeeper"},
     {id : 2, name : "Defender"},
     {id : 3, name : "Midfield"},
     {id : 4, name : "Attack"}
   ]);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     fetch('/soccerManager/players/club/' + props.clubId)
@@ -30,7 +25,7 @@ const PlayerTable = (props) => {
       })
       .catch(error => console.error('Erreur lors de la récupération des clubs', error));
     
-  }, [])
+  }, [props.clubId])
 
   const handlePositionChange = (e) => {
     setSelectedPosition(e.target.value)
@@ -71,7 +66,6 @@ const PlayerTable = (props) => {
             <th>Valeur</th>
             <th>Poste</th>
             <th>Pied fort</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
