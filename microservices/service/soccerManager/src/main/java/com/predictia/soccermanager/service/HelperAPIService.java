@@ -2,6 +2,7 @@ package com.predictia.soccermanager.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -24,17 +25,17 @@ public class HelperAPIService {
      * Envoie une requête GET à l'API spécifié.
      *
      * @param target_URL ciblage URL Valeur possible: ["EXT","DATA"].
-     * @param endpoint l'endpoint de l'API.
+     * @param endpoint   l'endpoint de l'API.
      * @return la réponse de l'API au format JSONObject.
      */
     public JSONObject callAPI(String target_URL, String endpoint) {
         HttpResponse<String> response = null;
-        JSONObject responseJSONObject = null;
+        JSONObject responseJSONObject = new JSONObject();
 
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request;
-            if(target_URL.contains("EXT")){
+            if (target_URL.contains("EXT")) {
                 target_URL = EXTERNAL_API_URL;
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(target_URL + endpoint))
@@ -45,8 +46,7 @@ public class HelperAPIService {
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(target_URL + endpoint))
                         .build();
-            }
-            else {
+            } else {
                 System.out.println("Error no target_URL corresponding to your first parameter, please select one of [\"EXT\",\"DATA\"] as first parameter. If the first parameter is correct, verify the API_KEY");
                 return responseJSONObject;
             }
@@ -63,11 +63,17 @@ public class HelperAPIService {
 
         try {
             if (response != null) {
-                 responseJSONObject = new JSONObject(response.body());
+                responseJSONObject = new JSONObject(response.body());
             }
         } catch (JSONException e) {
-            System.out.println("Error while parsing response");
-            e.printStackTrace();
+            try {
+                responseJSONObject.put("data", new JSONArray(response.body()));
+                return responseJSONObject;
+            } catch (JSONException e1) {
+                System.out.println("Error while parsing response");
+                e.printStackTrace();
+                return responseJSONObject;
+            }
         }
         return responseJSONObject;
     }
