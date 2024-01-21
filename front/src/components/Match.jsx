@@ -1,50 +1,64 @@
 import React, { useState, useEffect } from 'react';
 
-const Match = ({ team1, team2, logo1, logo2 }) => {
-  const [percentageTeam1, setPercentageTeam1] = useState(0);
-  const [percentageTeam2, setPercentageTeam2] = useState(0);
-  const [percentageTeam3, setPercentageTeam3] = useState(0);
+const Match = ({ match }) => {
+  const [percentageHome, setPercentageHome] = useState(0);
+  const [percentageAway, setPercentageAway] = useState(0);
+  const [percentageDraw, setPercentageDraw] = useState(0);
+  const [favoriteTeam, setFavoriteTeam] = useState(0);
 
   useEffect(() => {
-  })
+    setPercentageHome(match.predictionWinHome)
+    setPercentageAway(match.predictionWinAway)
+    setPercentageDraw(match.predictionDraw)
+  }, [])
 
   const handleButtonClick = () => {
-    const newPercentage = Math.floor(Math.random() * 100) + 1;
-    setPercentageTeam1(newPercentage);
-    setPercentageTeam2(100-newPercentage);
-    setPercentageTeam3(100-newPercentage);
   };
+
+  function formatDate(dateString) {
+    const months = [
+      'Janvier', 'Février', 'Mars', 'Avril',
+      'Mai', 'Juin', 'Juillet', 'Août',
+      'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    ];
+  
+    const [year, month, day] = dateString.split('-');
+    const monthName = months[parseInt(month, 10) - 1];
+  
+    return `${parseInt(day, 10)} ${monthName} ${year}`;
+  }
 
   return (
     <div className="match-football">
+    <p className='match-date'>Date : {formatDate(match.gameDate)}</p>
     <div className="teams-container">
         <div className="team">
-        <img src={logo1} alt={`${team1} logo`} />
-        <p>{team1}</p>
+          {match.homeClubLogoUrl && <img src={match.homeClubLogoUrl} />}
+          <p>{match.homeClubShortName}</p>
         </div>
 
         <div className="versus">VS</div>
 
         <div className="team">
-        <img src={logo2} alt={`${team2} logo`} />
-        <p>{team2}</p>
+          {match.awayClubLogoUrl && <img src={match.awayClubLogoUrl} />}
+          <p>{match.awayClubShortName}</p>
         </div>
     </div>
 
     <div className="percentage-bar">
-        <div className="percentage" style={{ width: `${percentageTeam1}%` }}>
-        {percentageTeam1}%
+        <div className="percentage" style={{ width: `${percentageHome}%` }}>
+        {percentageHome}%
         </div>
-        <div className="percentage2" style={{ width: `${percentageTeam2}%` }}>
-        {percentageTeam2}%
+        <div className="percentage2" style={{ width: `${percentageDraw}%` }}>
+        {percentageDraw}%
         </div>
-        <div className="percentage3" style={{ width: `${percentageTeam3}%` }}>
-        {percentageTeam3}%
+        <div className="percentage3" style={{ width: `${percentageAway}%` }}>
+        {percentageAway}%
         </div>
     </div>
 
     <div>
-      <p>Predictia indique {team2} vainqueur</p>
+      <p>Predictia indique {favoriteTeam} vainqueur</p>
     </div>
 
     <button onClick={handleButtonClick}>Simuler le match</button>

@@ -307,6 +307,10 @@ button:active {
   margin: 10px;
 }
 
+.match-date {
+  margin: 0;
+}
+
 .teams-container {
   display: flex;
   align-items: center;

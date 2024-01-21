@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCompetitions, getTeams } from '../redux/actions';
+import { getCompetitions, getTeams, getMatches } from '../redux/actions';
 import MatchTable from './MatchTable'
 
 const Home = () => {
@@ -25,6 +25,14 @@ const Home = () => {
           dispatch(getTeams(data));
         })
         .catch(error => console.error('Erreur lors de la récupération des clubs', error));
+    }
+    if(dataReducer.matches.length === 0){
+      fetch('/soccerManager/nextgames/getAllNextGamesInRange')
+        .then(response => response.json())
+        .then(data => {
+          dispatch(getMatches(data));
+        })
+        .catch(error => console.error('Erreur lors de la récupération des matchs', error));
     }
   }, []);
 

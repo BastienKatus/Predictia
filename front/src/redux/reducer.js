@@ -5,6 +5,7 @@ const initialState = {
     userId: -1,
     followedTeams: [],
     teams: [],
+    matches: [],
     competitions: []
 };
 
@@ -44,6 +45,11 @@ export const dataReducer = (state = initialState, action) => {
             ...state,
             competitions: action.payload
           };
+          case 'GET_MATCHES':
+            return {
+              ...state,
+              matches: action.payload
+            };
         default:
         return state;
     }

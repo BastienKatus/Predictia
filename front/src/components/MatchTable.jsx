@@ -8,43 +8,37 @@ const TeamTable = (props) => {
   const [allMatches, setAllMatches] = useState([]);
 
   const userReducer = useSelector(state => state.userReducer)
+  const dataReducer = useSelector(state => state.dataReducer)
 
   useEffect(() => {
-    const data = [
-      { team1: 'Real', team2:'Barca', logo1: '', logo2: '' },
-      { team1: 'AC Ajaccio', team2:'ASSE', logo1: '', logo2: '', id1: 1147, id2: 54 },
-      { team1: 'Paris', team2:'Tamere', logo1: '', logo2: '' },
-    ];
-  
     if (userReducer.followedTeams === [] || !userReducer.followedTeams) {
       followedMatches = []
-      allMatches = data
+      allMatches = dataReducer.matches
     }
     else{
-      setFollowedMatches(data.filter((match) =>
-        userReducer.followedTeams.includes(match.id1) || userReducer.followedTeams.includes(match.id2)
+      setFollowedMatches(dataReducer.matches.filter((match) =>
+        userReducer.followedTeams.includes(match.awayClubId) || userReducer.followedTeams.includes(match.homeClubId)
       ));
-      setAllMatches(data.filter((match) =>
-        !userReducer.followedTeams.includes(match.id1) && !userReducer.followedTeams.includes(match.id2)
+      setAllMatches(dataReducer.matches.filter((match) =>
+        !userReducer.followedTeams.includes(match.awayClubId) && !userReducer.followedTeams.includes(match.homeClubId)
       ));
     }
-  }, []);
+  }, [dataReducer.matches]);
 
   return (
     <div>
       {followedMatches.length !== 0 && <h1>Equipe suivies</h1>}
       {followedMatches.map((match, index) => (
           <Match
-          team1={match.team1}
-          team2={match.team2}
+          key={index}
+          match={match}
         />
       ))}
       {allMatches !== [] && <h1>Toutes les équipes</h1>}
       {allMatches.map((match, index) => (
         <Match
         key={index}
-        team1={match.team1}
-        team2={match.team2}
+        match={match}
       />
     ))}
     </div>

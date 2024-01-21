@@ -126,7 +126,7 @@ const RegistrationForm = () => {
       </div>
       <div>
         <label>
-          Nom d'Utilisateur : *
+          Nom d'Utilisateur :
           <input type="text" value={username} onChange={handleUsernameChange} required className={username ? '' : 'required-input'}/>
         </label>
       </div>
@@ -160,17 +160,17 @@ const RegistrationForm = () => {
         </div>
       <div>
         <label>
-          Email: *
+          Email:
           <input type="email" value={mail} onChange={handleMailChange} required className={mail ? '' : 'required-input'}/>
         </label>
       </div>
       <div>
         <label>
-          Mot de passe : *
+          Mot de passe :
           <input type="password" value={password} onChange={handlePasswordChange} required className={password ? '' : 'required-input'}/>
         </label>
         <small>
-          Doit contenir au moins 12 caractères, dont au moins une minuscule, une majuscule, un chiffre et un caractère spécial.
+          Doit contenir au moins 12 caractères, une minuscule, une majuscule, un chiffre et un caractère spécial.
         </small>
       </div>
       <button type="submit">S'inscrire</button>
