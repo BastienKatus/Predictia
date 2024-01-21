@@ -7,6 +7,7 @@ import com.predictia.soccermanager.model.ClubModel;
 import com.predictia.soccermanager.repository.ClubLinkRepository;
 import com.predictia.soccermanager.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,5 +46,9 @@ public class ClubService {
         }else{
             return null;
         }
+    }
+
+    public JSONObject getStatisticsByClubId(Integer clubId, Integer seasonId)  {
+        return new JSONObject();
     }
 }

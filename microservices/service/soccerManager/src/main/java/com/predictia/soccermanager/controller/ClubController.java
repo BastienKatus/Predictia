@@ -3,6 +3,7 @@ package com.predictia.soccermanager.controller;
 import com.predictia.dto.ClubDTO;
 import com.predictia.soccermanager.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,4 +27,8 @@ public class ClubController {
     }
 
 
+    @GetMapping("/statistics/{clubId}&{seasonId}")
+    public JSONObject getStatisticsByClubId(@PathVariable("clubId") Integer clubId, Integer seasonId){
+        return clubService.getStatisticsByClubId(clubId, seasonId);
+    }
 }
