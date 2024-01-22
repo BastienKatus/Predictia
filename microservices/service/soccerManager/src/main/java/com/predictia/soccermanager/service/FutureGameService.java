@@ -13,17 +13,10 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -41,24 +34,24 @@ public class FutureGameService {
     @Autowired
     private HelperAPIService helperAPIService;
 
-    public void getAllFutureGames() throws IOException, InterruptedException {
+    public void getAllFutureGames(){
         helperAPIService.callAPI("EXT", "v4/matches/?status=SCHEDULED");
     }
 
-    public JSONObject getFromAPINextGamesInRange(LocalDate dateFrom, LocalDate dateTo) throws IOException, InterruptedException, JSONException {
+    public JSONObject getFromAPINextGamesInRange(LocalDate dateFrom, LocalDate dateTo) {
         String filterRequest = "?status=SCHEDULED";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDateTo = dateTo.format(formatter);
         String formattedDateFrom = dateFrom.format(formatter);
 
-        filterRequest = "&dateFrom=" + formattedDateFrom + "&dateTo=" + formattedDateTo;
+        filterRequest += "&dateFrom=" + formattedDateFrom + "&dateTo=" + formattedDateTo;
 
         return helperAPIService.callAPI("EXT", "v4/matches?"+filterRequest);
     }
 
     @Transactional
-    public List<FutureGameDTO> getAllRangeWeekMatch(LocalDate startDate, LocalDate endDate) throws JSONException, IOException, InterruptedException {
+    public List<FutureGameDTO> getAllRangeWeekMatch(LocalDate startDate, LocalDate endDate) throws JSONException {
         List<FutureGameModel> futureGameModelExistWithDate = futureGameRepository.findAllByModifiedDateVerification(LocalDate.now());
         List<FutureGameModel> filteredGames = new ArrayList<>();
 
@@ -84,54 +77,60 @@ public class FutureGameService {
                 JSONObject homeTeamObj = matchObj.getJSONObject("homeTeam");
                 JSONObject awayTeamObj = matchObj.getJSONObject("awayTeam");
                 JSONObject scoreObj = matchObj.getJSONObject("score");
+                JSONObject competitionObj = matchObj.getJSONObject("competition");
 
-                String utcDate = matchObj.getString("utcDate");
-                String status = matchObj.getString("status");
-                Integer homeclubId = Integer.parseInt(homeTeamObj.getString("id"));
-                Integer awayClubid = Integer.parseInt(awayTeamObj.getString("id"));
-                String homeShortName = homeTeamObj.getString("shortName");
-                String awayShortName = awayTeamObj.getString("shortName");
+                List<String> list = Arrays.asList("PL", "FL1", "BL1", "SA", "DED", "PPL", "PD");
+                if (list.contains(competitionObj.getString("code"))) {
+                    String utcDate = matchObj.getString("utcDate");
+                    String status = matchObj.getString("status");
+                    Integer homeclubId = Integer.parseInt(homeTeamObj.getString("id"));
+                    Integer awayClubid = Integer.parseInt(awayTeamObj.getString("id"));
+                    String homeShortName = homeTeamObj.getString("shortName");
+                    String awayShortName = awayTeamObj.getString("shortName");
 
-                FutureGameModel futureGameModel = futureGameRepository.findFutureGameModelByHomeClubShortNameAndAwayClubShortName(homeShortName, awayShortName);
-                if(futureGameModel == null) {
-                    futureGameModel = new FutureGameModel();
-                }
-
-                futureGameModel.setHomeClubId(homeclubId);
-                futureGameModel.setHomeClubShortName(homeShortName);
-                futureGameModel.setAwayClubId(awayClubid);
-                futureGameModel.setAwayClubShortName(awayShortName);
-                futureGameModel.setStatus(status);
-                futureGameModel.setModifiedDateVerification(LocalDate.now());
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                LocalDateTime dateTime = LocalDateTime.parse(utcDate, formatter);
-                LocalDate localDate = dateTime.toLocalDate();
-                futureGameModel.setGameDate(localDate);
-
-                // Transform Ids of club retrieve from external API into data Ids
-                Optional<ClubLinkModel> homeClubLink = clubLinkRepository.findById(homeclubId);
-                Optional<ClubLinkModel> awayClubLink = clubLinkRepository.findById(awayClubid);
-
-                // Compute the prediction
-                if(homeClubLink.isPresent()
-                        && awayClubLink.isPresent()
-                        && homeClubLink.get().getId() != null
-                        && awayClubLink.get().getId() != null){
-                    JSONObject prediction = helperAPIService.callAPI("DATA", "/predict?home_team_id=" + homeClubLink.get().getIdSoccerManager() + "&away_team_id=" + awayClubLink.get().getIdSoccerManager());
-                    if(prediction != null) {
-                        try {
-                            futureGameModel.setPredictionDraw(Float.parseFloat(prediction.getString("probabilite_nul")));
-                            futureGameModel.setPredictionWinHome(Float.parseFloat(prediction.getString("probabilite_victoire")));
-                            futureGameModel.setPredictionWinAway(Float.parseFloat(prediction.getString("probabilite_defaite")));
-                        } catch (Exception e){
-                            e.printStackTrace();
-                        }
+                    FutureGameModel futureGameModel = futureGameRepository.findFutureGameModelByHomeClubShortNameAndAwayClubShortName(homeShortName, awayShortName);
+                    if(futureGameModel == null) {
+                        futureGameModel = new FutureGameModel();
                     }
-                    futureGameModel.setHomeClubLogoUrl(homeClubLink.get().getLogo());
-                    futureGameModel.setAwayClubLogoUrl(awayClubLink.get().getLogo());
+
+                    futureGameModel.setHomeClubShortName(homeShortName);
+                    futureGameModel.setAwayClubShortName(awayShortName);
+                    futureGameModel.setStatus(status);
+                    futureGameModel.setModifiedDateVerification(LocalDate.now());
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                    LocalDateTime dateTime = LocalDateTime.parse(utcDate, formatter);
+                    LocalDate localDate = dateTime.toLocalDate();
+                    futureGameModel.setGameDate(localDate);
+
+                    // Transform Ids of club retrieve from external API into data Ids
+                    Optional<ClubLinkModel> homeClubLink = clubLinkRepository.findById(homeclubId);
+                    Optional<ClubLinkModel> awayClubLink = clubLinkRepository.findById(awayClubid);
+
+                    // Compute the prediction
+                    if(homeClubLink.isPresent()
+                            && awayClubLink.isPresent()
+                            && homeClubLink.get().getId() != null
+                            && awayClubLink.get().getId() != null){
+                        JSONObject prediction = helperAPIService.callAPI("DATA", "/predict?home_team_id=" + homeClubLink.get().getIdSoccerManager() + "&away_team_id=" + awayClubLink.get().getIdSoccerManager());
+                        if(prediction != null) {
+                            try {
+                                futureGameModel.setPredictionDraw(Float.parseFloat(prediction.getString("probabilite_nul")));
+                                futureGameModel.setPredictionWinHome(Float.parseFloat(prediction.getString("probabilite_victoire")));
+                                futureGameModel.setPredictionWinAway(Float.parseFloat(prediction.getString("probabilite_defaite")));
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                        futureGameModel.setHomeClubId(homeClubLink.get().getIdSoccerManager());
+                        futureGameModel.setAwayClubId(awayClubLink.get().getIdSoccerManager());
+                        futureGameModel.setHomeClubLogoUrl(homeClubLink.get().getLogo());
+                        futureGameModel.setAwayClubLogoUrl(awayClubLink.get().getLogo());
+                    }
+                    filteredGames.add(futureGameModel);
+
+
                 }
-                filteredGames.add(futureGameModel);
             }
             futureGameRepository.saveAll(filteredGames);
         }
