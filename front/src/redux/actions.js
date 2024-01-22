@@ -1,8 +1,9 @@
-export const logIn = (username, id, followedTeams) => ({
+export const logIn = (username, id, followedTeams, favoriteClubId) => ({
     type: 'LOG_IN',
     payload: username,
     userId: id,
-    followteams: followedTeams
+    followteams: followedTeams,
+    favoriteClub: favoriteClubId
 });
   
 export const logOut = () => ({

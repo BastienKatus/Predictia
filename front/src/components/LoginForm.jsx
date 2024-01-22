@@ -46,7 +46,7 @@ const LoginForm = () => {
         return response.json();
     })
     .then((data) => {
-        dispatch(logIn(data.username, data.id, data.followedTeamsId));
+        dispatch(logIn(data.username, data.id, data.followedTeamsId, data.favoriteClubId));
         setSuccess("Connexion réussie ! Veuillez patienter");
         setIsModalOpen(true);
         setTimeout(() => {
