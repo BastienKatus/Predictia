@@ -35,6 +35,11 @@ public class UserController {
         return userService.createOrUpdate(userDTO);
     }
 
+
+    @PutMapping("/modify/{id}")
+    public UserDTO putUser(@PathVariable("id") Integer id, @RequestBody UserDTO userDTO) {
+        return userService.modifyUser(id, userDTO);
+    }
     @PostMapping("/followedteams/{id}")
     public UserDTO modifyFollowedTeams(@PathVariable("id") Integer id, @RequestBody String jsonString){
         List<Integer> followedTeamIds = new ArrayList<Integer>();
