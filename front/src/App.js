@@ -15,6 +15,7 @@ import {
 import {Provider} from 'react-redux'
 import store from './redux/store'
 import UserProfile from './components/UserProfile';
+import Simulation from "./components/Simulation";
 
 function App() {
     useEffect(() => {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <Register />,
+    },
+    {
+      path: "/simulation",
+      element: <Simulation />,
     },
     {
         path: "/profile/:id",

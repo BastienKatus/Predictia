@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from "react-router-dom";
 
 const Match = ({ match }) => {
   const [percentageHome, setPercentageHome] = useState(0);
   const [percentageAway, setPercentageAway] = useState(0);
   const [percentageDraw, setPercentageDraw] = useState(0);
   const [favoriteTeam, setFavoriteTeam] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setPercentageHome(Math.round(match.predictionWinHome*100))
@@ -20,6 +22,8 @@ const Match = ({ match }) => {
   };
 
   const handleButtonClick = () => {
+      console.log('handleButtonClick');
+      navigate('/simulation/');
   };
 
   function formatDate(dateString) {

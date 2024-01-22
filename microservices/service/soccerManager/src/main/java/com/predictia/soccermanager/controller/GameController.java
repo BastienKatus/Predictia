@@ -26,4 +26,8 @@ public class GameController {
         return gameService.getGameById(id);
     }
 
+    @GetMapping("/predict")
+    public String getPrediction(@RequestParam("homeTeamId") Integer homeTeamId, @RequestParam("awayTeamId") Integer awayTeamId){
+        return gameService.getPrediction(homeTeamId, awayTeamId).toString();
+    }
 }
