@@ -409,7 +409,7 @@ select option {
 }
 
 .team-grid-container {
-  max-height: 90%; /* Ajustez la hauteur maximale selon vos besoins */
+  max-height: 80%;
   overflow-y: auto;
   padding: 16px;
   border: 1px solid darkgray;
@@ -487,4 +487,20 @@ select option {
 
 .close:hover {
   color: #333;
+}
+
+.team-info-container {
+  display: flex;
+}
+
+.team-logo {
+  width: 150px;
+  height: 150px;
+  margin-right: 50px;
+  margin-top: 50px;
+}
+
+.team-details {
+  display: flex;
+  flex-direction: column;
 }

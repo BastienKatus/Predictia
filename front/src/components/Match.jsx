@@ -7,10 +7,17 @@ const Match = ({ match }) => {
   const [favoriteTeam, setFavoriteTeam] = useState(0);
 
   useEffect(() => {
-    setPercentageHome(match.predictionWinHome)
-    setPercentageAway(match.predictionWinAway)
-    setPercentageDraw(match.predictionDraw)
+    setPercentageHome(Math.round(match.predictionWinHome*100))
+    setPercentageAway(Math.round(match.predictionWinAway*100))
+    setPercentageDraw(Math.round(match.predictionDraw*100))
   }, [])
+
+  const isMatchToday = () => {
+    const today = new Date();
+    const matchDate = new Date(match.gameDate);
+  
+    return today.toDateString() === matchDate.toDateString();
+  };
 
   const handleButtonClick = () => {
   };
@@ -30,7 +37,10 @@ const Match = ({ match }) => {
 
   return (
     <div className="match-football">
-    <p className='match-date'>Date : {formatDate(match.gameDate)}</p>
+    <p className='match-date'>
+        Date : 
+        {isMatchToday() ? " Aujourd'hui" : formatDate(match.gameDate)}
+    </p>
     <div className="teams-container">
         <div className="team">
           {match.homeClubLogoUrl && <img src={match.homeClubLogoUrl} />}
@@ -57,9 +67,9 @@ const Match = ({ match }) => {
         </div>
     </div>
 
-    <div>
+    {/* <div>
       <p>Predictia indique {favoriteTeam} vainqueur</p>
-    </div>
+    </div> */}
 
     <button onClick={handleButtonClick}>Simuler le match</button>
     </div>

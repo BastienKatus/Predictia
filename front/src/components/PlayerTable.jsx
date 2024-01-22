@@ -60,6 +60,7 @@ const PlayerTable = (props) => {
 
   return (
     <>
+    <h1>Joueurs</h1>
     <label>
       Poste :
       <select value={selectedPosition} onChange={handlePositionChange}>
@@ -101,7 +102,7 @@ const PlayerTable = (props) => {
             >
               <td>{player.firstName}</td>
               <td>{player.lastName}</td>
-              <td>{player.marketValueInEur}</td>
+              <td>{player.marketValueInEur} €</td>
               <td>{player.subPosition}</td>
               <td>{player.foot}</td>
             </tr>
