@@ -82,7 +82,7 @@ def predict():
 
 @app.route('/calculate-club-ranking', methods=['GET'])
 def calculate_club_ranking():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -96,7 +96,7 @@ def calculate_club_ranking():
 # Endpoint pour calculer les buts marqués par un club dans une saison spécifiée
 @app.route('/calculate-goals-scored', methods=['GET'])
 def calculate_goals_scored():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -110,7 +110,7 @@ def calculate_goals_scored():
 # Endpoint pour calculer la moyenne des buts marqués par un club dans une saison spécifiée
 @app.route('/calculate-average-goals-scored', methods=['GET'])
 def calculate_average_goals_scored():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -124,7 +124,7 @@ def calculate_average_goals_scored():
 # Endpoint pour calculer le total des buts encaissés par un club dans une saison spécifiée
 @app.route('/calculate-total-goals-conceded', methods=['GET'])
 def calculate_total_goals_conceded():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -137,7 +137,7 @@ def calculate_total_goals_conceded():
 
 @app.route('/calculate-wins', methods=['GET'])
 def calculate_wins():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -152,7 +152,7 @@ def calculate_wins():
 # Endpoint pour calculer le nombre de défaites d'un club dans une saison spécifiée
 @app.route('/calculate-losses', methods=['GET'])
 def calculate_losses():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -167,7 +167,7 @@ def calculate_losses():
 # Endpoint pour calculer la forme d'un club sur les 5 derniers matchs dans une saison spécifiée
 @app.route('/calculate-form-last-5-matches', methods=['GET'])
 def calculate_form_last_5_matches():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -180,7 +180,7 @@ def calculate_form_last_5_matches():
 
 @app.route('/calculate-yellow-cards', methods=['GET'])
 def calculate_yellow_cards():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -195,7 +195,7 @@ def calculate_yellow_cards():
 # Endpoint pour calculer la moyenne de cartons jaunes par match pour un club dans une saison spécifiée
 @app.route('/calculate-average-yellow-cards-per-match', methods=['GET'])
 def calculate_average_yellow_cards_per_match():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -210,7 +210,7 @@ def calculate_average_yellow_cards_per_match():
 # Endpoint pour calculer le nombre de cartons rouges pour un club dans une saison spécifiée
 @app.route('/calculate-red-cards', methods=['GET'])
 def calculate_red_cards():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -225,7 +225,7 @@ def calculate_red_cards():
 # Endpoint pour calculer le nombre de cartons rouges et la moyenne par match pour un club dans une saison spécifiée
 @app.route('/calculate-red-cards-and-average', methods=['GET'])
 def calculate_red_cards_and_average():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -239,7 +239,7 @@ def calculate_red_cards_and_average():
 
 @app.route('/calculate-goals-matches', methods=['GET'])
 def calculate_goals_matches():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -254,7 +254,7 @@ def calculate_goals_matches():
 # Endpoint pour calculer le nombre de matchs avec au moins un but encaissé par un club dans une saison spécifiée
 @app.route('/calculate-conceded-goals-matches', methods=['GET'])
 def calculate_conceded_goals_matches():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -269,7 +269,7 @@ def calculate_conceded_goals_matches():
 # Endpoint pour calculer la minute moyenne du premier but marqué par un club dans une saison spécifiée
 @app.route('/calculate-average-minute-first-goal', methods=['GET'])
 def calculate_average_minute_first_goal():
-    load_data()
+    #load_data()
     club_id_specifique = request.args.get('club_id', type=int)
     saison_specifique = request.args.get('season', type=int)
 
@@ -282,4 +282,5 @@ def calculate_average_minute_first_goal():
 
 if __name__ == '__main__':
     load_data()
+    print("Data loaded.")
     app.run(debug=True, port=5000)

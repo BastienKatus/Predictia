@@ -38,7 +38,7 @@ public class FutureGameMapper {
         fgmDTO.setPredictionWinAway(futureGameModel.getPredictionWinAway());
         fgmDTO.setStatus(futureGameModel.getStatus());
         fgmDTO.setAwayClubLogoUrl(futureGameModel.getAwayClubLogoUrl());
-        fgmDTO.setHomeClubLogoUrl(futureGameModel.getAwayClubLogoUrl());
+        fgmDTO.setHomeClubLogoUrl(futureGameModel.getHomeClubLogoUrl());
         fgmDTO.setGameDate(futureGameModel.getGameDate());
         return fgmDTO;
     }
