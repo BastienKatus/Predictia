@@ -6,7 +6,8 @@ const initialState = {
     followedTeams: [],
     teams: [],
     matches: [],
-    competitions: []
+    competitions: [],
+    favoriteClub : -1
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -16,7 +17,8 @@ export const userReducer = (state = initialState, action) => {
             ...state,
             currentUser: action.payload,
             userId: action.userId,
-            followedTeams: action.followteams
+            followedTeams: action.followteams,
+            favoriteClub: action.favoriteClub
           };
         case 'SAVE_FOLLOWED_TEAMS':
           return {

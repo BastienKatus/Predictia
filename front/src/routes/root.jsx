@@ -15,7 +15,6 @@ export default function Root(props) {
     navigate('/');
   };
 
-
   return (
     <>
       <div id="sidebar">
@@ -58,7 +57,7 @@ export default function Root(props) {
               <li>
                 <Link onClick={handleLogOut}>Se Déconnecter</Link>
               </li>
-              <p><FontAwesomeIcon icon={faUser} /> {userReducer.currentUser} {userReducer.userId}</p>
+              <Link to={`/profile/${userReducer.userId}`}><FontAwesomeIcon icon={faUser} /> {userReducer.currentUser}</Link>
               </>
             )}
           </ul>
