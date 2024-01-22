@@ -46,7 +46,12 @@ const LoginForm = () => {
         return response.json();
     })
     .then((data) => {
-        dispatch(logIn(data.username, data.id, data.followedTeamsId, data.favoriteClubId));
+      fetch('/soccerManager/clubs/' + data.favoriteClubId)
+        .then(response => response.json())
+        .then(data2 => {
+          dispatch(logIn(data.username, data.id, data.followedTeamsId, data2.url_logo));
+      })
+      .catch(error => console.error('Erreur lors de la récupération du club', error));
         setSuccess("Connexion réussie ! Veuillez patienter");
         setIsModalOpen(true);
         setTimeout(() => {

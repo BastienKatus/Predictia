@@ -4,6 +4,7 @@ import com.predictia.dto.ClubDTO;
 import com.predictia.dto.GameDTO;
 import com.predictia.soccermanager.mapper.ClubMapper;
 import com.predictia.soccermanager.model.ClubModel;
+import com.predictia.soccermanager.model.PlayerModel;
 import com.predictia.soccermanager.repository.ClubLinkRepository;
 import com.predictia.soccermanager.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ClubService {
@@ -33,12 +32,34 @@ public class ClubService {
     @Autowired
     private HelperAPIService helperAPIService;
 
+    private final List<String> listLeague = Arrays.asList("GB1", "FR1", "ES1", "IT1", "PO1", "L1", "NL1");
+
     public List<ClubDTO> getAllClubs()  {
         Iterable<ClubModel> clubModels =  clubRepository.findAll();
         List<ClubModel> clubModelList = new ArrayList<>();
         clubModels.forEach(clubModelList::add);
         return new ArrayList<>(clubMapper.listClubEntityToClubDTO(clubModelList));
 
+    }
+
+    public List<ClubDTO> getAllClubsFromSevenBigLeagues(){
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        Iterable<ClubModel> clubModelIt = clubRepository.findClubsByLastSeasonAndCompetition(year,listLeague);
+        int tailleIterable = 0;
+        for (ClubModel ignored : clubModelIt) {
+            tailleIterable++;
+        }
+        while(tailleIterable==0){
+            year = year-1;
+            clubModelIt =  clubRepository.findClubsByLastSeasonAndCompetition(year,listLeague);
+            for (ClubModel ignored : clubModelIt) {
+                tailleIterable++;
+            }
+        }
+        List<ClubModel> clubModelList = new ArrayList<>();
+        clubModelIt.forEach(clubModelList::add);
+        return new ArrayList<>(clubMapper.listClubEntityToClubDTO(clubModelList));
     }
 
     public ClubDTO getClubById(Integer id)  {

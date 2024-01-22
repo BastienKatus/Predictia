@@ -16,6 +16,7 @@ const RegistrationForm = () => {
   const [mail, setMail] = useState('');
   const [favoriteTeam, setFavoriteTeam] = useState('');
   const [teamList, setTeamList] = useState([]);
+  const [filteredTeamList, setFilteredTeamList] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState('');
   const [leagueList, setLeagueList] = useState([]);
   const [success, setSuccess] = useState('');
@@ -23,8 +24,14 @@ const RegistrationForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setTeamList(dataReducer.teams)
-  }, [dataReducer.teams]);
+    fetch('/soccerManager/clubs/BigLeagueOnly')
+        .then(response => response.json())
+        .then(data => {
+          setTeamList(data);
+        })
+        .catch(error => console.error('Erreur lors de la récupération des compétitions', error));
+    
+  }, []);
 
   useEffect(() => {
     const filteredCompetitions = dataReducer.competitions.filter(
@@ -34,10 +41,15 @@ const RegistrationForm = () => {
   }, [dataReducer.competitions]);
 
   useEffect(() => {
-    const filteredTeams = dataReducer.teams.filter(
-      (team) => selectedLeague !== '' && team.domesticCompetitionId === selectedLeague
-    );
-    setTeamList(filteredTeams);
+    if(selectedLeague === ""){
+      setFilteredTeamList(dataReducer.teams)
+    }
+    else{
+      const filteredTeams = teamList.filter(
+        (team) => selectedLeague !== '' && team.domesticCompetitionId === selectedLeague
+      );
+      setFilteredTeamList(filteredTeams);
+    }
   }, [selectedLeague, dataReducer.teams]);
 
   const handleFirstnameChange = (e) => {
@@ -149,7 +161,7 @@ const RegistrationForm = () => {
               Equipe favorite :
               <select value={favoriteTeam} onChange={handleFavoriteTeamChange}>
                 <option value="">Selectionner une équipe</option>
-                {teamList.map((team) => (
+                {filteredTeamList.map((team) => (
                   <option key={team.clubId} value={team.clubId}>
                     {team.name}
                   </option>

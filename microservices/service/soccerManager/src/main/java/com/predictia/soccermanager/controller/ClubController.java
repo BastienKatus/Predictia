@@ -23,6 +23,12 @@ public class ClubController {
         return clubService.getAllClubs();
     }
 
+    @GetMapping("/BigLeagueOnly")
+    public List<ClubDTO> getAllFromBigLeaguesOnly(){
+        return clubService.getAllClubsFromSevenBigLeagues();
+    }
+
+
     @GetMapping("/{id}")
     public ClubDTO getById(@PathVariable("id") Integer id){
         return clubService.getClubById(id);
