@@ -43,7 +43,7 @@ const Match = ({ match }) => {
     <div className="match-football">
     <p className='match-date'>
         Date : 
-        {isMatchToday() ? " Aujourd'hui" : formatDate(match.gameDate)}
+        {isMatchToday() ? " Aujourd'hui" : ' ' + formatDate(match.gameDate)}
     </p>
     <div className="teams-container">
         <div className="team">

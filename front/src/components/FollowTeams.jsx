@@ -6,6 +6,7 @@ const FollowTeams = (props) => {
     const [selectedTeams, setSelectedTeams] = useState([]);
     const [teamList, setTeamList] = useState([]);
     const [league, setLeague] = useState('');
+    const [filter, setFilter] = useState('');
 
     const dataReducer = useSelector(state => state.dataReducer);
     const userReducer = useSelector(state => state.userReducer);
@@ -27,6 +28,14 @@ const FollowTeams = (props) => {
 
     const handleLeagueChange = (event) => {
       setLeague(event.target.value);
+    };
+
+    const handleFilterChange = (event) => {
+      setFilter(event.target.value);
+      const filteredTeams = dataReducer.teams.filter(
+        (team) => team.name.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      setTeamList(filteredTeams);
     };
 
     useEffect(() => {
@@ -93,6 +102,14 @@ const FollowTeams = (props) => {
               </option>
             ))}
           </select>
+          <label htmlFor="filter">Filtrer par nom :</label>
+          <input
+            type="text"
+            id="filter"
+            name="filter"
+            value={filter}
+            onChange={handleFilterChange}
+          />
         </div>
         <div className="team-grid-container">
             <div className="team-grid">

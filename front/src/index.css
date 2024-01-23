@@ -46,6 +46,10 @@ button:active {
   background-color: #AAA;
 }
 
+h4 {
+  margin: 0px;
+}
+
 #root {
   display: flex;
   height: 100%;
@@ -236,7 +240,7 @@ button:active {
 }
 
 .card-table {
-  width: 80%;
+  width: 95%;
   border-collapse: collapse;
   margin-top: 20px;
   font-family: Arial, sans-serif;
@@ -380,6 +384,15 @@ select option {
   padding: 10px;
 }
 
+input {
+  appearance: none;
+  padding: 5px;
+  border-radius: 4px;
+  width: 100%;
+  height: 36px;
+  cursor: pointer;
+}
+
 .required-input {
   border: 1px solid lightcoral;
 }
@@ -396,7 +409,6 @@ select option {
   text-align: center;
   background-color: #f9f9f9;
   border-radius: 8px;
-  min-height: 150px;
 }
 
 .team-grid-card-selected {
@@ -405,7 +417,6 @@ select option {
   text-align: center;
   background-color: #a7c5eb !important;
   border-radius: 8px;
-  min-height: 150px;
 }
 
 .team-grid-container {
@@ -413,6 +424,7 @@ select option {
   overflow-y: auto;
   padding: 16px;
   border: 1px solid darkgray;
+  margin: 10px 0 10px 0;
 }
 
 .center-button-container {
@@ -475,6 +487,18 @@ select option {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.modal-content-xl {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+}
+
 .close {
   position: absolute;
   top: 10px;
@@ -494,15 +518,24 @@ select option {
 }
 
 .team-logo {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   margin-right: 50px;
   margin-top: 50px;
 }
 
 .team-details {
-  display: flex;
   flex-direction: column;
+}
+
+.team-stats {
+  margin-left: auto;
+  padding: 50px;
+}
+
+.team-stats-btn {
+  height: 50px;
+  width: 50px;
 }
 
 .user-profile-container {
@@ -533,6 +566,10 @@ input {
   margin-top: 3px;
 }
 
+button {
+  background-color: #eee;
+}
+
 .save-button {
   background-color: #4caf50;
   color: white;
@@ -549,4 +586,27 @@ input {
 .logo-xs {
   width: 30px;
   height: 30px;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.stat-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 200px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.stat-p {
+  margin: 0;
+}
+
+.stat-h1{
+  padding-left: 30px;
 }
