@@ -61,8 +61,18 @@ const PlayerTable = (props) => {
   return (
     <>
     <h1>Joueurs</h1>
-    <label>
-      Poste :
+    <div className="filters">
+      <label>
+        Nom :
+      </label>
+      <input
+        type="text"
+        value={filter}
+        onChange={handleFilterChange}
+      />
+      <label>
+        Poste :
+      </label>
       <select value={selectedPosition} onChange={handlePositionChange}>
         <option value="">Tous les postes</option>
         {positionList.map((position) => (
@@ -71,15 +81,7 @@ const PlayerTable = (props) => {
           </option>
         ))}
       </select>
-    </label>
-    <label>
-      Filtrer par nom :
-      <input
-        type="text"
-        value={filter}
-        onChange={handleFilterChange}
-      />
-    </label>
+    </div>
     <div className="card-table-container">
       <table className="card-table">
         <thead>

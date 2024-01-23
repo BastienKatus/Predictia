@@ -87,8 +87,9 @@ const FollowTeams = (props) => {
     
     return (
       <>
-        <div>
-          <label htmlFor="league">Sélectionner une ligue :</label>
+        <h1>Suivez vos équipes préférées</h1>
+        <div className='filters'>
+          <label htmlFor="league">Ligue :</label>
           <select
             id="league"
             name="league"
@@ -102,7 +103,7 @@ const FollowTeams = (props) => {
               </option>
             ))}
           </select>
-          <label htmlFor="filter">Filtrer par nom :</label>
+          <label htmlFor="filter">Nom :</label>
           <input
             type="text"
             id="filter"

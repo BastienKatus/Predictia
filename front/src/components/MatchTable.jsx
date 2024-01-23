@@ -51,28 +51,30 @@ const TeamTable = (props) => {
 
   return (
     <div>
-      <label htmlFor="league">Filtrer par ligue :</label>
-      <select
-            id="league"
-            name="league"
-            value={league}
-            onChange={handleLeagueChange}
-          >
-            <option value=''>Toutes les ligues</option>
-            {dataReducer.competitions.map((competition) => (
-              <option key={competition.competitionId} value={competition.competitionId}>
-                {competition.name}
-              </option>
-            ))}
-          </select>
-      <label htmlFor="filter">Filtrer par nom :</label>
-          <input
-            type="text"
-            id="filter"
-            name="filter"
-            value={filter}
-            onChange={handleFilterChange}
-          />
+      <div className='filters'>
+        <label htmlFor="league">Ligue :</label>
+        <select
+          id="league"
+          name="league"
+          value={league}
+          onChange={handleLeagueChange}
+        >
+          <option value=''>Toutes les ligues</option>
+          {dataReducer.competitions.map((competition) => (
+            <option key={competition.competitionId} value={competition.competitionId}>
+              {competition.name}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="filter">Equipe :</label>
+        <input
+          type="text"
+          id="filter"
+          name="filter"
+          value={filter}
+          onChange={handleFilterChange}
+        />
+      </div>
       {(followedMatches.length !== 0 && filter === '' && league === '') && <h1>Equipes suivies</h1>}
       {filter === '' && league === '' && followedMatches.map((match, index) => (
           <Match

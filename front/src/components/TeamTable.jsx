@@ -65,8 +65,8 @@ const TeamTable = () => {
   return (
     <>
       {routeParams.id !== 'followed' ? (
-        <div>
-          <label htmlFor="league">Sélectionner une ligue :</label>
+        <div className='filters'>
+          <label htmlFor="league">Ligue :</label>
           <select
             id="league"
             name="league"
@@ -80,7 +80,7 @@ const TeamTable = () => {
               </option>
             ))}
           </select>
-          <label htmlFor="filter">Filtrer par nom :</label>
+          <label htmlFor="filter">Nom :</label>
           <input
             type="text"
             id="filter"
