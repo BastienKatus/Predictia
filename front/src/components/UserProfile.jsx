@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logIn } from '../redux/actions';
 
 const UserProfile = ({ userId }) => {
   const [success, setSuccess] = useState('');
@@ -12,6 +14,7 @@ const UserProfile = ({ userId }) => {
 
   const [user, setUser] = useState(null);
   const routeParams = useParams();
+  const dispatch = useDispatch();
   const [teamList, setTeamList] = useState([]);
   const [favoriteTeam, setFavoriteTeam] = useState([]);
   const [filteredTeamList, setFilteredTeamList] = useState([]);
@@ -79,7 +82,6 @@ const UserProfile = ({ userId }) => {
   };
 
   const handleSave = () => {
-    console.log(favoriteTeam);
     const updatedUser = { ...user, favoriteClubId: favoriteTeam };
     fetch(`/users/modify/${routeParams.id}`, {
       method: 'PUT',
@@ -91,6 +93,11 @@ const UserProfile = ({ userId }) => {
       .then((response) => response.json())
       .then((data) => {
         setUser(data);
+        fetch('/soccerManager/clubs/' + data.favoriteClubId)
+          .then(response => response.json())
+          .then(data2 => {
+            dispatch(logIn(data.username, data.id, data.followedTeamsId, data2.url_logo));
+          })
         setSuccess("Informations mises à jour avec succès !");
         setIsModalOpen(true);
       })
