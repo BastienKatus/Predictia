@@ -610,3 +610,8 @@ button {
 .stat-h1{
   padding-left: 30px;
 }
+
+.logo-xl {
+  width: 150px;
+  height: 150px;
+}
