@@ -76,6 +76,22 @@ public class UserService {
         allFollowedTeamsOfUser.forEach(followedTeamsModel -> followedTeamsRepository.deleteById(followedTeamsModel.getId()));
     }
 
+    public UserDTO modifyUser(Integer id, UserDTO userDTO){
+        // Vérifiez si l'utilisateur avec l'ID spécifié existe
+        UserDTO existingUser = getUserById(id);
+        if (existingUser == null) {
+            return null;
+        }
+        existingUser.setUsername(userDTO.getUsername());
+        existingUser.setPassword(userDTO.getPassword());
+        existingUser.setFirstname(userDTO.getFirstname());
+        existingUser.setLastname(userDTO.getLastname());
+        existingUser.setMail(userDTO.getMail());
+        existingUser.setCredits(userDTO.getCredits());
+        existingUser.setFavoriteClubId(userDTO.getFavoriteClubId());
+        return createOrUpdate(existingUser);
+    }
+
     public void deleteAll(){
         userRepository.deleteAll();
     }
