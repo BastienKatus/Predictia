@@ -28,6 +28,47 @@ const StatsTable = (props) => {
     <>
     <h1 className='stat-h1'>Statistiques en {props.year}</h1>
     {Object.keys(statsGoal).length !== 0 ? (
+    <div className='filters'>
+      <div className="stats-container">
+        <div className="stat-card">
+          <h4>Classement du club</h4>
+          <p className="stat-p">Position: {stats["calculate-club-ranking"]["data"][0]["position"]}</p>
+          <p className="stat-p">Points: {stats["calculate-club-ranking"]["data"][0]["points"]}</p>
+        </div>
+
+        <div className="stat-card">
+          <h4>Victoires</h4>
+          <p className="stat-p">Domicile: {stats["calculate-wins"]["data"][0]["victoires_domicile"]}</p>
+          <p className="stat-p">Extérieur: {stats["calculate-wins"]["data"][0]["victoires_exterieur"]}</p>
+        </div>
+
+        <div className="stat-card">
+          <h4>Défaites</h4>
+          <p className="stat-p">Domicile: {stats["calculate-losses"]["data"][0]["defaites_domicile"]}</p>
+          <p className="stat-p">Extérieur: {stats["calculate-losses"]["data"][0]["defaites_exterieur"]}</p>
+        </div>
+
+        <div className="stat-card">
+          <h4>5 derniers matchs</h4>
+          <p className="stat-p">Victoires: {stats["calculate-form-last-5-matches"]["data"][0]["victoires_5_derniers"]}</p>
+          <p className="stat-p">Défaites: {stats["calculate-form-last-5-matches"]["data"][0]["defaites_5_derniers"]}</p>
+          <p className="stat-p">Nuls: {stats["calculate-form-last-5-matches"]["data"][0]["nul_5_derniers"]}</p>
+        </div>
+
+        <div className="stat-card">
+          <h4>Cartons jaunes</h4>
+          <p className="stat-p">Nombre: {stats["calculate-yellow-cards"]["nombre_cartons_jaunes"]}</p>
+          <p className="stat-p">Moyenne par match: {stats["calculate-average-yellow-cards-per-match"]["moyenne_cartons_jaunes_par_match"]}</p>
+
+        </div>
+
+        <div className="stat-card">
+          <h4>Cartons rouges</h4>
+          <p className="stat-p">Nombre: {stats["calculate-red-cards"]["nombre_cartons_rouges"]}</p>
+          <p className="stat-p">Moyenne par match: {stats["calculate-red-cards-and-average"]["data"][0]["moyenne_cartons_rouges_par_match"]}</p>
+        </div>
+      </div>
+        -
       <div className="stats-container">
         <div className="stat-card">
           <h4>Buts marqués :</h4>
@@ -64,54 +105,8 @@ const StatsTable = (props) => {
           <h4>Moyenne de la minute du premier but</h4>
           <p className="stat-p">{Math.round(statsGoal["calculate-average-minute-first-goal"].minute_moyenne_premier_but*10)/10} minutes</p>
         </div>
-
-        <div className="stat-card">
-          <h4>Classement du club</h4>
-          <p className="stat-p">Position: {stats["calculate-club-ranking"]["data"][0]["position"]}</p>
-          <p className="stat-p">Points: {stats["calculate-club-ranking"]["data"][0]["points"]}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Victoires</h4>
-          <p className="stat-p">Domicile: {stats["calculate-wins"]["data"][0]["victoires_domicile"]}</p>
-          <p className="stat-p">Extérieur: {stats["calculate-wins"]["data"][0]["victoires_exterieur"]}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Défaites</h4>
-          <p className="stat-p">Domicile: {stats["calculate-losses"]["data"][0]["defaites_domicile"]}</p>
-          <p className="stat-p">Extérieur: {stats["calculate-losses"]["data"][0]["defaites_exterieur"]}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Forme des 5 derniers matchs</h4>
-          <p className="stat-p">Victoires: {stats["calculate-form-last-5-matches"]["data"][0]["victoires_5_derniers"]}</p>
-          <p className="stat-p">Défaites: {stats["calculate-form-last-5-matches"]["data"][0]["defaites_5_derniers"]}</p>
-          <p className="stat-p">Nuls: {stats["calculate-form-last-5-matches"]["data"][0]["nul_5_derniers"]}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Cartons jaunes</h4>
-          <p className="stat-p">Nombre: {stats["calculate-yellow-cards"]["nombre_cartons_jaunes"]}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Moyenne de cartons jaunes par match</h4>
-          <p className="stat-p">Moyenne: {stats["calculate-average-yellow-cards-per-match"]["moyenne_cartons_jaunes_par_match"]}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Cartons rouges</h4>
-          <p className="stat-p">Nombre: {stats["calculate-red-cards"]["nombre_cartons_rouges"]}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Cartons rouges et moyenne</h4>
-          <p className="stat-p">Nombre: {stats["calculate-red-cards-and-average"]["data"][0]["nombre_cartons_rouges"]}</p>
-          <p className="stat-p">Moyenne par match: {stats["calculate-red-cards-and-average"]["data"][0]["moyenne_cartons_rouges_par_match"]}</p>
-        </div>
       </div>
-    
+    </div>
     )
     :
     (
