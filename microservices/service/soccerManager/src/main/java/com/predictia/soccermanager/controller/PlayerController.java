@@ -1,5 +1,6 @@
 package com.predictia.soccermanager.controller;
 
+import com.predictia.dto.ClubDTO;
 import com.predictia.dto.PlayerDTO;
 import com.predictia.soccermanager.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class PlayerController {
     @GetMapping("/club/{id}")
     public List<PlayerDTO> getAllPlayersFromClub(@PathVariable("id") Integer id){
         return playerService.getAllPlayersFromClub(id);
+    }
+
+    @GetMapping("/search")
+    public List<PlayerDTO> searchPlayersByName(@RequestParam("name") String name) {
+        return playerService.searchPlayersByName(name);
     }
 
 }
