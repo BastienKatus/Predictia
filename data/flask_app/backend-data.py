@@ -135,6 +135,21 @@ def calculate_total_goals_conceded():
 
     return total_buts_encaisses.to_json(orient='records')
 
+# Endpoint pour calculer la moyenne des buts marqués par un club dans une saison spécifiée
+@app.route('/calculate-average-goals-conceded', methods=['GET'])
+def calculate_average_goals_conceded():
+    #load_data()
+    club_id_specifique = request.args.get('club_id', type=int)
+    saison_specifique = request.args.get('season', type=int)
+
+    if club_id_specifique is None or saison_specifique is None:
+        return jsonify({'error': 'Missing club_id or season'}), 400
+
+    moyenne_buts_encaisses = predictia_stats.calculer_moyenne_buts_encaisses(df_clubs, df_games, club_id_specifique, saison_specifique)
+
+    return moyenne_buts_encaisses.to_json(orient='records')
+
+
 @app.route('/calculate-wins', methods=['GET'])
 def calculate_wins():
     #load_data()

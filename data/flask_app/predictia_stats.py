@@ -204,6 +204,9 @@ def calculer_moyenne_buts_marques(df_clubs, df_games, club_id_specifique, saison
 
     return resultats_club_specifie
 
+
+
+
 def calculer_total_buts_encaisses(df_clubs, df_games, club_id_specifique, saison_specifique):
     # Récupérez le championnat domestique de l'équipe spécifiée
     championnat_domestique = df_clubs[df_clubs['club_id'] == club_id_specifique]['domestic_competition_id'].iloc[0]
@@ -247,6 +250,53 @@ def calculer_total_buts_encaisses(df_clubs, df_games, club_id_specifique, saison
 
     return resultats_club_specifie
 
+
+def calculer_moyenne_buts_encaisses(df_clubs, df_games, club_id_specifique, saison_specifique):
+    # Récupérez le championnat domestique de l'équipe spécifiée
+    championnat_domestique = df_clubs[df_clubs['club_id'] == club_id_specifique]['domestic_competition_id'].iloc[0]
+
+    # Filtrer les clubs ayant le même championnat domestique et last_season spécifiée
+    clubs_meme_championnat = df_clubs[(df_clubs['domestic_competition_id'] == championnat_domestique) & (df_clubs['last_season'] == saison_specifique)]
+
+    # Filtrer les jeux en fonction du championnat domestique et de la saison spécifiée
+    games_championnat_domestique_saison = df_games[(df_games['competition_id'] == championnat_domestique) & (df_games['season'] == saison_specifique)]
+
+    # Créer un tableau pour stocker les résultats des buts marqués par match
+    buts_encaisses_tableau = []
+
+    # Parcourir tous les clubs du même championnat
+    for _, club_row in clubs_meme_championnat.iterrows():
+        current_club_id = club_row['club_id']
+        matchs_du_club_domicile = games_championnat_domestique_saison[(games_championnat_domestique_saison['home_club_id'] == current_club_id)]
+        matchs_du_club_exterieur = games_championnat_domestique_saison[(games_championnat_domestique_saison['away_club_id'] == current_club_id)]
+
+        nb_matchs_domicile = len(matchs_du_club_domicile)
+
+        nb_matchs_exterieur = len(matchs_du_club_exterieur)
+
+        nb_matchs_total = nb_matchs_domicile + nb_matchs_exterieur
+
+        total_buts_encaisses_domicile = matchs_du_club_domicile['away_club_goals'].sum()
+
+        total_buts_encaisses_exterieur = matchs_du_club_exterieur['home_club_goals'].sum()
+
+        total_buts_encaisses_total = total_buts_encaisses_domicile + total_buts_encaisses_exterieur
+
+        moyenne_buts_encaisses_domicile = total_buts_encaisses_domicile / nb_matchs_domicile if nb_matchs_domicile > 0 else 0
+
+        moyenne_buts_encaisses_exterieur = total_buts_encaisses_exterieur / nb_matchs_exterieur if nb_matchs_exterieur > 0 else 0
+
+        moyenne_buts_encaisses_total = total_buts_encaisses_total / nb_matchs_total if nb_matchs_total > 0 else 0
+
+        buts_encaisses_tableau.append({'club_id': current_club_id, 'moyenne_buts_marques_domicile': moyenne_buts_encaisses_domicile, 'moyenne_buts_marques_exterieur': moyenne_buts_encaisses_exterieur, 'moyenne_buts_marques_total': moyenne_buts_encaisses_total})
+
+    # Créer un DataFrame à partir du tableau
+    df_buts_marques = pd.DataFrame(buts_encaisses_tableau)
+
+    # Filtrer les résultats pour le club spécifié
+    resultats_club_specifie = df_buts_marques[df_buts_marques['club_id'] == club_id_specifique]
+
+    return resultats_club_specifie
 
 def calculer_nombre_victoires(df_clubs, df_games, club_id_specifique, saison_specifique):
     # Récupérez le championnat domestique de l'équipe spécifiée
@@ -391,17 +441,20 @@ def calculer_forme_5_derniers_matchs(df_clubs, df_games, club_id_specifique, sai
 
 
 def calculer_cartons_jaunes_pour_club(df_clubs, df_games, df_game_events, club_id_specifique, saison_specifique):
-    # Récupérez le championnat domestique de l'équipe spécifiée
+    pd.set_option('display.max_columns', None)
     championnat_domestique = df_clubs[df_clubs['club_id'] == club_id_specifique]['domestic_competition_id'].iloc[0]
+
     # Filtrer les jeux en fonction du championnat domestique et de la saison spécifiée
     games_championnat_domestique_saison = df_games[(df_games['competition_id'] == championnat_domestique) & (df_games['season'] == saison_specifique)]
+
     # Filtrer les événements de jeu liés aux matchs de la saison spécifiée dans le même championnat
     events_championnat_saison = df_game_events[df_game_events['game_id'].isin(games_championnat_domestique_saison['game_id'])]
-    print(events_championnat_saison)
+
+    
     # Filtrer les événements de jeu qui sont des cartons jaunes pour le club spécifié
-    cartons_jaunes_club_specifique = events_championnat_saison[(events_championnat_saison['club_id'] == club_id_specifique) & 
-                                                                (events_championnat_saison['description'].str.contains("Yellow card"))]
-    print(cartons_jaunes_club_specifique)
+    cartons_jaunes_club_specifique = events_championnat_saison[(events_championnat_saison['club_id'] == club_id_specifique) &
+                                                              (events_championnat_saison['description'].str.contains("Yellow card"))]
+
     # Compter le nombre de cartons jaunes pour le club spécifié
     nombre_cartons_jaunes_club_specifique = len(cartons_jaunes_club_specifique)
 
