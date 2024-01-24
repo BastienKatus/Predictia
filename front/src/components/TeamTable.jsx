@@ -24,6 +24,7 @@ const TeamTable = () => {
         (team) => userReducer.followedTeams.includes(team.clubId)
       );
       setTeamList(followedTeams);
+      setLeague('')
     } else if (routeParams.id !== 'all') {
       setLeague(routeParams.id);
       const filteredTeams = dataReducer.teams.filter(
@@ -32,6 +33,7 @@ const TeamTable = () => {
       setTeamList(filteredTeams);
     } else {
       setTeamList(dataReducer.teams);
+      setLeague('')
     }
   }, [location]);
 
@@ -63,8 +65,8 @@ const TeamTable = () => {
   return (
     <>
       {routeParams.id !== 'followed' ? (
-        <div>
-          <label htmlFor="league">Sélectionner une ligue :</label>
+        <div className='filters'>
+          <label htmlFor="league">Ligue :</label>
           <select
             id="league"
             name="league"
@@ -78,7 +80,7 @@ const TeamTable = () => {
               </option>
             ))}
           </select>
-          <label htmlFor="filter">Filtrer par nom :</label>
+          <label htmlFor="filter">Nom :</label>
           <input
             type="text"
             id="filter"

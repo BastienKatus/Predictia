@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
+import { saveFollowedTeams } from '../redux/actions';
 
 const FollowTeams = (props) => {
     const [selectedTeams, setSelectedTeams] = useState([]);
     const [teamList, setTeamList] = useState([]);
     const [league, setLeague] = useState('');
+    const [filter, setFilter] = useState('');
 
     const dataReducer = useSelector(state => state.dataReducer);
     const userReducer = useSelector(state => state.userReducer);
@@ -27,6 +29,14 @@ const FollowTeams = (props) => {
 
     const handleLeagueChange = (event) => {
       setLeague(event.target.value);
+    };
+
+    const handleFilterChange = (event) => {
+      setFilter(event.target.value);
+      const filteredTeams = dataReducer.teams.filter(
+        (team) => team.name.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      setTeamList(filteredTeams);
     };
 
     useEffect(() => {
@@ -53,6 +63,7 @@ const FollowTeams = (props) => {
     };
 
     const toggleSaveSelection = () => {
+      dispatch(saveFollowedTeams(selectedTeams))
         fetch('/users/followedteams/' + routeParams.id, {
             method: 'POST',
             headers: {
@@ -78,8 +89,9 @@ const FollowTeams = (props) => {
     
     return (
       <>
-        <div>
-          <label htmlFor="league">Sélectionner une ligue :</label>
+        <h1>Suivez vos équipes préférées</h1>
+        <div className='filters'>
+          <label htmlFor="league">Ligue :</label>
           <select
             id="league"
             name="league"
@@ -93,6 +105,14 @@ const FollowTeams = (props) => {
               </option>
             ))}
           </select>
+          <label htmlFor="filter">Nom :</label>
+          <input
+            type="text"
+            id="filter"
+            name="filter"
+            value={filter}
+            onChange={handleFilterChange}
+          />
         </div>
         <div className="team-grid-container">
             <div className="team-grid">

@@ -20,45 +20,50 @@ export default function Root(props) {
       <div id="sidebar">
         <nav>
           <ul>
+            <p className="sidebar-label">Données :</p>
             <li>
-              <Link to={`/`}>Accueil</Link>
+              <Link to={`/`}>Prochains Matchs</Link>
             </li>
             <li>
               <Link to={`/competitions`}>Compétitions</Link>
             </li>
-            {userReducer.currentUser !== null && 
-            <li>
-              <Link to={`/teams/followed`}>Equipes Suivies</Link>
-            </li>
-            }
             <li>
               <Link to={`/teams/all`}>Equipes</Link>
             </li>
 
+
             {userReducer.currentUser !== null ? (
                     <>
+                    <li className="li-separation">
+                      <p className="sidebar-label">Utilisateurs :</p>
+                    </li>
                     <li>
                       <Link to={`/simulation`}>Simulation</Link>
                     </li>
+                    <li>
+                      <Link to={`/teams/followed`}>Equipes Suivies</Link>
+                    </li>
                     </>
                 ) : (
-                    <>
-                    <li>
+                    <div className="li-bas">
+                    <li >
                       <Link to={`/login`}>Se connecter</Link>
                     </li>
                     <li>
                       <Link to={`/register`}>S'inscrire</Link>
                     </li>
-                    </>
+                    </div>
                 )
             }
             {userReducer.currentUser !== null && (
-              <>
-              <li>
-                <Link onClick={handleLogOut}>Se Déconnecter</Link>
-              </li>
-              <Link to={`/profile/${userReducer.userId}`}><FontAwesomeIcon icon={faUser} /><img className="logo-xs" src={userReducer.favoriteClubLogo} /> {userReducer.currentUser}</Link>
-              </>
+              <div className="li-bas">
+                <li>
+                <Link to={`/profile/${userReducer.userId}`}>Profile<img className="logo-xs" src={userReducer.favoriteClubLogo} /> {userReducer.currentUser}</Link>
+                </li>
+                <li>
+                  <Link onClick={handleLogOut}>Se Déconnecter</Link>
+                </li>
+              </div>
             )}
           </ul>
         </nav>

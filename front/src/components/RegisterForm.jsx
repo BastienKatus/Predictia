@@ -15,6 +15,7 @@ const RegistrationForm = () => {
   const [username, setUsername] = useState('');
   const [mail, setMail] = useState('');
   const [favoriteTeam, setFavoriteTeam] = useState('');
+  const [followedTeam, setFollowedTeam] = useState([]);
   const [teamList, setTeamList] = useState([]);
   const [filteredTeamList, setFilteredTeamList] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState('');
@@ -143,31 +144,29 @@ const RegistrationForm = () => {
         </label>
       </div>
       <div className="label-group">
-        <div>
-            <label>
-              Ligue :
-              <select value={selectedLeague} onChange={handleLeagueChange}>
-                <option value="">Toutes les ligues</option>
-                {leagueList.map((league) => (
-                  <option key={league.competitionId} value={league.competitionId}>
-                    {league.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div>
-            <label>
-              Equipe favorite :
-              <select value={favoriteTeam} onChange={handleFavoriteTeamChange}>
-                <option value="">Selectionner une équipe</option>
-                {filteredTeamList.map((team) => (
-                  <option key={team.clubId} value={team.clubId}>
-                    {team.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+        <div className="filters">
+          <label>
+            Ligue :
+            <select value={selectedLeague} onChange={handleLeagueChange}>
+              <option value="">Toutes les ligues</option>
+              {leagueList.map((league) => (
+                <option key={league.competitionId} value={league.competitionId}>
+                  {league.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Equipe favorite :
+            <select value={favoriteTeam} onChange={handleFavoriteTeamChange} required className={favoriteTeam ? "" : 'required-input'}>
+              <option value="">Selectionner une équipe</option>
+              {filteredTeamList.map((team) => (
+                <option key={team.clubId} value={team.clubId}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
+          </label>
           </div>
         </div>
       <div>

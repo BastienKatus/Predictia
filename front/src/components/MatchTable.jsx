@@ -6,7 +6,7 @@ import Match from './Match';
 const TeamTable = (props) => {
   const [followedMatches, setFollowedMatches] = useState([]);
   const [allMatches, setAllMatches] = useState([]);
-  // const [league, setLeague] = useState('');
+  const [league, setLeague] = useState('');
   const [filter, setFilter] = useState('');
 
   const userReducer = useSelector(state => state.userReducer)
@@ -27,16 +27,21 @@ const TeamTable = (props) => {
     }
   }, [dataReducer.matches]);
 
-  // const handleLeagueChange = (event) => {
-  //   setLeague(event.target.value);
-  //   setFilter('');
-  //   const filteredMatches = dataReducer.matches.filter(
-  //     (match) => team.domesticCompetitionId === event.target.value
-  //   );
-  //   setAllMatches(filteredMatches);
-  // };
+  const handleLeagueChange = (event) => {
+    setFilter('');
+    setLeague(event.target.value);
+    const filteredTeams = dataReducer.teams.filter(
+      (team) => team.domesticCompetitionId === event.target.value
+    );
+    const teamIds = filteredTeams.map(team => team.clubId);
+    const filteredMatches = dataReducer.matches.filter(match => {
+      return teamIds.includes(match.homeClubId) || teamIds.includes(match.awayClubId);
+    });
+    setAllMatches(filteredMatches);
+  };
 
   const handleFilterChange = (event) => {
+    setLeague('');
     setFilter(event.target.value);
     const filteredMatches = dataReducer.matches.filter(
       (match) => match.awayClubShortName.toLowerCase().includes(event.target.value.toLowerCase()) || match.homeClubShortName.toLowerCase().includes(event.target.value.toLowerCase())
@@ -46,16 +51,32 @@ const TeamTable = (props) => {
 
   return (
     <div>
-      <label htmlFor="filter">Filtrer par nom :</label>
-          <input
-            type="text"
-            id="filter"
-            name="filter"
-            value={filter}
-            onChange={handleFilterChange}
-          />
-      {(followedMatches.length !== 0 && filter === '') && <h1>Equipes suivies</h1>}
-      {filter === '' && followedMatches.map((match, index) => (
+      <div className='filters'>
+        <label htmlFor="league">Ligue :</label>
+        <select
+          id="league"
+          name="league"
+          value={league}
+          onChange={handleLeagueChange}
+        >
+          <option value=''>Toutes les ligues</option>
+          {dataReducer.competitions.map((competition) => (
+            <option key={competition.competitionId} value={competition.competitionId}>
+              {competition.name}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="filter">Equipe :</label>
+        <input
+          type="text"
+          id="filter"
+          name="filter"
+          value={filter}
+          onChange={handleFilterChange}
+        />
+      </div>
+      {(followedMatches.length !== 0 && filter === '' && league === '') && <h1>Equipes suivies</h1>}
+      {filter === '' && league === '' && followedMatches.map((match, index) => (
           <Match
             key={index}
             match={match}
