@@ -1,13 +1,20 @@
-from flask import Flask, jsonify, request
 import os
 import psycopg2
 import pandas as pd
 import joblib
 import predictia_ml
-from sqlalchemy import create_engine
 import pandas as pd
+import re
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sqlalchemy import create_engine
+from flask import Flask, jsonify, request
+from datetime import datetime
 
-model = joblib.load(os.path.join("..", "model_training", "model.pkl"))
+TF_ENABLE_ONEDNN_OPTS=0
+model_rl = joblib.load(os.path.join("..", "model_training", "model_rl.pkl"))
+model_seq = joblib.load(os.path.join("..", "model_training", "model_sequential.pkl"))
+scaler = joblib.load(os.path.join("..", "model_training", "scaler_sequential.pkl"))
 
 app = Flask(__name__)
 
@@ -56,24 +63,42 @@ def predict():
     # Récupérer les paramètres de la requête
     home_team_id = request.args.get('home_team_id', type=int)
     away_team_id = request.args.get('away_team_id', type=int)
+    date_str = request.args.get('date')
+
+    # Valider le format de la date si elle est fournie, sinon utiliser la date d'aujourd'hui
+    if date_str:
+        # Vérifier que la date est au format YYYY-MM-DD
+        if not re.match(r'\d{4}-\d{2}-\d{2}', date_str):
+            return jsonify({'error': 'Date format is invalid. Use YYYY-MM-DD.'}), 400
+        # Convertir la chaîne de caractères en objet date
+        try:
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return jsonify({'error': 'Date format is invalid. Use YYYY-MM-DD.'}), 400
+    else:
+        # Utiliser la date du jour si aucune date n'est fournie
+        date = datetime.today().date()
 
     # Assurez-vous que les ID d'équipe sont fournis
     if home_team_id is None or away_team_id is None:
         return jsonify({'error': 'Missing home_team_id or away_team_id'}), 400
+
     # Préparer les caractéristiques pour un match donné
-    match_features = predictia_ml.preparer_caracteristiques_match(df_games, df_players, df_game_lineups, home_team_id, away_team_id)
+    # Ici, vous devriez également passer la date à la fonction si elle est nécessaire pour la prédiction
+    features_resultat, features_probas = predictia_ml.preparer_caracteristiques_match(df_games, df_players, df_game_lineups, home_team_id, away_team_id, date)
+
     # Faire la prédiction des probabilités
-    probas = predictia_ml.predire_probabilites(model, match_features)
-    # Traiter les probabilités comme nécessaire
-    # Par exemple, les ajouter au DataFrame des caractéristiques et filtrer les colonnes
-    # Convertir l'array NumPy en liste Python
+    resultat = predictia_ml.predire_resultat(model_seq, features_resultat, scaler, 0.75)
+    probas = predictia_ml.predire_proba(model_rl, features_probas)
     probas_list = probas.tolist()
     print(probas_list)
+    print(np.argmax(resultat.tolist()))
     # Créer un dictionnaire pour la réponse JSON
     response = {
-        'probabilite_defaite': probas_list[0][0],
-        'probabilite_nul': probas_list[0][1],
-        'probabilite_victoire': probas_list[0][2]
+        'probabilite_defaite': probas_list[0],
+        'probabilite_nul': probas_list[1],
+        'probabilite_victoire': probas_list[2],
+        'classification_predictia': str(np.argmax(resultat.tolist()))
     }
     return jsonify(response)
 
