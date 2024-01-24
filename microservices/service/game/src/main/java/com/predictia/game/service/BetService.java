@@ -20,6 +20,7 @@ public class BetService {
 
     public BetDTO betAgainstPredictia(BetDTO betDTO){
         JSONObject prediction = helperAPIService.callAPI("DATA", "/predict?home_team_id=" + betDTO.getClubHomeId() + "&away_team_id=" + betDTO.getClubAwayId());
+         BetDTO betResult = new BetDTO();
         try {
             System.out.println(prediction);
             Float predictionDraw = Float.valueOf(prediction.getString("probabilite_nul"));
@@ -30,8 +31,8 @@ public class BetService {
             Float playerPredictionWinAway = betDTO.getBetWinAwayClub();
             Float playerPredictionDraw = betDTO.getBetDraw();
 
-            Float coefficient = 0f;
-            Float difference = 0f;
+            float coefficient = 0f;
+            float difference = 0f;
             if(Objects.equals(playerPredictionWinHome, predictionWinHome) && Objects.equals(playerPredictionDraw, predictionDraw) && Objects.equals(playerPredictionWinAway, predictionWinAway)){
                 coefficient += 5;
             } else {
@@ -39,27 +40,8 @@ public class BetService {
                         + Math.abs(predictionWinAway - playerPredictionWinAway)
                         + Math.abs(predictionDraw - playerPredictionDraw);
 
-                String whichResultForPlayer = "";
-                if (playerPredictionWinHome > 0.6f && playerPredictionWinHome > playerPredictionWinAway) {
-                    whichResultForPlayer = "HOME";
-                } else if (playerPredictionWinAway > 0.6f && playerPredictionWinAway > playerPredictionWinHome) {
-                    whichResultForPlayer = "AWAY";
-                } else if ((playerPredictionWinHome > 0.6f && playerPredictionWinHome < 0.4f)
-                        || (playerPredictionWinAway > 0.6f && playerPredictionWinAway < 0.4f)
-                        || (playerPredictionDraw > 0.2f)) {
-                    whichResultForPlayer = "DRAW";
-                }
-
-                String whichResultForPredictia = "";
-                if (predictionWinHome > 0.6f && predictionWinHome > predictionWinAway) {
-                    whichResultForPredictia = "HOME";
-                } else if (predictionWinAway > 0.6f && predictionWinAway > predictionWinHome) {
-                    whichResultForPredictia = "AWAY";
-                } else if ((predictionWinHome > 0.6f && predictionWinHome < 0.4f)
-                        || (predictionWinAway > 0.6f && predictionWinAway < 0.4f)
-                        || (predictionDraw > 0.2f)) {
-                    whichResultForPredictia = "DRAW";
-                }
+                String whichResultForPlayer = getFinalMatchStatus(playerPredictionWinHome, playerPredictionDraw, playerPredictionWinAway);
+                String whichResultForPredictia = getFinalMatchStatus(predictionWinHome, predictionDraw, predictionWinAway);
 
                 if(whichResultForPlayer.equals(whichResultForPredictia)){
                     if(whichResultForPlayer.equals("DRAW")){
@@ -79,6 +61,7 @@ public class BetService {
 
             ResponseEntity<UserDTO> response = restTemplate.exchange( getUserURL, HttpMethod.GET, null, UserDTO.class);
             UserDTO user = response.getBody();
+            UserDTO updatedUser = null;
             if(user != null){
                 BigDecimal userCredits;
                 if(user.getCredits() == null ){
@@ -95,11 +78,30 @@ public class BetService {
                 HttpEntity<UserDTO> request = new HttpEntity<>(user);
 
                 response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, UserDTO.class);
-                UserDTO updatedUser = response.getBody();
+                updatedUser = response.getBody();
+            }
+            if(updatedUser != null) {
+                betResult = betDTO;
+                betResult.setPrize(creditsRedistributed);
             }
         } catch (Exception e) {
-            return new BetDTO();
+            // Return an empty betDTO object
+            return betResult;
         }
-        return new BetDTO();
+        // Return the betResult object. Attributes are null if the user is not updated.
+        return betResult;
+    }
+
+    private String getFinalMatchStatus(Float percentWinHome, Float percentDraw, Float percentWinAway){
+        if (percentWinHome > 0.6f && percentWinHome > percentWinAway) {
+            return "HOME";
+        } else if (percentWinAway > 0.6f && percentWinAway > percentWinHome) {
+            return "AWAY";
+        } else if ((percentWinHome < 0.6f && percentWinHome > 0.4f)
+                || (percentWinAway < 0.6f && percentWinAway > 0.4f)
+                || (percentDraw > 0.2f)) {
+            return "DRAW";
+        }
+        return "DRAW";
     }
 }

@@ -16,7 +16,7 @@ public class BetController {
     @Autowired
     private BetService betService;
 
-    @GetMapping()
+    @PostMapping("/bet")
     public BetDTO betAgainstPredictia(@RequestBody BetDTO betDTO) {
         return betService.betAgainstPredictia(betDTO);
     }

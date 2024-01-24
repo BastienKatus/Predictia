@@ -82,13 +82,16 @@ public class FutureGameService {
                 List<String> list = Arrays.asList("PL", "FL1", "BL1", "SA", "DED", "PPL", "PD");
                 if (list.contains(competitionObj.getString("code"))) {
                     String utcDate = matchObj.getString("utcDate");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                    LocalDateTime dateTime = LocalDateTime.parse(utcDate, formatter);
+                    LocalDate localDate = dateTime.toLocalDate();
                     String status = matchObj.getString("status");
                     Integer homeclubId = Integer.parseInt(homeTeamObj.getString("id"));
                     Integer awayClubid = Integer.parseInt(awayTeamObj.getString("id"));
                     String homeShortName = homeTeamObj.getString("shortName");
                     String awayShortName = awayTeamObj.getString("shortName");
 
-                    FutureGameModel futureGameModel = futureGameRepository.findFutureGameModelByHomeClubShortNameAndAwayClubShortName(homeShortName, awayShortName);
+                    FutureGameModel futureGameModel = futureGameRepository.findFutureGameModelByHomeClubShortNameAndAwayClubShortNameAndGameDate(homeShortName, awayShortName, localDate);
                     if(futureGameModel == null) {
                         futureGameModel = new FutureGameModel();
                     }
@@ -98,9 +101,6 @@ public class FutureGameService {
                     futureGameModel.setStatus(status);
                     futureGameModel.setModifiedDateVerification(LocalDate.now());
 
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                    LocalDateTime dateTime = LocalDateTime.parse(utcDate, formatter);
-                    LocalDate localDate = dateTime.toLocalDate();
                     futureGameModel.setGameDate(localDate);
 
                     // Transform Ids of club retrieve from external API into data Ids
