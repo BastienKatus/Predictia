@@ -4,3 +4,4 @@ data/model_training/source/*
 data/.ipynb_checkpoints
 data/predictia_env/*
 docker-volumes/*
+data/model_training/*.xlsx
