@@ -13,6 +13,10 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClubService {
@@ -71,6 +75,21 @@ public class ClubService {
         }else{
             return null;
         }
+    }
+
+    public List<ClubDTO> searchClubsByName(String name) {
+        Iterable<ClubModel> clubModels = clubRepository.findAll();
+        List<ClubModel> matchingClubs = new ArrayList<>();
+
+        clubModels.forEach(clubModel -> {
+            if (clubModel.getName().toLowerCase().contains(name.toLowerCase())) {
+                matchingClubs.add(clubModel);
+            }
+        });
+
+        return matchingClubs.stream()
+                .map(clubModel -> clubMapper.clubEntityToClubDTO(clubModel, null, null))
+                .collect(Collectors.toList());
     }
 
     public JSONObject getStatisticsByClubId(Integer clubId, Integer season)  {

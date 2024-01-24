@@ -88,7 +88,7 @@ FROM '/csv_files/competitions.csv' DELIMITER ',' CSV HEADER;
 CREATE TABLE game_events (
     game_event_id VARCHAR(255) NULL,
     date VARCHAR(255) NULL,
-    game_id VARCHAR(255) NULL,
+    game_id INTEGER NULL,
     minute INTEGER NULL,
     type VARCHAR(255) NULL,
     club_id INTEGER NULL,
