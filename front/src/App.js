@@ -1,5 +1,6 @@
 import './App.css';
 import Login from './components/LoginForm';
+import Search from './components/Search';
 import Home from './components/Home';
 import Team from './components/Team';
 import TeamTable from './components/TeamTable';
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
     {
         path: "/follow_teams/:id",
         element: <FollowTeams />,
+    },
+    {
+        path: "/search/:search",
+        element: <Search />,
     },
     {
         path: "/login",
