@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import CardPlayer from './CardPlayer';
 
 const StatsTable = (props) => {
-  const [stats, setStats] = useState({});
-  const [statsGoal, setStatsGoal] = useState({});
+  const [stats, setStats] = useState([]);
+  const [statsGoal, setStatsGoal] = useState([]);
+  const [clubName, setClubName] = useState('');
   const routeParams = useParams();
   const dataReducer = useSelector(state => state.dataReducer);
   
@@ -22,11 +23,21 @@ const StatsTable = (props) => {
         setStats(data)
       })
       .catch(error => console.error('Erreur lors de la récupération des statistiques', error));
+      getClubName()
   }, []);
+
+  const getClubName = () => {
+    fetch('/soccerManager/clubs/' + props.id)
+      .then(response => response.json())
+      .then(data => {
+        setClubName(data.name);
+      })
+      .catch(error => console.error('Erreur lors de la récupération du club', error));
+  }
 
   return (
     <>
-    <h1 className='stat-h1'>Statistiques en {props.year}</h1>
+    <h1 className='stat-h1'>Statistiques en {props.year} : {clubName}</h1>
     {Object.keys(statsGoal).length !== 0 ? (
     <div className='filters'>
       <div className="stats-container">
