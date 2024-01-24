@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Entity
@@ -28,6 +27,12 @@ public class FutureGameModel {
 
     @Column(name="away_club_short_name")
     private String awayClubShortName;
+
+    @Column(name="home_club_logo_url")
+    private String homeClubLogoUrl;
+
+    @Column(name="away_club_logo_url")
+    private String awayClubLogoUrl;
 
     @Column(name="status")
     private String status;
