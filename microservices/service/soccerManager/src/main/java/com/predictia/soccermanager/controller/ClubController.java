@@ -48,4 +48,9 @@ public class ClubController {
     public String getStatisticsGoalsByClubId(@PathVariable("clubId") Integer clubId){
         return clubService.getStatisticsGoalsByClubId(clubId, LocalDate.now().getYear()).toString();
     }
+
+    @GetMapping("/search")
+    public List<ClubDTO> searchClubsByName(@RequestParam("name") String name) {
+        return clubService.searchClubsByName(name);
+    }
 }
