@@ -83,13 +83,13 @@ const StatsTable = (props) => {
       <div className="stats-container">
         <div className="stat-card">
           <h4>Buts marqués :</h4>
-          <p className="stat-p">Total: {Math.round(statsGoal["calculate-goals-scored"]["data"][0]["buts_marques_par_match_total"]*100)/100}</p>
-          <p className="stat-p">Domicile: {Math.round(statsGoal["calculate-goals-scored"]["data"][0]["buts_marques_par_match_domicile"]*100)/100}</p>
-          <p className="stat-p">Extérieur: {Math.round(statsGoal["calculate-goals-scored"]["data"][0]["buts_marques_par_match_exterieur"]*100)/100}</p>
+          <p className="stat-p">Total: {statsGoal["calculate-goals-scored"]["data"][0]["total_buts_marques_total"]}</p>
+          <p className="stat-p">Domicile: {statsGoal["calculate-goals-scored"]["data"][0]["total_buts_marques_domicile"]}</p>
+          <p className="stat-p">Extérieur: {statsGoal["calculate-goals-scored"]["data"][0]["total_buts_marques_exterieur"]}</p>
         </div>
 
         <div className="stat-card">
-          <h4>Moyenne de buts</h4>
+          <h4>Moyenne de buts marqués</h4>
           <p className="stat-p">Total: {Math.round(statsGoal["calculate-average-goals-scored"]["data"][0]["moyenne_buts_marques_total"]*100)/100}</p>
           <p className="stat-p">Domicile: {Math.round(statsGoal["calculate-average-goals-scored"]["data"][0]["moyenne_buts_marques_domicile"]*100)/100}</p>
           <p className="stat-p">Extérieur: {Math.round(statsGoal["calculate-average-goals-scored"]["data"][0]["moyenne_buts_marques_exterieur"]*100)/100}</p>

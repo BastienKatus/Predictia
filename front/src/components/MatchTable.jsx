@@ -25,19 +25,29 @@ const TeamTable = (props) => {
         !userReducer.followedTeams.includes(match.awayClubId) && !userReducer.followedTeams.includes(match.homeClubId)
       ));
     }
-  }, [dataReducer.matches]);
+  }, [dataReducer.matches, userReducer.followedTeams]);
 
   const handleLeagueChange = (event) => {
     setFilter('');
     setLeague(event.target.value);
-    const filteredTeams = dataReducer.teams.filter(
-      (team) => team.domesticCompetitionId === event.target.value
-    );
-    const teamIds = filteredTeams.map(team => team.clubId);
-    const filteredMatches = dataReducer.matches.filter(match => {
-      return teamIds.includes(match.homeClubId) || teamIds.includes(match.awayClubId);
-    });
-    setAllMatches(filteredMatches);
+    if(event.target.value === ''){
+      setFollowedMatches(dataReducer.matches.filter((match) =>
+        userReducer.followedTeams.includes(match.awayClubId) || userReducer.followedTeams.includes(match.homeClubId)
+      ));
+      setAllMatches(dataReducer.matches.filter((match) =>
+        !userReducer.followedTeams.includes(match.awayClubId) && !userReducer.followedTeams.includes(match.homeClubId)
+      ));
+    }
+    else{
+      const filteredTeams = dataReducer.teams.filter(
+        (team) => team.domesticCompetitionId === event.target.value
+      );
+      const teamIds = filteredTeams.map(team => team.clubId);
+      const filteredMatches = dataReducer.matches.filter(match => {
+        return teamIds.includes(match.homeClubId) || teamIds.includes(match.awayClubId);
+      });
+      setAllMatches(filteredMatches);
+    }
   };
 
   const handleFilterChange = (event) => {

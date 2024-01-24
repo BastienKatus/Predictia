@@ -63,7 +63,9 @@ const FollowTeams = (props) => {
     };
 
     const toggleSaveSelection = () => {
-      dispatch(saveFollowedTeams(selectedTeams))
+      if(userReducer.userId !== -1){
+        dispatch(saveFollowedTeams(selectedTeams))
+      }
         fetch('/users/followedteams/' + routeParams.id, {
             method: 'POST',
             headers: {
