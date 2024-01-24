@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
+import { saveFollowedTeams } from '../redux/actions';
 
 const FollowTeams = (props) => {
     const [selectedTeams, setSelectedTeams] = useState([]);
@@ -62,6 +63,7 @@ const FollowTeams = (props) => {
     };
 
     const toggleSaveSelection = () => {
+      dispatch(saveFollowedTeams(selectedTeams))
         fetch('/users/followedteams/' + routeParams.id, {
             method: 'POST',
             headers: {

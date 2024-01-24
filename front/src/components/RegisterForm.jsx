@@ -158,7 +158,7 @@ const RegistrationForm = () => {
           </label>
           <label>
             Equipe favorite :
-            <select value={favoriteTeam} onChange={handleFavoriteTeamChange}>
+            <select value={favoriteTeam} onChange={handleFavoriteTeamChange} required className={favoriteTeam ? "" : 'required-input'}>
               <option value="">Selectionner une équipe</option>
               {filteredTeamList.map((team) => (
                 <option key={team.clubId} value={team.clubId}>
