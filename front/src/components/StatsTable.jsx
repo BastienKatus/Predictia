@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CardPlayer from './CardPlayer';
+import Loading from "./Loading";
 
 const StatsTable = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState([]);
   const [statsGoal, setStatsGoal] = useState([]);
   const [clubName, setClubName] = useState('');
@@ -11,6 +13,7 @@ const StatsTable = (props) => {
   const dataReducer = useSelector(state => state.dataReducer);
   
   useEffect(() => {
+    setIsLoading(true)
     fetch('/soccerManager/clubs/statistics_goals?clubId=' + props.id + '&season=' + props.year)
       .then(response => response.json())
       .then(data => {
@@ -21,9 +24,11 @@ const StatsTable = (props) => {
       .then(response => response.json())
       .then(data => {
         setStats(data)
+        setIsLoading(false)
       })
       .catch(error => console.error('Erreur lors de la récupération des statistiques', error));
       getClubName()
+
   }, []);
 
   const getClubName = () => {
@@ -120,9 +125,9 @@ const StatsTable = (props) => {
     </div>
     )
     :
-    (
-      <p>Chargement en cours...</p>
-    )}
+      (
+        <Loading isLoading={isLoading}/>
+      )}
     </>
   );
 };

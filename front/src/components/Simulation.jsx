@@ -202,7 +202,7 @@ const Simulation = (props) => {
         </div>
       </div>
 
-      <Loading/>
+      <Loading isLoading={isLoading}/>
       <div className={"main-section"}>
         <div className={`${sectionSimulation ? 'isActive' : 'isDisactive'}`} onClick={handleClickSectionSimulation}>
           <h2>
