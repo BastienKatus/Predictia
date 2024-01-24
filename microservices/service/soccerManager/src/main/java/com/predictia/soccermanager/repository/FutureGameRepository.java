@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface FutureGameRepository extends CrudRepository<FutureGameModel, Integer> {
     FutureGameModel findFutureGameModelByHomeClubShortNameAndAwayClubShortName(@Param("homeClubShortName") String homeClubShortName,@Param("awayClubShortName") String awayClubShortName);
+    FutureGameModel findFutureGameModelByHomeClubShortNameAndAwayClubShortNameAndGameDate(@Param("homeClubShortName") String homeClubShortName,@Param("awayClubShortName") String awayClubShortName, @Param("game_date") LocalDate gameDate);
     List<FutureGameModel> findAllByModifiedDateVerification(@Param("modified_date_verification") LocalDate modifiedDateVerification);
     
 }
