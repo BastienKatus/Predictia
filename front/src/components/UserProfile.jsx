@@ -113,7 +113,7 @@ const UserProfile = ({ userId }) => {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div>Chargement en cours...</div>;
   }
 
   return (
@@ -156,34 +156,35 @@ const UserProfile = ({ userId }) => {
         />
       </div>
       <div className="form-group">
+        <label>Equipe favorite :</label>
         <div>
-          <label>
+          <label className="label-form-xs">
             Ligue :
-            <select value={selectedLeague} onChange={handleLeagueChange}>
-              <option value="">Toutes les ligues</option>
-              {leagueList.map((league) => (
-                <option key={league.competitionId} value={league.competitionId}>
-                  {league.name}
-                </option>
-              ))}
-            </select>
           </label>
+          <select value={selectedLeague} onChange={handleLeagueChange}>
+            <option value="">Toutes les ligues</option>
+            {leagueList.map((league) => (
+              <option key={league.competitionId} value={league.competitionId}>
+                {league.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
-          <label>
-            Equipe favorite :
-            <select value={favoriteTeam} onChange={handleFavoriteTeamChange}>
-              <option value="">Selectionner une équipe</option>
-              {filteredTeamList.map((team) => (
-                <option key={team.clubId} value={team.clubId}>
-                  {team.name}
-                </option>
-              ))}
-            </select>
+          <label className="label-form-xs">
+            Equipe :
           </label>
+          <select value={favoriteTeam} onChange={handleFavoriteTeamChange}>
+            <option value="">Selectionner une équipe</option>
+            {filteredTeamList.map((team) => (
+              <option key={team.clubId} value={team.clubId}>
+                {team.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
-      <button className="save-button" onClick={handleSave}>
+      <button className="save-user-button" onClick={handleSave}>
         Enregistrer
       </button>
       {isModalOpen && (

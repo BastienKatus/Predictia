@@ -92,6 +92,12 @@ h4 {
   top: 1px;
 }
 
+.sidebar-label{
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 #sidebar > div {
   display: flex;
   align-items: center;
@@ -195,7 +201,7 @@ h4 {
   box-sizing: border-box;
 }
 
-.login-form button, .registration-form button {
+.login-form button, .registration-form button, .save-user-button {
   background-color: #4caf50;
   color: white;
   padding: 10px 15px;
@@ -309,10 +315,35 @@ h4 {
   border: 1px solid #ddd;
   padding: 20px;
   margin: 10px;
+  position: relative;
 }
 
 .match-date {
   margin: 0;
+}
+
+.team1-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.team2-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.team1-button-history {
+  position: absolute;
+  top: 10px;
+  left: 50px;
+}
+
+.team2-button-history {
+  position: absolute;
+  top: 10px;
+  right: 50px;
 }
 
 .teams-container {
@@ -394,7 +425,7 @@ input {
 }
 
 .required-input {
-  border: 1px solid lightcoral;
+  border: 1px solid lightcoral !important;
 }
 
 .team-grid {
@@ -475,6 +506,7 @@ input {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .modal-content {
@@ -537,6 +569,12 @@ input {
 .team-stats-btn {
   height: 50px;
   width: 50px;
+  margin-right: 20px;
+}
+
+.team-history-btn {
+  height: 50px;
+  width: 50px;
 }
 
 .user-profile-container {
@@ -569,15 +607,6 @@ input {
 
 button {
   background-color: #eee;
-}
-
-.save-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
 }
 
 .save-button:hover {
@@ -616,6 +645,12 @@ button {
   width: 150px;
   height: 150px;
 }
+
+.label-form-xs {
+  font-size: 14px;
+  margin: 5px 0 0 0;
+}
+
 .filters{
   display: flex;
   align-items: center;
@@ -624,4 +659,14 @@ button {
 label{
   min-width: 60px;
   margin: 10px;
+}
+
+.li-separation{
+  padding-top: 60px;
+}
+
+.li-bas{
+  width: 175px;
+  position: fixed;
+  bottom: 30px;
 }
