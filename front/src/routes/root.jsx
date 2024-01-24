@@ -57,7 +57,7 @@ export default function Root(props) {
               <li>
                 <Link onClick={handleLogOut}>Se Déconnecter</Link>
               </li>
-              <Link to={`/profile/${userReducer.userId}`}><FontAwesomeIcon icon={faUser} /><img className="logo-xs" src={userReducer.favoriteClubLogo} /> <div>{userReducer.currentUser.credits}</div> {userReducer.currentUser}</Link>
+              <Link to={`/profile/${userReducer.userId}`}><FontAwesomeIcon icon={faUser} /><img className="logo-xs" src={userReducer.favoriteClubLogo} /> {userReducer.currentUser}</Link>
               </>
             )}
           </ul>

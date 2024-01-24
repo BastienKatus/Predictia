@@ -19,16 +19,18 @@ function TwoHandleSliderRangeInput({ values, onChange }) {
   return (
     <Box sx={{ width: 300 }}>
       <Typography mb={2} id="range-slider" gutterBottom>
-        Valeurs
+        Glisser pour choisir vos valeurs
       </Typography>
-      <Slider
-        id="range-slider"
-        value={values}
-        onChange={handleChange}
-        min={0}
-        max={100}
-      />
-      <FormInputs values={values} handleInputChange={handleInputChange} />
+      <div className={"slider_form"}>
+        <Slider
+          id="range-slider"
+          value={values}
+          onChange={handleChange}
+          min={0}
+          max={100}
+        />
+        <FormInputs values={values} handleInputChange={handleInputChange} />
+      </div>
     </Box>
   );
 }

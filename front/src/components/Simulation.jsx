@@ -1,8 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import TwoHandleSliderRangeInput from "./TwoHandleSliderRangeInput";
+import Loading from "./Loading";
 
 const Simulation = (props) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [sectionSimulation, setSectionSimulation] = useState(false);
+  const [sectionBet, setSectionBet] = useState(false);
+
   const [teamList, setTeamList] = useState([]);
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
@@ -57,11 +64,6 @@ const Simulation = (props) => {
   useEffect(() => {
   }, [predictionResult]);
 
-
-  useEffect(() => {
-    console.log("userReducer.currentUser.credits", userReducer.currentUser.credits)
-  }, [userReducer.currentUser.credits]);
-
   const handleZonesChange = (newValues) => {
     setZonesValues(newValues);
   };
@@ -87,6 +89,7 @@ const Simulation = (props) => {
   };
 
   const handleApplyPrediction = (e) => {
+    setIsLoading(true)
     let predictionURL = "/soccerManager/games/predict?homeTeamId=" + homeTeam + "&awayTeamId=" + awayTeam;
     fetch(predictionURL, {
       method: 'GET',
@@ -98,24 +101,25 @@ const Simulation = (props) => {
       .then(json => {
         console.log("json", json);
         setPredictionResult(json);
+        setIsLoading(false)
       })
   };
 
   const handleBetAgainstIA = (e) => {
-    console.log("bet againstIA")
-    if(userReducer.userId && homeTeam && awayTeam){
+    setIsLoading(true)
+    if (userReducer.userId && homeTeam && awayTeam) {
       fetch("/game/betgames/bet", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "userId":userReducer.userId,
+          "userId": userReducer.userId,
           "clubHomeId": homeTeam,
           "clubAwayId": awayTeam,
-          "betWinHomeClub": zonesValues[0],
-          "betWinAwayClub": zonesValues[1],
-          "betDraw": (100 - zonesValues[1]-zonesValues[0]),
+          "betWinHomeClub": zonesValues[0] / 100,
+          "betWinAwayClub": zonesValues[1] / 100,
+          "betDraw": (100 - zonesValues[1] - zonesValues[0]) / 100,
           "bet": bet
         }),
       })
@@ -123,19 +127,31 @@ const Simulation = (props) => {
         .then(json => {
           console.log("json", json);
           let predictionResult = {
-            "probabilite_victoire":json['predictionResultWinHomeClub'],
-            "probabilite_nul":json['predictionResultDraw'],
-            "probabilite_defaite":json['predictionResultWinAwayClub']
+            "probabilite_victoire": json['predictionResultWinHomeClub'],
+            "probabilite_nul": json['predictionResultDraw'],
+            "probabilite_defaite": json['predictionResultWinAwayClub']
           }
           setPredictionResult(predictionResult);
+          setIsLoading(false)
         })
     }
   };
 
+  const handleClickSectionSimulation = () => {
+    setSectionSimulation(true);
+    setSectionBet(false);
+  };
+
+  const handleClickSectionBet = () => {
+    setSectionSimulation(false);
+    setSectionBet(true);
+  };
+
   return (
-    <div>
-      <div>
-        <div>
+    <div id={"simulation"}>
+      <h2> Je personnalise mon match </h2>
+      <div className={"select_home_away_team"}>
+        <div className={"home_team"}>
           <label>
             Ligue de l'équipe à domicile:
             <select value={selectedHomeLeague} onChange={handleHomeLeagueChange}>
@@ -147,8 +163,6 @@ const Simulation = (props) => {
               ))}
             </select>
           </label>
-        </div>
-        <div>
           <label>
             Equipe domicile :
             <select onChange={handleHomeTeamChange}>
@@ -162,7 +176,7 @@ const Simulation = (props) => {
           </label>
         </div>
 
-        <div>
+        <div className={"away_team"}>
           <label>
             Ligue de l'équipe visiteur:
             <select value={selectedAwayLeague} onChange={handleAwayLeagueChange}>
@@ -174,8 +188,6 @@ const Simulation = (props) => {
               ))}
             </select>
           </label>
-        </div>
-        <div>
           <label>
             Equipe visiteur :
             <select onChange={handleAwayTeamChange}>
@@ -190,39 +202,85 @@ const Simulation = (props) => {
         </div>
       </div>
 
-      <label>
-        Résultat prédit par notre IA
-      </label>
+      <Loading/>
+      <div className={"main-section"}>
+        <div className={`${sectionSimulation ? 'isActive' : 'isDisactive'}`} onClick={handleClickSectionSimulation}>
+          <h2>
+            Predictia
+          </h2>
+          <div className={"detail"}>
+            Explication de comment cela fonctionne rapidement
+          </div>
+
+          <button onClick={handleApplyPrediction}>Simulation simple</button>
+        </div>
+
+        <div className={`${sectionBet ? 'isActive' : 'isDisactive'}`} onClick={handleClickSectionBet}>
+          <h2>
+            Jouer contre Predictia
+          </h2>
+
+          <div className={"detail"}>
+            <p>
+              {"Les résultats sont distribués de la manière suivante:"}
+            </p>
+            <p>
+              {"Si le joueur annonce Victoire de A ou de B à 60% et plus alors cela ajoute un coefficient plus fort pour la victoire de l'équipe annoncé."}
+            </p>
+            <p>
+              {"Si le joueur annonce aucune des deux équipes avec un pourcentage de victoire > 60 et <40 ou un match nul > 20 alors c’est considéré comme un match nul. Un coefficient est ajouté pour le match nul."}
+            </p>
+            <p>
+              {"Les crédits redistribué sont équivalent à mise de départ X coefficient."}
+            </p>
+            <p>
+              {"coefficient = +2 pour une victoire d'équipe"}
+            </p>
+            <p>
+              {"coefficient = +3 pour un match nul"}
+            </p>
+            <p>
+              {"coefficient -= |PredictionA - JoueurA| +|PredictionNul - JoueurNul| + |PredictionB - JoueurB|"}
+            </p>
+            <p>
+              {"Si tous les résultats sont exacts, alors cela fait X10 de la mise."}
+            </p>
+          </div>
+
+          <label>
+            Montant de votre mise :
+            <input type="number" value={bet} onChange={handleBetChange}/>
+          </label>
+
+          <TwoHandleSliderRangeInput values={zonesValues} onChange={handleZonesChange}/>
+
+          <button onClick={handleBetAgainstIA}>Parier contre l'IA</button>
+        </div>
+      </div>
       {
-        predictionResult !== null && (
-          <div className="percentage-bar">
-            <div className="percentage" style={{width: `${predictionResult.probabilite_victoire * 100}%`}}>
-              {Math.round(predictionResult.probabilite_victoire * 100)}%
-            </div>
-            <div className="percentage2" style={{width: `${predictionResult.probabilite_nul * 100}%`}}>
-              {Math.round(predictionResult.probabilite_nul * 100)}%
-            </div>
-            <div className="percentage3" style={{width: `${predictionResult.probabilite_defaite * 100}%`}}>
-              {Math.round(predictionResult.probabilite_defaite * 100)}%
+        predictionResult && predictionResult.probabilite_nul && (
+          <div className={"result"}>
+            <h2>
+              Résultat prédit par notre IA
+            </h2>
+            <div className="percentage-bar">
+              <div className="percentage" style={{width: `${predictionResult.probabilite_victoire * 100}%`}}>
+                {Math.round(predictionResult.probabilite_victoire * 100)}%
+              </div>
+              <div className="percentage2" style={{width: `${predictionResult.probabilite_nul * 100}%`}}>
+                {Math.round(predictionResult.probabilite_nul * 100)}%
+              </div>
+              <div className="percentage3" style={{width: `${predictionResult.probabilite_defaite * 100}%`}}>
+                {Math.round(predictionResult.probabilite_defaite * 100)}%
+              </div>
             </div>
           </div>
         )
       }
-
-      <button onClick={handleApplyPrediction}>Simulation simple</button>
-      <button onClick={handleBetAgainstIA}>Parier contre l'IA</button>
-
-      <TwoHandleSliderRangeInput values={zonesValues} onChange={handleZonesChange} />
-
-
-      <div>
-        <label>
-          Montant de la mise :
-          <input type="number" value={bet} onChange={handleBetChange}/>
-        </label>
-      </div>
     </div>
   )
+
+
     ;
 };
 

@@ -550,3 +550,109 @@ input {
   width: 30px;
   height: 30px;
 }
+
+button {
+  cursor: pointer;
+}
+
+/* Page de simulation */
+#simulation {
+}
+
+#simulation .select_home_away_team {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-bottom: 25px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #cecece;
+}
+
+#simulation .select_home_away_team .home_team{
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+#simulation .select_home_away_team .away_team{
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+#simulation .main-section{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 10px;
+}
+
+#simulation .main-section p{
+  font-size:12px
+}
+
+#simulation .main-section:hover {
+  cursor: pointer;
+}
+
+#simulation .main-section .isActive{
+  width: 70%;
+  cursor: default;
+}
+
+#simulation .main-section .isDisactive{
+  width: 30%;
+  opacity: .3;
+  font-size: 10px !important;
+  overflow: hidden !important;
+  text-overflow-ellipsis: ellipsis !important;
+  max-height: 200px;
+}
+
+#simulation .main-section .detail{
+  padding: 15px 0;
+}
+
+#simulation .result{
+  margin-bottom: 40px;
+}
+
+#simulation .css-1v5z18m{
+  width: 100%;
+}
+
+#simulation button{
+  display: flex;
+  margin: 15px auto;
+}
+
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
