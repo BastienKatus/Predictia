@@ -68,6 +68,20 @@ h4 {
   left: 0;
 }
 
+.sidebar-search-container {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-input {
+  height: 30px;
+}
+
+.sidebar-button {
+  height: 30px;
+  width: 40px;
+}
+
 #sidebar > * {
   padding-left: 2rem;
   padding-right: 2rem;
@@ -360,7 +374,7 @@ h4 {
 
 .team img {
   width: 50px;
-  height: 50px;
+  height: auto;
   object-fit: cover;
   margin-bottom: 10px;
 }
@@ -662,7 +676,7 @@ label{
 }
 
 .li-separation{
-  padding-top: 60px;
+  padding-top:10px;
 }
 
 .li-bas{
@@ -775,4 +789,14 @@ button {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.search-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-player,
+.search-team {
+  width: 48%;
 }

@@ -81,13 +81,13 @@ const Match = ({ match }) => {
     </div>
 
     <div className="percentage-bar">
-        <div className="percentage" style={{ width: `${percentageHome}%` }}>
+        <div className={ percentageHome >= percentageAway ? "percentage" : "percentage3" } style={{ width: `${percentageHome}%` }}>
         {percentageHome}%
         </div>
         <div className="percentage2" style={{ width: `${percentageDraw}%` }}>
         {percentageDraw}%
         </div>
-        <div className="percentage3" style={{ width: `${percentageAway}%` }}>
+        <div className={ percentageHome < percentageAway ? "percentage" : "percentage3" } style={{ width: `${percentageAway}%` }}>
         {percentageAway}%
         </div>
     </div>
