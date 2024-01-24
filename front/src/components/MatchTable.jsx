@@ -1,46 +1,103 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardTeam from './CardTeam';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Match from './Match';
 
 const TeamTable = (props) => {
+  const [followedMatches, setFollowedMatches] = useState([]);
+  const [allMatches, setAllMatches] = useState([]);
+  const [league, setLeague] = useState('');
+  const [filter, setFilter] = useState('');
 
-  const data = [
-    { team1: 'Real', team2:'Barca', logo1: '', logo2: '' },
-    { team1: 'OL', team2:'ASSE', logo1: '', logo2: '' },
-    { team1: 'Paris', team2:'Tamere', logo1: '', logo2: '' },
-  ];
+  const userReducer = useSelector(state => state.userReducer)
+  const dataReducer = useSelector(state => state.dataReducer)
 
-  let followedMatches = []
-  let allMatches = []
-  if (!props.followed) {
-    followedMatches = []
-    allMatches = data
-  }
-  else{
-    followedMatches = data.filter((match) =>
-      props.followed.includes(match.team1) || props.followed.includes(match.team2)
+  useEffect(() => {
+    if (userReducer.followedTeams === [] || !userReducer.followedTeams) {
+      followedMatches = []
+      allMatches = dataReducer.matches
+    }
+    else{
+      setFollowedMatches(dataReducer.matches.filter((match) =>
+        userReducer.followedTeams.includes(match.awayClubId) || userReducer.followedTeams.includes(match.homeClubId)
+      ));
+      setAllMatches(dataReducer.matches.filter((match) =>
+        !userReducer.followedTeams.includes(match.awayClubId) && !userReducer.followedTeams.includes(match.homeClubId)
+      ));
+    }
+  }, [dataReducer.matches, userReducer.followedTeams]);
+
+  const handleLeagueChange = (event) => {
+    setFilter('');
+    setLeague(event.target.value);
+    if(event.target.value === ''){
+      setFollowedMatches(dataReducer.matches.filter((match) =>
+        userReducer.followedTeams.includes(match.awayClubId) || userReducer.followedTeams.includes(match.homeClubId)
+      ));
+      setAllMatches(dataReducer.matches.filter((match) =>
+        !userReducer.followedTeams.includes(match.awayClubId) && !userReducer.followedTeams.includes(match.homeClubId)
+      ));
+    }
+    else{
+      const filteredTeams = dataReducer.teams.filter(
+        (team) => team.domesticCompetitionId === event.target.value
+      );
+      const teamIds = filteredTeams.map(team => team.clubId);
+      const filteredMatches = dataReducer.matches.filter(match => {
+        return teamIds.includes(match.homeClubId) || teamIds.includes(match.awayClubId);
+      });
+      setAllMatches(filteredMatches);
+    }
+  };
+
+  const handleFilterChange = (event) => {
+    setLeague('');
+    setFilter(event.target.value);
+    const filteredMatches = dataReducer.matches.filter(
+      (match) => match.awayClubShortName.toLowerCase().includes(event.target.value.toLowerCase()) || match.homeClubShortName.toLowerCase().includes(event.target.value.toLowerCase())
     );
-    allMatches = data.filter((match) =>
-      !props.followed.includes(match.team1) && !props.followed.includes(match.team2)
-    );
-  }
+    setAllMatches(filteredMatches);
+  };
 
   return (
     <div>
-      {props.followed && <h1>Equipe suivies</h1>}
-      {followedMatches.map((match, index) => (
-          <Match
-          team1={match.team1}
-          team2={match.team2}
+      <div className='filters'>
+        <label htmlFor="league">Ligue :</label>
+        <select
+          id="league"
+          name="league"
+          value={league}
+          onChange={handleLeagueChange}
+        >
+          <option value=''>Toutes les ligues</option>
+          {dataReducer.competitions.map((competition) => (
+            <option key={competition.competitionId} value={competition.competitionId}>
+              {competition.name}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="filter">Equipe :</label>
+        <input
+          type="text"
+          id="filter"
+          name="filter"
+          value={filter}
+          onChange={handleFilterChange}
         />
+      </div>
+      {(followedMatches.length !== 0 && filter === '' && league === '') && <h1>Equipes suivies</h1>}
+      {filter === '' && league === '' && followedMatches.map((match, index) => (
+          <Match
+            key={index}
+            match={match}
+          />
       ))}
-      <h1>Toutes les équipes</h1>
+      {allMatches !== [] && <h1>Toutes les équipes</h1>}
       {allMatches.map((match, index) => (
         <Match
-        team1={match.team1}
-        team2={match.team2}
-      />
+          key={index}
+          match={match}
+        />
     ))}
     </div>
   );
