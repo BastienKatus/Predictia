@@ -16,4 +16,8 @@ public class BetDTO {
     private Float betDraw;
     private Float bet;
     private Float prize;
+
+    private Float predictionResultWinHomeClub;
+    private Float predictionResultWinAwayClub;
+    private Float predictionResultDraw;
 }

@@ -20,7 +20,7 @@ public class BetService {
 
     public BetDTO betAgainstPredictia(BetDTO betDTO){
         JSONObject prediction = helperAPIService.callAPI("DATA", "/predict?home_team_id=" + betDTO.getClubHomeId() + "&away_team_id=" + betDTO.getClubAwayId());
-         BetDTO betResult = new BetDTO();
+        BetDTO betResult = new BetDTO();
         try {
             System.out.println(prediction);
             Float predictionDraw = Float.valueOf(prediction.getString("probabilite_nul"));
@@ -83,11 +83,16 @@ public class BetService {
             if(updatedUser != null) {
                 betResult = betDTO;
                 betResult.setPrize(creditsRedistributed);
+                betResult.setPredictionResultDraw(predictionDraw);
+                betResult.setPredictionResultWinAwayClub(predictionWinAway);
+                betResult.setPredictionResultWinHomeClub(predictionWinHome);
             }
         } catch (Exception e) {
             // Return an empty betDTO object
+            System.out.println("Crédits in catch" + betResult.toString());
             return betResult;
         }
+        System.out.println("Crédits" + betResult.toString());
         // Return the betResult object. Attributes are null if the user is not updated.
         return betResult;
     }

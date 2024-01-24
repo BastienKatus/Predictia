@@ -55,6 +55,7 @@ def execute_query(query, args=None):
 
 @app.route('/predict', methods=['GET'])
 def predict():
+    load_data()
     # Récupérer les paramètres de la requête
     home_team_id = request.args.get('home_team_id', type=int)
     away_team_id = request.args.get('away_team_id', type=int)
