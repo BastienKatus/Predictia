@@ -46,7 +46,8 @@ const Simulation = (props) => {
       const filteredTeams = teamList.filter(
         (team) => selectedHomeLeague !== '' && team.domesticCompetitionId === selectedHomeLeague
       );
-      setFilteredHomeTeamList(filteredTeams);
+      const sortedData = filteredTeams.sort((a, b) => a.name.localeCompare(b.name));
+      setFilteredHomeTeamList(sortedData);
     }
   }, [selectedHomeLeague]);
 
@@ -57,7 +58,8 @@ const Simulation = (props) => {
       const filteredTeams = teamList.filter(
         (team) => selectedAwayLeague !== '' && team.domesticCompetitionId === selectedAwayLeague
       );
-      setFilteredAwayTeamList(filteredTeams);
+      const sortedData = filteredTeams.sort((a, b) => a.name.localeCompare(b.name));
+      setFilteredAwayTeamList(sortedData);
     }
   }, [selectedAwayLeague]);
 

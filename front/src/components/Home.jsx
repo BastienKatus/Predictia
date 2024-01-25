@@ -22,7 +22,8 @@ const Home = () => {
       fetch('/soccerManager/clubs')
         .then(response => response.json())
         .then(data => {
-          dispatch(getTeams(data));
+          const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
+          dispatch(getTeams(sortedData));
         })
         .catch(error => console.error('Erreur lors de la récupération des clubs', error));
     }

@@ -5,7 +5,7 @@ import HistoriqueTable from './HistoriqueTable';
 import StatsTable from './StatsTable';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faHistory } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faHistory } from '@fortawesome/free-solid-svg-icons';
 
 const Team = () => {
   const [team, setTeam] = useState({});
@@ -49,7 +49,7 @@ const Team = () => {
         {team.coachName && <p><strong>Nom du coach: </strong>{team.coachName}</p>}
       </div>
       <div className="team-stats">
-        <button onClick={() => handleClick()} className="team-stats-btn"><FontAwesomeIcon icon={faCircleInfo} size='xl'/></button> 
+        <button onClick={() => handleClick()} className="team-stats-btn"><FontAwesomeIcon icon={faChartLine} size='xl'/></button> 
         <button onClick={() => handleClickHistory()} className="team-history-btn"><FontAwesomeIcon icon={faHistory} size='xl'/></button> 
       </div>
     </div>
@@ -61,7 +61,7 @@ const Team = () => {
             <span className="close" onClick={closeModal}>
               &times;
             </span>
-          <HistoriqueTable gamesList={team.gamesList} />
+          <HistoriqueTable gamesList={team.gamesList} clubId={team.clubId} />
           </div>
         </div>
       )}

@@ -7,16 +7,19 @@ const HistoriqueTable = (props) => {
   const [gamesList, setGamesList] = useState([]);
   
   useEffect(() => {
-    if(props.clubId){
+    if(props.year){
       fetch('/soccerManager/clubs/' + (props.clubId))
         .then(response => response.json())
         .then(data => {
           setGamesList(data.gamesList);
+          console.log(data.gamesList);
+          console.log(props.clubId);
         })
         .catch(error => console.error('Erreur lors de la récupération du club', error));
     }
     else{
       setGamesList(props.gamesList)
+      console.log(props.gamesList);
     }
   }, []);
 
