@@ -49,7 +49,8 @@ const RegistrationForm = () => {
       const filteredTeams = teamList.filter(
         (team) => selectedLeague !== '' && team.domesticCompetitionId === selectedLeague
       );
-      setFilteredTeamList(filteredTeams);
+      const sortedData = filteredTeams.sort((a, b) => a.name.localeCompare(b.name));
+      setFilteredTeamList(sortedData);
     }
   }, [selectedLeague, dataReducer.teams]);
 
