@@ -3,6 +3,8 @@ package com.predictia.soccermanager.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -51,4 +53,7 @@ public class FutureGameModel {
 
     @Column(name="prediction_draw")
     private Float predictionDraw;
+
+    @Column(name="prediction_resultat")
+    private Integer predictionResultat;
 }

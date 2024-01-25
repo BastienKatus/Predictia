@@ -118,6 +118,7 @@ public class FutureGameService {
                                 futureGameModel.setPredictionDraw(Float.parseFloat(prediction.getString("probabilite_nul")));
                                 futureGameModel.setPredictionWinHome(Float.parseFloat(prediction.getString("probabilite_victoire")));
                                 futureGameModel.setPredictionWinAway(Float.parseFloat(prediction.getString("probabilite_defaite")));
+                                futureGameModel.setPredictionResultat(Integer.parseInt(prediction.getString("classification_predictia")));
                             } catch (Exception e){
                                 e.printStackTrace();
                             }

@@ -23,6 +23,7 @@ public class FutureGameMapper {
         fgm.setAwayClubLogoUrl(dto.getAwayClubLogoUrl());
         fgm.setHomeClubLogoUrl(dto.getHomeClubLogoUrl());
         fgm.setId(dto.getId());
+        fgm.setPredictionResultat(dto.getPredictionResultat());
         return fgm;
     }
 
@@ -40,6 +41,7 @@ public class FutureGameMapper {
         fgmDTO.setAwayClubLogoUrl(futureGameModel.getAwayClubLogoUrl());
         fgmDTO.setHomeClubLogoUrl(futureGameModel.getHomeClubLogoUrl());
         fgmDTO.setGameDate(futureGameModel.getGameDate());
+        fgmDTO.setPredictionResultat(futureGameModel.getPredictionResultat());
         return fgmDTO;
     }
 }

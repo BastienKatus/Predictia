@@ -204,18 +204,18 @@ const Simulation = (props) => {
 
       <Loading isLoading={isLoading}/>
       <div className={"main-section"}>
-        <div className={`${sectionSimulation ? 'isActive' : 'isDisactive'}`} onClick={handleClickSectionSimulation}>
+        <div onClick={handleClickSectionSimulation}> {/*className={`${sectionSimulation ? 'isActive' : 'isDisactive'}`}*/}
           <h2>
             Predictia
           </h2>
           <div className={"detail"}>
-            Explication de comment cela fonctionne rapidement
+            La prédiction est basée sur la valeur marchande des équipes et la forme des équipes (à domicile ou exterieur) sur les 5 derniers matchs. Le modèle a été entrainé sur les matchs de la saison 2022.
           </div>
 
           <button onClick={handleApplyPrediction}>Simulation simple</button>
         </div>
 
-        <div className={`${sectionBet ? 'isActive' : 'isDisactive'}`} onClick={handleClickSectionBet}>
+        <div className={`bet ${sectionBet ? 'isActive' : 'isDisactive'}`} onClick={handleClickSectionBet}>
           <h2>
             Jouer contre Predictia
           </h2>

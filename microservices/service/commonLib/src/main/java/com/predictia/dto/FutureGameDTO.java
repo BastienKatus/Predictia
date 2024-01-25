@@ -22,4 +22,6 @@ public class FutureGameDTO {
     private Float predictionWinHome;
     private Float predictionWinAway;
     private Float predictionDraw;
+
+    private Integer predictionResultat;
 }

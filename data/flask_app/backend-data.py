@@ -13,6 +13,7 @@ import predictia_stats
 
 TF_ENABLE_ONEDNN_OPTS=0
 model_rl = joblib.load(os.path.join("..", "model_training", "model_rl.pkl"))
+model_rl = joblib.load(os.path.join("..", "model_training", "model.pkl"))
 model_seq = joblib.load(os.path.join("..", "model_training", "model_sequential.pkl"))
 scaler = joblib.load(os.path.join("..", "model_training", "scaler_sequential.pkl"))
 
@@ -91,11 +92,9 @@ def predict():
     features_resultat, features_probas = predictia_ml.preparer_caracteristiques_match(df_games, df_players, df_game_lineups, home_team_id, away_team_id, date)
 
     # Faire la prédiction des probabilités
-    resultat = predictia_ml.predire_resultat(model_seq, features_resultat, scaler, 0.75)
+    resultat = predictia_ml.predire_resultat(model_seq, features_resultat, scaler, 0.8)
     probas = predictia_ml.predire_proba(model_rl, features_probas)
     probas_list = probas.tolist()
-    print(probas_list)
-    print(np.argmax(resultat.tolist()))
     # Créer un dictionnaire pour la réponse JSON
     response = {
         'probabilite_defaite': probas_list[0],
@@ -103,6 +102,7 @@ def predict():
         'probabilite_victoire': probas_list[2],
         'classification_predictia': str(np.argmax(resultat.tolist()))
     }
+    print(str(response))
     return jsonify(response)
 
 

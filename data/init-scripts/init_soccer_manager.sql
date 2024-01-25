@@ -146,14 +146,13 @@ CREATE TABLE next_games (
     modified_date_verification DATE,
     prediction_win_home FLOAT,
     prediction_win_away FLOAT,
-    prediction_draw FLOAT
+    prediction_draw FLOAT,
+    prediction_resultat INTEGER
 );
 
 CREATE TABLE player_valuations (
     player_id INTEGER NULL,
     date VARCHAR(255) NULL,
-    datetime VARCHAR(255) NULL,
-    dateweek VARCHAR(255) NULL,
     market_value_in_eur INTEGER NULL,
     current_club_id INTEGER NULL,
     player_club_domestic_competition_id VARCHAR(255) NULL

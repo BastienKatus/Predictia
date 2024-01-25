@@ -760,6 +760,10 @@ button {
   margin: 15px auto;
 }
 
+#simulation .bet{
+  display: none;
+}
+
 .loading-container {
   position: fixed;
   top: 0;

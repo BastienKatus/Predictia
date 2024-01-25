@@ -38,7 +38,11 @@ def predire_resultat(model, match_features, scaler, seuil_nul=0.5):
     match_features_scaled = scaler.transform(match_features)
     # Faire la prédiction
     prediction_prob = model.predict(match_features_scaled)
-    return prediction_prob[0]
+    if prediction_prob[0][1] >= seuil_nul:
+        return prediction_prob[0]
+    else:
+        prediction_prob[0][1] = 0
+        return prediction_prob[0]
 
 def predire_proba(model, match_features):
     # Faire la prédiction
