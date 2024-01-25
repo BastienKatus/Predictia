@@ -1,32 +1,119 @@
-version: '3'
-services:
-  nginx:
-    image: nginx
-    container_name: nginx-reverse-proxy
-    ports:
-      - "8080:8080"
-    #network_mode: host #Obligatoire sur Linux
-    volumes:
-      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf #Sur Ordi perso, décommenter cette ligne
-      #- /tmp/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf #Sur Ordi CPE, décommenter cette ligne
-  
-  postgres:
-    build: ./data/
-    container_name: postgre-container
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: predictia_soccer_manager
-    ports:
-      - "5433:5432"
-   
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin-container
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5051:80"
-    depends_on:
-      - postgres
+  version: '3'
+  services:
+    nginx:
+      image: nginx
+      container_name: nginx-reverse-proxy
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
+
+    postgres:
+      build: ./data/
+      environment:
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: admin
+        POSTGRES_DB: predictia_soccer_manager
+      ports:
+        - "5432:5432"
+
+    pgadmin:
+      image: dpage/pgadmin4
+      container_name: pgadmin-container
+      environment:
+        PGADMIN_DEFAULT_EMAIL: admin@admin.com
+        PGADMIN_DEFAULT_PASSWORD: admin
+      ports:
+        - "5051:80"
+      depends_on:
+        - postgres
+
+    flask_api:
+      build: ./data/flask_app/
+      ports:
+        - "5000:5000"
+      environment:
+        DB_HOST: postgres
+        DB_PORT: "5432"
+        DB_USER: admin
+        DB_PASSWORD: admin
+        DB_NAME: predictia_soccer_manager
+      depends_on:
+        - postgres
+    
+    authentification:
+      build:
+        context: ./microservices
+        dockerfile: Dockerfile
+        args:
+          MS_NAME: authentification
+      ports:
+        - "8082:8082"
+      depends_on:
+        - postgres
+
+    game:
+      build:
+        context: ./microservices
+        dockerfile: Dockerfile
+        args:
+          MS_NAME: game
+      ports:
+        - "8084:8084"
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/predictia_game
+        SPRING_DATASOURCE_USERNAME: admin
+        SPRING_DATASOURCE_PASSWORD: admin
+        SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
+        SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+        SPRING_JPA_SHOW_SQL: "true"
+        SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      depends_on:
+        - postgres
+
+    soccer_manager:
+      build:
+        context: ./microservices
+        dockerfile: Dockerfile
+        args:
+          MS_NAME: soccerManager
+      ports:
+        - "8081:8081"
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/predictia_soccer_manager
+        SPRING_DATASOURCE_USERNAME: admin
+        SPRING_DATASOURCE_PASSWORD: admin
+        SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
+        SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+        SPRING_JPA_SHOW_SQL: "true"
+        SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      depends_on:
+        - postgres
+
+    user:
+      build:
+        context: ./microservices
+        dockerfile: Dockerfile
+        args:
+          MS_NAME: user
+      ports:
+        - "8083:8083"
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/predictia_user
+        SPRING_DATASOURCE_USERNAME: admin
+        SPRING_DATASOURCE_PASSWORD: admin
+        SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
+        SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+        SPRING_JPA_SHOW_SQL: "true"
+        SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      depends_on:
+        - postgres
+    
+    react_app:
+      build:
+        context: ./front
+        dockerfile: Dockerfile
+      ports:
+        - "3000:80"
+      depends_on:
+        - nginx

@@ -29,10 +29,6 @@ const Match = ({ match }) => {
     if ((match.predictionWinHome < match.predictionWinAway) && (match.predictionWinAway > match.predictionDraw)){
       setFavoriteTeam(match.awayClubShortName + " vainqueur")
     }
-    
-    //0 => homeClubShortName
-    //1 => num 
-    //2 => awayClubShortName
   }, [])
 
   const isMatchToday = () => {

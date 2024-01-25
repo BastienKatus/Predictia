@@ -11,6 +11,14 @@ from flask import Flask, jsonify, request
 from datetime import datetime
 import predictia_stats
 
+DB_HOST = os.getenv('DB_HOST', 'postgres')
+DB_PORT = os.getenv('DB_PORT', '5432')
+DB_USER = os.getenv('DB_USER', 'admin')
+DB_PASSWORD = os.getenv('DB_PASSWORD', 'admin')
+DB_NAME = os.getenv('DB_NAME', 'predictia_soccer_manager')
+DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+
 TF_ENABLE_ONEDNN_OPTS=0
 model_rl = joblib.load(os.path.join("..", "model_training", "model_rl.pkl"))
 model_rl = joblib.load(os.path.join("..", "model_training", "model.pkl"))
@@ -19,20 +27,12 @@ scaler = joblib.load(os.path.join("..", "model_training", "scaler_sequential.pkl
 
 app = Flask(__name__)
 
-# Remplacez par vos détails de connexion PostgreSQL
-DB_HOST = 'localhost'
-DB_PORT = '5433'
-DB_USER = 'admin'
-DB_PASSWORD = 'admin'
-DB_NAME = 'predictia_soccer_manager'
-
 # Initialisation des DataFrames
 df_players = None
 df_clubs = None
 df_game_lineups = None
 df_games = None
 df_game_events = None
-DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 def load_data():
     print("Loading")

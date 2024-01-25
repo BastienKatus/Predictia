@@ -45,6 +45,6 @@ public class GameService {
     }
 
     public JSONObject getPrediction(Integer homeTeamId, Integer awayTeamId){
-        return helperAPIService.callAPI("DATA", "/predict?home_team_id=" + homeTeamId + "&away_team_id=" + awayTeamId);
+        return helperAPIService.callAPI("DATA", "prediction/predict?home_team_id=" + homeTeamId + "&away_team_id=" + awayTeamId);
     }
 }

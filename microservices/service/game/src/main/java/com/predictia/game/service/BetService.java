@@ -19,7 +19,7 @@ public class BetService {
     private HelperAPIService helperAPIService;
 
     public BetDTO betAgainstPredictia(BetDTO betDTO){
-        JSONObject prediction = helperAPIService.callAPI("DATA", "/predict?home_team_id=" + betDTO.getClubHomeId() + "&away_team_id=" + betDTO.getClubAwayId());
+        JSONObject prediction = helperAPIService.callAPI("DATA", "prediction/predict?home_team_id=" + betDTO.getClubHomeId() + "&away_team_id=" + betDTO.getClubAwayId());
         BetDTO betResult = new BetDTO();
         try {
             System.out.println(prediction);

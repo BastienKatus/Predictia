@@ -112,7 +112,7 @@ public class FutureGameService {
                             && awayClubLink.isPresent()
                             && homeClubLink.get().getId() != null
                             && awayClubLink.get().getId() != null){
-                        JSONObject prediction = helperAPIService.callAPI("DATA", "/predict?home_team_id=" + homeClubLink.get().getIdSoccerManager() + "&away_team_id=" + awayClubLink.get().getIdSoccerManager());
+                        JSONObject prediction = helperAPIService.callAPI("DATA", "prediction/predict?home_team_id=" + homeClubLink.get().getIdSoccerManager() + "&away_team_id=" + awayClubLink.get().getIdSoccerManager());
                         if(prediction != null) {
                             try {
                                 futureGameModel.setPredictionDraw(Float.parseFloat(prediction.getString("probabilite_nul")));
