@@ -20,10 +20,10 @@ public class CompetitionService {
     @Autowired
     private CompetitionMapper competitionMapper;
 
-    final String typeLeague = "domestic_league";
+    static final String TYPE_LEAGUE = "domestic_league";
 
     public List<CompetitionDTO> getAllCompetitions()  {
-        Iterable<CompetitionModel> competitionModels =  competitionRepository.findAllByType(typeLeague);
+        Iterable<CompetitionModel> competitionModels =  competitionRepository.findAllByType(TYPE_LEAGUE);
         List<CompetitionModel> competitionModelList = new ArrayList<>();
         competitionModels.forEach(competitionModelList::add);
         return new ArrayList<>(competitionMapper.listCompetitionEntityToCompetitionDTO(competitionModelList));

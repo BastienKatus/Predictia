@@ -1,9 +1,7 @@
 package com.predictia.soccermanager.mapper;
 
 import com.predictia.dto.CompetitionDTO;
-import com.predictia.dto.GameDTO;
 import com.predictia.soccermanager.model.CompetitionModel;
-import com.predictia.soccermanager.model.GameModel;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

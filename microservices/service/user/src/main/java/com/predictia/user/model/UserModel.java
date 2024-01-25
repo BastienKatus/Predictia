@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "user-predictia")
+@Table(name = "users")
 public class UserModel {
 
     @Id
@@ -30,6 +30,6 @@ public class UserModel {
     @Column(name="credits")
     private Double credits;
 
-    @Column(name="favoriteclubid")
+    @Column(name="favorite_club_id")
     private Integer favoriteClubId;
 }
