@@ -51,7 +51,12 @@ const FollowTeams = (props) => {
     }  
     
     function handleRouting(id) {
+      if (userReducer.userId === -1) {
+        navigate('/login')
+      }
+      else{
         navigate("/");
+      }
     }
 
     const toggleTeamSelection = (clubId) => {

@@ -22,12 +22,11 @@ function App() {
     useEffect(() => {
         document.title = 'Predictia';
     }, []);
+
     return (
-        <React.StrictMode>
-            <Provider store={store}>
-                <RouterProvider router={router} />
-            </Provider>
-        </React.StrictMode>
+        <Provider store={store}>
+            <RouterProvider router={router} />
+        </Provider>
     );
 }
 
