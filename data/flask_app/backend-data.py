@@ -27,6 +27,7 @@ df_game_events = None
 DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 def load_data():
+    print("Loading")
     global df_players, df_clubs, df_game_lineups, df_games, df_game_events
     engine = create_engine(DB_URI)
     df_players = pd.read_sql("SELECT * FROM players", engine)
@@ -55,7 +56,6 @@ def execute_query(query, args=None):
 
 @app.route('/predict', methods=['GET'])
 def predict():
-    load_data()
     # Récupérer les paramètres de la requête
     home_team_id = request.args.get('home_team_id', type=int)
     away_team_id = request.args.get('away_team_id', type=int)
