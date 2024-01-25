@@ -632,7 +632,7 @@ def calculer_minute_moyenne_premier_but_pour_club(df_clubs, df_games, df_game_ev
     for _, match_row in matchs_du_club_2023.iterrows():
         game_id = match_row['game_id']
         events_du_match = df_game_events[
-            (df_game_events['game_id'] == str(game_id))
+            (df_game_events['game_id'] == game_id)
             & (df_game_events['type'] == 'Goals')
             & (df_game_events['club_id'] == club_id_specifique)
         ]

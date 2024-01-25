@@ -16,9 +16,23 @@ const Match = ({ match }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(match)
     setPercentageHome(Math.round(match.predictionWinHome*100))
     setPercentageAway(Math.round(match.predictionWinAway*100))
     setPercentageDraw(Math.round(match.predictionDraw*100))
+    if ((match.predictionWinHome > match.predictionWinAway) && (match.predictionWinHome > match.predictionDraw)) {
+      setFavoriteTeam(match.homeClubShortName + " vainqueur")
+    }
+    if ((match.predictionDraw > match.predictionWinAway) && (match.predictionWinHome < match.predictionDraw)){
+      setFavoriteTeam(" match nul.")
+    }
+    if ((match.predictionWinHome < match.predictionWinAway) && (match.predictionWinAway > match.predictionDraw)){
+      setFavoriteTeam(match.awayClubShortName + " vainqueur")
+    }
+    
+    //0 => homeClubShortName
+    //1 => num 
+    //2 => awayClubShortName
   }, [match])
 
   const isMatchToday = () => {
@@ -122,9 +136,9 @@ const Match = ({ match }) => {
         <FontAwesomeIcon icon={faCircleInfo}/>
       </button>
     
-        {/* <div>
-          <p>Predictia indique {favoriteTeam} vainqueur</p>
-        </div> */}
+        <div>
+          <p>Predictia indique {favoriteTeam}</p>
+        </div>
     
         {/* <button onClick={handleButtonClick}>Simuler le match</button> */}
     

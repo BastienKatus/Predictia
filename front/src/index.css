@@ -733,6 +733,8 @@ button {
   padding: 10px;
 }
 
+#simulation .bet{ display:none;}
+
 #simulation .main-section p{
   font-size:12px
 }
