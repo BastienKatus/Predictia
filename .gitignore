@@ -3,3 +3,6 @@ front/.idea
 data/model_training/source/*
 data/.ipynb_checkpoints
 data/predictia_env/*
+data/flask_app/*
+predictia_env/*
+docker-volumes/*

@@ -5,21 +5,21 @@ services:
     container_name: nginx-reverse-proxy
     ports:
       - "8080:8080"
+    #network_mode: host #Obligatoire sur Linux
     volumes:
-      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
-
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf #Sur Ordi perso, décommenter cette ligne
+      #- /tmp/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf #Sur Ordi CPE, décommenter cette ligne
+  
   postgres:
     build: ./data/
     container_name: postgre-container
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: predictia
+      POSTGRES_DB: predictia_soccer_manager
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data  # Volume nommé pour la persistance des données
-
+      - "5433:5432"
+   
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin-container
@@ -27,12 +27,6 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "5050:80"
+      - "5051:80"
     depends_on:
       - postgres
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin  # Volume nommé pour la persistance des données de pgAdmin
-
-volumes:
-  postgres-data:  # Définition du volume nommé pour PostgreSQL
-  pgadmin-data:   # Définition du volume nommé pour pgAdmin

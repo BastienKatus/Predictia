@@ -1,10 +1,13 @@
 package com.predictia.user.mapper;
 
 import com.predictia.dto.UserDTO;
+import com.predictia.user.model.FollowedTeamsModel;
 import com.predictia.user.model.UserModel;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserMapper {
@@ -16,24 +19,41 @@ public class UserMapper {
         u.setPassword(dto.getPassword());
         u.setFirstname(dto.getFirstname());
         u.setLastname(dto.getLastname());
-        u.setBirthdate(dto.getBirthdate());
         u.setMail(dto.getMail());
         u.setFavoriteClubId(dto.getFavoriteClubId());
-        u.setCredits(Double.valueOf(dto.getCredits().toString()));
+        if(dto.getCredits() != null){
+            u.setCredits(Double.valueOf(dto.getCredits().toString()));
+        }
         return u;
     }
 
-    public UserDTO userEntityToUserDTO(UserModel userModel){
+    public UserDTO userEntityToUserDTO(UserModel userModel,List<FollowedTeamsModel> idFT){
         UserDTO u = new UserDTO();
         u.setId(userModel.getId());
         u.setUsername(userModel.getUsername());
         u.setPassword(userModel.getPassword());
         u.setFirstname(userModel.getFirstname());
         u.setLastname(userModel.getLastname());
-        u.setBirthdate(userModel.getBirthdate());
         u.setMail(userModel.getMail());
         u.setFavoriteClubId(userModel.getFavoriteClubId());
-        u.setCredits(BigDecimal.valueOf(userModel.getCredits()));
+        if(userModel.getCredits()!=null){
+            u.setCredits(BigDecimal.valueOf(userModel.getCredits()));
+        }
+        List<Integer> idTeams = new ArrayList<>();
+        if(idFT!=null && !idFT.isEmpty()){
+            for(FollowedTeamsModel ft:idFT){
+                idTeams.add(ft.getIdTeam());
+            }
+        }
+        u.setFollowedTeamsId(idTeams);
         return u;
+    }
+
+    public List<UserDTO> listUserEntityToUserDTO(List<UserModel> list){
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (UserModel UserModel: list){
+            userDTOList.add(userEntityToUserDTO(UserModel,null));
+        }
+        return userDTOList;
     }
 }

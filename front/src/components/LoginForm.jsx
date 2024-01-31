@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
+import { logIn } from '../redux/actions';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import './css/signup.css';
 
 const LoginForm = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -12,29 +23,75 @@ const LoginForm = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  function handleRouting() {
+    navigate("/");
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Username:', username);
-    console.log('Password:', password);
-    setUsername('');
-    setPassword('');
+    setSuccess('');
+    setError('');
+
+    fetch('/auth/login', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({"username": username,"password": password}),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Nom d\'utilisateur ou mot de passe incorrect. Veuillez rééssayer');
+        }
+        return response.json();
+    })
+    .then((data) => {
+      fetch('/soccerManager/clubs/' + data.favoriteClubId)
+        .then(response => response.json())
+        .then(data2 => {
+          dispatch(logIn(data.username, data.id, data.followedTeamsId, data2.url_logo));
+      })
+      .catch(error => console.error('Erreur lors de la récupération du club', error));
+        setSuccess("Connexion réussie ! Veuillez patienter");
+        setIsModalOpen(true);
+        setTimeout(() => {
+            handleRouting();
+        }, 2000);
+    })
+    .catch((error) => {
+        setError(error.message);
+        setIsModalOpen(true);
+    });
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
       <div>
         <label>
-          Username:
-          <input type="text" value={username} onChange={handleUsernameChange} />
+        Nom d'Utilisateur :
+          <input type="text" value={username} onChange={handleUsernameChange} required />
         </label>
       </div>
       <div>
         <label>
-          Password:
-          <input type="password" value={password} onChange={handlePasswordChange} />
+          Mot de passe :
+          <input type="password" value={password} onChange={handlePasswordChange} required />
         </label>
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Se connecter</button>
+      {isModalOpen && (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={closeModal}>&times;</span>
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
+        </div>
+      </div>
+      )}
     </form>
   );
 };

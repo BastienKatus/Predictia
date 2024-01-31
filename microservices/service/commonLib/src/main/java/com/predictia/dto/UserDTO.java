@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +17,7 @@ public class UserDTO {
     private String firstname;
     private String lastname;
     private String mail;
-    private Date birthdate;
     private BigDecimal credits;
     private Integer favoriteClubId;
-}
+    private List<Integer> followedTeamsId;
+ }

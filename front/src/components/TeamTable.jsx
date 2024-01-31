@@ -1,49 +1,119 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardTeam from './CardTeam';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
-const TeamTable = (props) => {
-  const [selectedTeam, setSelectedTeam] = useState({
-    name: '',
-  });
+const TeamTable = () => {
+  const [selectedTeam, setSelectedTeam] = useState({ name: '' });
+  const [teamList, setTeamList] = useState([]);
+  const [league, setLeague] = useState('');
+  const [filter, setFilter] = useState('');
+  const routeParams = useParams();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dataReducer = useSelector(state => state.dataReducer);
+  const userReducer = useSelector(state => state.userReducer);
 
-  const data = [
-    { name: 'Real', league: 'Liga', classement: 1, followed: false },
-    { name: 'Barca', league: 'Liga', classement: 4, followed: false },
-    { name: 'OL', league: 'Ligue1', classement: 54, followed: true },
-  ];
+  useEffect(() => {
+    if (routeParams.id === 'followed') {
+      const followedTeams = dataReducer.teams.filter(
+        (team) => userReducer.followedTeams.includes(team.clubId)
+      );
+      setTeamList(followedTeams);
+      setLeague('')
+    } else if (routeParams.id !== 'all') {
+      setLeague(routeParams.id);
+      const filteredTeams = dataReducer.teams.filter(
+        (team) => team.domesticCompetitionId === routeParams.id
+      );
+      setTeamList(filteredTeams);
+    } else {
+      setTeamList(dataReducer.teams);
+      setLeague('')
+    }
+  }, [location]);
 
-  const filteredData = props.followed === 'true' ? data.filter((team) => team.followed === true) : data;
+  const handleLeagueChange = (event) => {
+    setLeague(event.target.value);
+    setFilter('');
+    const filteredTeams = dataReducer.teams.filter(
+      (team) => team.domesticCompetitionId === event.target.value
+    );
+    setTeamList(filteredTeams);
+  };
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+    const filteredTeams = dataReducer.teams.filter(
+      (team) => team.name.toLowerCase().includes(event.target.value.toLowerCase())
+    );
+    setTeamList(filteredTeams);
+  };
+
+  const handleClick = (userId) => {
+    navigate('/follow_teams/' + userId);
+  }
+
+  const handleDoubleClick = (teamId) => {
+    navigate('/team/' + teamId);
+  };
 
   return (
-    <div className="card-table-container">
-      <table className="card-table">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Ligue</th>
-            <th>Classement</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((team, index) => (
-            <tr
-              key={index}
-              className={selectedTeam.name === team.name ? 'selected' : ''}
-              onClick={() => setSelectedTeam(team)}
-            >
-              <td>{team.name}</td>
-              <td>{team.league}</td>
-              <td>{team.classement}</td>
+    <>
+      {routeParams.id !== 'followed' ? (
+        <div className='filters'>
+          <label htmlFor="league">Ligue :</label>
+          <select
+            id="league"
+            name="league"
+            value={league}
+            onChange={handleLeagueChange}
+          >
+            <option value="">Toutes les ligues</option>
+            {dataReducer.competitions.map((competition) => (
+              <option key={competition.competitionId} value={competition.competitionId}>
+                {competition.name}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="filter">Nom :</label>
+          <input
+            type="text"
+            id="filter"
+            name="filter"
+            value={filter}
+            onChange={handleFilterChange}
+          />
+        </div>
+      ) : (
+        <div>
+          <button onClick={() => handleClick(userReducer.userId)}>Modifier les équipes suivies</button>
+        </div>
+      )}
+      <div className="card-table-container">
+        <table className="card-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {selectedTeam.name !== '' && <CardTeam card={selectedTeam} />}
-    </div>
+          </thead>
+          <tbody>
+            {teamList.map((team) => (
+              <tr
+                key={team.clubId}
+                onDoubleClickCapture={() => { handleDoubleClick(team.clubId) }}
+              >
+                <td>{team.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

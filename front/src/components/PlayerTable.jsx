@@ -1,53 +1,129 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardPlayer from './CardPlayer';
-import { useDispatch } from 'react-redux'
 
 const PlayerTable = (props) => {
-  const [selectedPlayer, setSelectedPlayer] = useState({
-    name: '',
-  });
+  const [selectedPlayer, setSelectedPlayer] = useState({ name: '' });
+  const [playerList, setPlayerList] = useState([]);
+  const [filteredPlayerList, setFilteredPlayerList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState('');
+  const [filter, setFilter] = useState('');
+  const [positionList] = useState([
+    { id: 1, name: 'Goalkeeper' },
+    { id: 2, name: 'Defender' },
+    { id: 3, name: 'Midfield' },
+    { id: 4, name: 'Attack' },
+  ]);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    fetch('/soccerManager/players/club/' + props.clubId)
+      .then((response) => response.json())
+      .then((data) => {
+        setPlayerList(data);
+        setFilteredPlayerList(data);
+      })
+      .catch((error) =>
+        console.error('Erreur lors de la récupération des joueurs', error)
+      );
+  }, [props.clubId]);
 
-  const data = [
-    { name: 'Lionel Pepsi', club: 'dzd', age: 12, value: 277700, pied_fort: 'L', nb_match: 4 },
-    { name: 'Christiano RonaldMcDonald', club: 'ddzdz', age: 43, value: 277700, pied_fort: 'L', nb_match: 4 },
-    { name: 'Zizinédine Zizidane', club: 'dzd', age: 43, value: 277700, pied_fort: 'D', nb_match: 4 },
-  ];
+  const handlePositionChange = (e) => {
+    setSelectedPosition(e.target.value);
+    setFilter(''); // Reset player name filter when changing position
+    if (e.target.value !== '') {
+      const filteredPlayers = playerList.filter(
+        (player) => player.position === e.target.value
+      );
+      setFilteredPlayerList(filteredPlayers);
+    } else {
+      setFilteredPlayerList(playerList);
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+    const filteredPlayers = playerList.filter(
+      (player) =>
+        player.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        player.lastName.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setFilteredPlayerList(filteredPlayers);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
+    <>
+    <h1>Joueurs</h1>
+    <div className="filters">
+      <label>
+        Nom :
+      </label>
+      <input
+        type="text"
+        value={filter}
+        onChange={handleFilterChange}
+      />
+      <label>
+        Poste :
+      </label>
+      <select value={selectedPosition} onChange={handlePositionChange}>
+        <option value="">Tous les postes</option>
+        {positionList.map((position) => (
+          <option key={position.id} value={position.name}>
+            {position.name}
+          </option>
+        ))}
+      </select>
+    </div>
     <div className="card-table-container">
       <table className="card-table">
         <thead>
           <tr>
-            <th>Prénom/Nom</th>
-            <th>Club</th>
-            <th>Age</th>
+            <th>Prénom</th>
+            <th>Nom</th>
             <th>Valeur</th>
+            <th>Poste</th>
             <th>Pied fort</th>
-            <th>Nombre de match</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((player, index) => (
+          {filteredPlayerList.map((player) => (
             <tr
-              key={index}
-              className={selectedPlayer.name === player.name ? 'selected' : ''}
-              onClick={() => setSelectedPlayer(player)}
+              key={player.playerId}
+              onDoubleClickCapture={() => {
+                setSelectedPlayer(player);
+                openModal();
+              }}
             >
-              <td>{player.name}</td>
-              <td>{player.club}</td>
-              <td>{player.age}</td>
-              <td>{player.value}</td>
-              <td>{player.pied_fort}</td>
-              <td>{player.nb_match}</td>
+              <td>{player.firstName}</td>
+              <td>{player.lastName}</td>
+              <td>{player.marketValueInEur} €</td>
+              <td>{player.subPosition}</td>
+              <td>{player.foot}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      {selectedPlayer.name !== '' && <CardPlayer card={selectedPlayer} />}
 
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+            <CardPlayer card={selectedPlayer} />
+          </div>
+        </div>
+      )}
     </div>
+    </>
   );
 };
 
